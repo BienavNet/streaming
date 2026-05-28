@@ -1,0 +1,69 @@
+package com.api.streaming.infrastructure.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.api.streaming.application.interfaces.AccountQueriesInterface;
+import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
+import com.api.streaming.application.useCases.Account.DeactivateAccountUseCase;
+import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
+import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
+import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
+import com.api.streaming.application.useCases.Account.UpdateAccountUseCase;
+import com.api.streaming.domain.interfaces.AccountInterface;
+import com.api.streaming.domain.interfaces.GenerateIdInterface;
+import com.api.streaming.domain.interfaces.PaymentInterface;
+import com.api.streaming.domain.interfaces.PlatformInterface;
+import com.api.streaming.infrastructure.mappers.AccountMapper;
+
+@Configuration
+public class AccountUseCasesConfig {
+
+    @Bean
+    CreateAccountUseCase createAccountUseCase(
+        AccountInterface accountInterface, 
+        PaymentInterface paymentInterface,
+        PlatformInterface platformInterface,
+        GenerateIdInterface generateIdInterface
+    ) {
+        return new CreateAccountUseCase(accountInterface, paymentInterface, platformInterface, generateIdInterface);
+    }
+
+    @Bean
+    DeactivateAccountUseCase deactivateAccountUseCase(
+        AccountInterface accountInterface
+    ) {
+        return new DeactivateAccountUseCase(accountInterface);
+    }
+
+    @Bean
+    DeleteAccountUseCase deleteAccountUseCase(
+        AccountInterface accountInterface
+    ) {
+        return new DeleteAccountUseCase(accountInterface);
+    }
+
+    @Bean
+    GetAccountFromIdUseCase deleteAccountFromIdUseCase(
+        AccountQueriesInterface accountInterface
+    ) {
+        return new GetAccountFromIdUseCase(accountInterface);
+    }
+
+    @Bean
+    GetAllAccountsUseCase getAllAccountsUseCase(
+        AccountQueriesInterface accountInterface
+    ) {
+        return new GetAllAccountsUseCase(accountInterface);
+    }
+
+    @Bean
+    UpdateAccountUseCase updateAccountUseCase(
+        AccountInterface accountInterface,
+        PaymentInterface paymentInterface,
+        PlatformInterface platformInterface,
+        AccountMapper mapper
+    ) {
+        return new UpdateAccountUseCase(accountInterface, paymentInterface, platformInterface, mapper);
+    }
+}

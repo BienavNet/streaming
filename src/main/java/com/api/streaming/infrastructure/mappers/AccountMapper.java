@@ -1,0 +1,121 @@
+package com.api.streaming.infrastructure.mappers;
+
+import java.util.List;
+
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+
+import com.api.streaming.application.commands.CreateAccountCommand;
+import com.api.streaming.application.commands.UpdateAccountCommand;
+import com.api.streaming.application.queries.AccountDetailsQuery;
+import com.api.streaming.domain.models.Account;
+import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.Email;
+import com.api.streaming.domain.valueObjects.PlatformId;
+import com.api.streaming.infrastructure.dtos.account.AccountDetailsResponse;
+import com.api.streaming.infrastructure.dtos.account.AccountResponse;
+import com.api.streaming.infrastructure.dtos.account.CreateAccountRequest;
+import com.api.streaming.infrastructure.dtos.account.UpdateAccountRequest;
+import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
+
+@Mapper(
+    componentModel = "spring",
+    nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+    unmappedTargetPolicy = ReportingPolicy.IGNORE,
+    uses = {PaymentMapper.class, PlatformMapper.class}
+)
+public interface AccountMapper {
+
+    @Mapping(
+        target = "id",
+        qualifiedByName = "stringToAccountId"
+    )
+    @Mapping(
+        target = "email",
+        qualifiedByName = "stringToEmail"
+    )
+    Account fromEntityToDomain(AccountEntity entity);
+    List<Account> fromEntityListToDomainList(List<AccountEntity> entities);
+
+    @Mapping(
+        target = "id",
+        qualifiedByName = "stringToAccountId"
+    )
+    @Mapping(
+        target = "email",
+        qualifiedByName = "stringToEmail"
+    )
+    AccountDetailsQuery fromEntityToQuery(AccountEntity entity);
+    List<AccountDetailsQuery> fromEntityToAccountDetailsQuery(List<AccountEntity> entities);
+
+    @Mapping(
+        target = "email",
+        qualifiedByName = "emailToString"
+    )
+    AccountResponse fromDomainToResponseDto(Account account);
+
+    @Mapping(
+        target = "email",
+        qualifiedByName = "emailToString"
+    )
+    AccountEntity fromDomainToEntity(Account domain);
+
+    void updateAccountFromCommand(UpdateAccountCommand source, @MappingTarget Account target);
+    
+    @Mapping(
+        target = "email",
+        qualifiedByName = "stringToEmail"
+    )
+    CreateAccountCommand toCreateAccountCommandFromDto(CreateAccountRequest request);
+
+    @Mapping(source = "platform.name", target = "platformName")
+    @Mapping(target = "email", qualifiedByName = "emailToString")
+    AccountDetailsResponse toResponse(AccountDetailsQuery query);
+    List<AccountDetailsResponse> fromQueryToResponse(List<AccountDetailsQuery> query);
+
+    @Mapping(
+        target = "email",
+        qualifiedByName = "emailToString"
+    )
+    @Mapping( target = "platform", source = "platform.id")
+    AccountResponse fromQueryToAccountResponse(AccountDetailsQuery query);
+
+    @Mapping(
+        target = "email",
+        qualifiedByName = "stringToEmail"
+    )
+    UpdateAccountCommand fromUpdateRequestToUpdateCommand(AccountId accountId, UpdateAccountRequest request);
+
+    @Named(value = "stringToAccountId")
+    default AccountId mapStringToAccountId(String id) {
+        return id != null ? new AccountId(id) : null;
+    }
+
+    default String mapAccountIdToString(AccountId id) {
+        return id == null ? null : id.value();
+    }
+
+    @Named("stringToEmail")
+    default Email mapStringToEmail(String email) {
+        return email == null ? null : new Email(email);
+    }
+
+    @Named("emailToString")
+    default String mapEmailToString(Email email) {
+        return email == null ? null : email.value();
+    }
+
+    @Named( value = "stringToPaymentId")
+    default PlatformId mapStringToPlatformId(String id) {
+        return new PlatformId(id);
+    }
+
+    @Named(value = "platformIdToString")
+    default String mapPlatformIdToString(PlatformId id) {
+        return id == null ? null : id.value();
+    }
+}
