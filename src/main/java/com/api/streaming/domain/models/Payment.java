@@ -25,31 +25,67 @@ public class Payment {
         this.cvv = cvv;
         this.bankName = bankName;
 
-        validate();
+        this.validate();
+    }
+
+    public void setNumber(String number) {
+        this.validateNumber(number);
+        this.number = number;
+    }
+
+    public void setMonth(Integer month) {
+        this.validateMonth(month);
+        this.month = month;
+    }
+
+    public void setCvv(String cvv) {
+        this.validateCvv(cvv);
+        this.cvv = cvv;
     }
 
     private void validate() {
-        if (this.number.startsWith("4") || this.number.startsWith("5") && this.number.length() != 16)
-            throw new IllegalArgumentException("Card Number is invalid.");
+        this.validateNumber(this.number);
+        this.validateMonth(this.month);
+        this.validateCvv(this.cvv);
+    }
 
-        if (this.month <=0 || this.month > 12)
+    private void validateCvv(String cvv) {
+        if (this.isNumber(cvv)){
+            if (cvv.length() == 3 && number.startsWith("4") || number.startsWith("5") || number.startsWith("6"))
+                return;
+            if (cvv.length() == 4 && number.startsWith("3"))
+                return;
+        }
+
+        throw new IllegalArgumentException("Invalid cvv for the registered card payment.");
+    }
+
+    private void validateNumber(String number) {
+
+        if (number != null && !number.isBlank()) {
+            if (number.length() == 16 && number.startsWith("4") || number.startsWith("5"))
+                return;
+            if (number.startsWith("3") && number.length() == 15)
+                return;
+        }
+
+        throw new IllegalArgumentException("Card number is invalid.");
+    }
+
+    private void validateMonth(Integer month) {
+        if (month == null)
             throw new IllegalArgumentException("Month specified is invalid.");
-        
-        if (!isNumber(this.getCvv()))
-            throw new IllegalArgumentException("Cvv is not a valid number.");
-
-        if (this.number.startsWith("3") && this.cvv.length()!=4)
-            throw new IllegalArgumentException("Cvv number is invalid for this card.");
-
-        if (this.number.startsWith("4") || this.number.startsWith("5") && this.cvv.length()!=3)
-            throw new IllegalArgumentException("Cvv number is invalid for this card.");
-
+        if (month <=0 || month > 12)
+            throw new IllegalArgumentException("Month specified is invalid.");
     }
 
     private boolean isNumber(String value) {
         try {
-            Integer.parseInt(value);
-            return true;
+            if (value != null && !value.isBlank()){
+                Integer.parseInt(value);
+                return true;
+            }
+            return false;
         } catch (NumberFormatException e) {
             return false;
         }

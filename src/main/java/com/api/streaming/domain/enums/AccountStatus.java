@@ -2,7 +2,7 @@ package com.api.streaming.domain.enums;
 
 public enum AccountStatus {
     ACTIVE("active"),
-    DEACTIVE("deactive");
+    DEACTIVE("deactivated");
 
     private final String value;
 

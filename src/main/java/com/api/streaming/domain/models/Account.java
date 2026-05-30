@@ -44,10 +44,44 @@ public class Account {
             this.validate();
     }
 
+    public void setEmail(String rawEmail) {
+        this.email = new Email(rawEmail);
+    }
+
+    public void setPlatform(String rawPlatform) {
+        this.platform = new PlatformId(rawPlatform);
+    }
+
+    public void setPayment(String rawPaymentId) {
+        this.payment = new PaymentId(rawPaymentId);
+    }
+
+    public void setMembershipBuyDate(LocalDate date) {
+        if (date != null && date.isBefore(this.membershipExpireDate)){
+            this.membershipBuyDate = date;
+            return;
+        }
+        throw new IllegalArgumentException("The new buy date has to be before than expired date.");
+    }
+
+    public void setMembershipExpireDate(LocalDate date) {
+        if ( date!=null && date.isAfter(this.membershipBuyDate)) {
+            this.membershipExpireDate = date;
+            return;
+        }
+        throw new IllegalArgumentException("The new expire date has to be after than expired date.");
+    }
+
     public void deactivateAccount() {
         if (this.status.equals(AccountStatus.fromValue(AccountStatus.DEACTIVE.getValue())))
             throw new IllegalArgumentException("Account is already deactivated.");
         this.status = AccountStatus.fromValue(AccountStatus.DEACTIVE.getValue());
+    }
+
+    public void activateAccount() {
+        if (this.status.equals(AccountStatus.fromValue(AccountStatus.ACTIVE.getValue())))
+            throw new IllegalArgumentException("Account is already activated.");
+        this.status = AccountStatus.fromValue(AccountStatus.ACTIVE.getValue());
     }
 
 

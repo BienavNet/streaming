@@ -64,6 +64,10 @@ public interface AccountMapper {
     )
     AccountEntity fromDomainToEntity(Account domain);
 
+    @Mapping(
+        target = "email",
+        qualifiedByName = "emailToString"
+    )
     void updateAccountFromCommand(UpdateAccountCommand source, @MappingTarget Account target);
     
     @Mapping(
