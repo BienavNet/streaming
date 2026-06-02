@@ -31,7 +31,7 @@ public class CreatePlatformUseCase {
     private void checkIfAlreadyExists(String name) {
         this.platformRepository.getByName(name)
             .ifPresent( platform -> {
-                throw new EntityExistsException("Ya se encuentra una plataforma registrada con este nombre.");
+                throw new EntityExistsException("Already exists a platform registered whit that Id.");
             });
     }
 }
