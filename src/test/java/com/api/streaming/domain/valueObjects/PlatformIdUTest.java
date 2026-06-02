@@ -18,7 +18,7 @@ public class PlatformIdUTest {
     void shouldThrowExceptionForBlankId() {
         assertThatThrownBy(() -> new PlatformId(null))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("This is a invalid Id for creating this account.");
+        .hasMessage("This is a invalid Id for creating this platform.");
 
         assertThatThrownBy(() -> new PlatformId("   "))
         .isInstanceOf(IllegalArgumentException.class);

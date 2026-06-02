@@ -18,7 +18,7 @@ public class PaymentIdUTest {
     void shouldThrowExceptionForBlankId() {
         assertThatThrownBy(() -> new PaymentId(null))
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessage("This is a invalid Id for creating this account.");
+        .hasMessage("This is a invalid Id for creating this payment.");
 
         assertThatThrownBy(() -> new PaymentId("   "))
         .isInstanceOf(IllegalArgumentException.class);
