@@ -12,12 +12,12 @@ public class DeletePlatformUseCase {
 
     public void execute(PlatformId id) {
 
-        checkIfPlatformExists(id);
+        this.checkIfPlatformExists(id);
         this.platformInterface.deletePlatform(id);
     }
 
     private void checkIfPlatformExists(PlatformId id) {
         this.platformInterface.getPlatform(id)
-            .orElseThrow(() -> new EntityNotFoundException("No se ha encontrado la plataforma con el id especificado."));
+            .orElseThrow(() -> new EntityNotFoundException("Platform does not exist."));
     }
 }
