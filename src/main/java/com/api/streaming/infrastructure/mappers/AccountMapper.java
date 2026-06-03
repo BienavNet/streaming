@@ -14,14 +14,19 @@ import com.api.streaming.application.commands.CreateAccountCommand;
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.domain.models.Account;
+import com.api.streaming.domain.models.Payment;
+import com.api.streaming.domain.models.Platform;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
+import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.dtos.account.AccountDetailsResponse;
 import com.api.streaming.infrastructure.dtos.account.AccountResponse;
 import com.api.streaming.infrastructure.dtos.account.CreateAccountRequest;
 import com.api.streaming.infrastructure.dtos.account.UpdateAccountRequest;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
+import com.api.streaming.infrastructure.persistence.entities.PaymentEntity;
+import com.api.streaming.infrastructure.persistence.entities.PlatformEntity;
 
 @Mapper(
     componentModel = "spring",
@@ -42,18 +47,32 @@ public interface AccountMapper {
         qualifiedByName = "stringToEmail"
     )
     Account fromEntityToDomain(AccountEntity entity);
+
+
     List<Account> fromEntityListToDomainList(List<AccountEntity> entities);
 
     @Mapping(
         target = "id",
+        source = "account.id",
         qualifiedByName = "stringToAccountId"
     )
     @Mapping(
         target = "email",
+        source = "account.email",
         qualifiedByName = "stringToEmail"
     )
-    AccountDetailsQuery fromEntityToQuery(AccountEntity entity);
-    List<AccountDetailsQuery> fromEntityToAccountDetailsQuery(List<AccountEntity> entities);
+    @Mapping(
+        target = "platform",
+        source = "platform"
+    )
+    @Mapping(
+        target = "payment",
+        source = "payment"
+    )
+    AccountDetailsQuery fromEntityToQuery(AccountEntity account, PlatformEntity platform, PaymentEntity payment);
+
+
+    // List<AccountDetailsQuery> fromEntityToAccountDetailsQuery(List<AccountEntity> entities);
 
     @Mapping(
         target = "email",
@@ -116,7 +135,7 @@ public interface AccountMapper {
         return email == null ? null : email.value();
     }
 
-    @Named( value = "stringToPaymentId")
+    @Named( value = "stringToPlatformId")
     default PlatformId mapStringToPlatformId(String id) {
         return new PlatformId(id);
     }
@@ -124,5 +143,15 @@ public interface AccountMapper {
     @Named(value = "platformIdToString")
     default String mapPlatformIdToString(PlatformId id) {
         return id == null ? null : id.value();
+    }
+
+    @Named( value = "paymentEntityToPaymentId")
+    default PaymentId mapStringToPaymentId(Payment payment) {
+        return payment.getId();
+    }
+
+    @Named(value = "paymentIdToString")
+    default PlatformId mapPaymentIdToString(Platform platform) {
+        return platform.getId();
     }
 }
