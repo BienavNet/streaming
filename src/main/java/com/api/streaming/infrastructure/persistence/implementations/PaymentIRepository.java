@@ -36,7 +36,7 @@ public class PaymentIRepository implements PaymentInterface {
     @Override
     public Payment savePayment(Payment payment) {
         PaymentEntity entityToSave = this.mapper.fromDomainToEntity(payment);
-        PaymentEntity savedEntity = this.jpa.save(entityToSave);
+        PaymentEntity savedEntity = this.jpa.saveAndFlush(entityToSave);
         return this.mapper.fromEntityToDomain(savedEntity);
     }
 

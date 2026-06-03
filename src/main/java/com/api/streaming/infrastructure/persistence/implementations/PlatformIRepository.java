@@ -42,7 +42,7 @@ public class PlatformIRepository implements PlatformInterface {
     @Override
     public Platform savePlatform(Platform platform) {
         PlatformEntity toSaveEntity = this.mapper.fromDomainToEntity(platform);
-        PlatformEntity savedEntity = this.jpa.save(toSaveEntity);
+        PlatformEntity savedEntity = this.jpa.saveAndFlush(toSaveEntity);
         return this.mapper.fromEntityToDomain(savedEntity);
     }
 

@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
 
 public interface AccountJpaRepository extends JpaRepository<AccountEntity, String> {
-    List<AccountEntity> findByPlatformId(String id);
+    List<AccountEntity> findByPlatform(String id);
 }
