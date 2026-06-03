@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import com.api.streaming.application.commands.CreatePaymentCommand;
 import com.api.streaming.domain.models.Payment;
@@ -20,6 +21,9 @@ import com.api.streaming.infrastructure.persistence.entities.PaymentEntity;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface PaymentMapper {
+
+    PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
+
     default PaymentId mapStringToPaymentId(String id) {
         return id == null ? null : new PaymentId(id);
     }

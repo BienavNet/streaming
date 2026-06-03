@@ -8,6 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import com.api.streaming.application.commands.CreateAccountCommand;
 import com.api.streaming.application.commands.UpdateAccountCommand;
@@ -29,6 +30,8 @@ import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
     uses = {PaymentMapper.class, PlatformMapper.class}
 )
 public interface AccountMapper {
+
+    AccountMapper INSTANCE = Mappers.getMapper(AccountMapper.class);
 
     @Mapping(
         target = "id",

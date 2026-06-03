@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import com.api.streaming.application.commands.CreatePlatformCommand;
 import com.api.streaming.application.commands.UpdatePlatformCommand;
@@ -22,6 +23,8 @@ import com.api.streaming.infrastructure.persistence.entities.PlatformEntity;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface PlatformMapper {
+
+    PlatformMapper INSTANCE = Mappers.getMapper(PlatformMapper.class);
 
     default String mapPlatformIdToString(PlatformId id) {
         return id != null ? id.value() : null;
