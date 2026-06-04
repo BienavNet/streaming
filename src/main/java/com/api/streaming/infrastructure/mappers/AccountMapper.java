@@ -14,7 +14,6 @@ import com.api.streaming.application.commands.CreateAccountCommand;
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.domain.models.Account;
-import com.api.streaming.domain.models.Payment;
 import com.api.streaming.domain.models.Platform;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
@@ -96,6 +95,14 @@ public interface AccountMapper {
         target = "email",
         qualifiedByName = "stringToEmail"
     )
+    @Mapping(
+        target = "platform",
+        qualifiedByName =  "stringToPlatformId"
+    )
+    @Mapping(
+        target = "payment",
+        qualifiedByName = "stringToPaymentId"
+    )
     CreateAccountCommand toCreateAccountCommandFromDto(CreateAccountRequest request);
 
     @Mapping(source = "platform.name", target = "platformName")
@@ -145,9 +152,9 @@ public interface AccountMapper {
         return id == null ? null : id.value();
     }
 
-    @Named( value = "paymentEntityToPaymentId")
-    default PaymentId mapStringToPaymentId(Payment payment) {
-        return payment.getId();
+    @Named( value = "stringToPaymentId")
+    default PaymentId mapStringToPaymentId(String payment) {
+        return new PaymentId(payment);
     }
 
     @Named(value = "paymentIdToString")
