@@ -106,7 +106,7 @@ public class AccountController {
                 .body(this.mapper.fromQueryToAccountResponse(account));
     }
 
-    @PutMapping("update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<GenericResponse> updateAccount(@PathVariable String id, @RequestBody UpdateAccountRequest request) {
         AccountId accountId = new AccountId(id);
 
@@ -114,7 +114,7 @@ public class AccountController {
 
         this.updateAccountUseCase.execute(command);
 
-        GenericResponse response = GenericResponse.builder().id(accountId.value()).message("Entity updated successfully").build();
+        GenericResponse response = GenericResponse.builder().id(accountId.value()).status(HttpStatus.OK.value()).message("Entity updated successfully").build();
 
         return ResponseEntity
                 .status(HttpStatus.OK)
