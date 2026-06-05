@@ -191,7 +191,7 @@ public class AccountControllerITest {
         doThrow(new EntityNotFoundException()).when(this.deleteAccountUseCase).execute(accountId);
         
         this.mockMvc.perform(
-            put("/api/account/deactivate/{id}", accountId.value())
+            delete("/api/account/{id}", accountId.value())
         ).andDo(print()).andExpect(status().isNotFound());
     }
 

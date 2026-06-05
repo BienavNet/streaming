@@ -36,6 +36,7 @@ import com.api.streaming.infrastructure.dtos.platform.CreatePlatformRequest;
 import com.api.streaming.infrastructure.dtos.platform.UpdatePlatformRequest;
 import com.api.streaming.infrastructure.mappers.PlatformMapperImpl;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.databind.ObjectMapper;
@@ -137,7 +138,7 @@ public class PlatformControllerITest {
     }
 
     @Test
-    void shouldThrowExceptionWhenErrorCreatingPlatform() throws Exception {
+    void shouldThrowExceptionWhenErrorCreatingPlatformWithInvalidParams() throws Exception {
         CreatePaymentRequest request = new CreatePaymentRequest();
 
         when(this.createPlatformUseCase.execute(any(CreatePlatformCommand.class))).thenThrow(new IllegalArgumentException());
@@ -148,6 +149,20 @@ public class PlatformControllerITest {
             .content(objectMapper.writeValueAsString(request))
         )
         .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenErrorCreatingAnExistingPlatform() throws Exception {
+        CreatePaymentRequest request = new CreatePaymentRequest();
+
+        when(this.createPlatformUseCase.execute(any(CreatePlatformCommand.class))).thenThrow(new EntityExistsException());
+
+        this.mockMvc.perform(
+            post("/api/platform")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request))
+        )
+        .andExpect(status().isConflict());
     }
 
     @Test
