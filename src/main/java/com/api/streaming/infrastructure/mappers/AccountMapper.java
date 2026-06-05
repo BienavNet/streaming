@@ -73,11 +73,11 @@ public interface AccountMapper {
 
     // List<AccountDetailsQuery> fromEntityToAccountDetailsQuery(List<AccountEntity> entities);
 
-    @Mapping(
-        target = "email",
-        qualifiedByName = "emailToString"
-    )
-    AccountResponse fromDomainToResponseDto(Account account);
+    // @Mapping(
+    //     target = "email",
+    //     qualifiedByName = "emailToString"
+    // )
+    // AccountResponse fromDomainToResponseDto(Account account);
 
     @Mapping(
         target = "email",
