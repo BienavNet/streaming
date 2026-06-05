@@ -1,15 +1,19 @@
 package com.api.streaming.application.useCases.Account;
 
+import java.util.List;
+
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 import com.api.streaming.domain.interfaces.PlatformInterface;
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapper;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -23,10 +27,19 @@ public class UpdateAccountUseCase {
     public AccountId execute(UpdateAccountCommand command) {
 
         //Validations
-        this.paymentExists(command.payment());
-        this.platformExists(command.platform());
-
         Account accountToUpdate = this.checkIfAccountExist(command.id());
+
+        if (command.payment() != null)
+            this.paymentExists(command.payment());
+        
+
+        if (command.platform() != null)
+            this.platformExists(command.platform());
+        
+        if (command.platform() != null || command.email() != null)
+            this.checkIfEmailIsRegisteredWithSamePlatform(command.email() != null ? command.email() : accountToUpdate.getEmail(), command.platform() != null ? command.platform() : accountToUpdate.getPlatform());
+
+
         this.mapper.updateAccountFromCommand(command, accountToUpdate);
 
         this.accountInterface.saveAccount(accountToUpdate);
@@ -46,5 +59,13 @@ public class UpdateAccountUseCase {
     private void platformExists(PlatformId id) {
         this.platformInterface.getPlatform(id)
             .orElseThrow(() -> new EntityNotFoundException("New platform is not registered yet."));
+    }
+
+    private void checkIfEmailIsRegisteredWithSamePlatform(Email email, PlatformId platform) {
+
+        List<Account> accounts = this.accountInterface.getAccountByEmailAndPlatform(email, platform);
+
+        if (accounts.size() != 0)
+            throw new EntityExistsException("There is already an account registered with this email for this platform.");
     }
 }

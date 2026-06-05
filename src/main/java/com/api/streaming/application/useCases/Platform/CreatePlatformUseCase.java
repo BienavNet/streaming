@@ -16,11 +16,11 @@ public class CreatePlatformUseCase {
     private final GenerateIdInterface generateIdService;
 
     public PlatformId execute(CreatePlatformCommand command) {
-        checkIfAlreadyExists(command.name());
+        checkIfAlreadyExists(command.name().toLowerCase());
 
         PlatformId id = this.generateIdService.generatePlatformId();
         // Como no existe una plataforma, procedemos a crerla
-        Platform platform = new Platform(id, command.name(), command.link(), command.icon());
+        Platform platform = new Platform(id, command.name().toLowerCase(), command.link(), command.icon());
 
         // Como ya no hay mas verificaciones, hacemos el guardado en la DB
         this.platformRepository.savePlatform(platform);
@@ -31,7 +31,7 @@ public class CreatePlatformUseCase {
     private void checkIfAlreadyExists(String name) {
         this.platformRepository.getByName(name)
             .ifPresent( platform -> {
-                throw new EntityExistsException("Already exists a platform registered whit that Id.");
+                throw new EntityExistsException("Already exists a platform registered whit that Name.");
             });
     }
 }
