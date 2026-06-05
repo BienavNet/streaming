@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PlatformId;
 
 public interface AccountInterface {
@@ -13,4 +14,6 @@ public interface AccountInterface {
     List<Account> getAccountsByPlatform(PlatformId id);
     Account saveAccount(Account account);
     void deleteAccount(AccountId accountId);
+
+    List<Account> getAccountByEmailAndPlatform(Email email, PlatformId platformId);
 }
