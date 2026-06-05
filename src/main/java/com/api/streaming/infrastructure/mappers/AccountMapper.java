@@ -114,12 +114,15 @@ public interface AccountMapper {
         target = "email",
         qualifiedByName = "emailToString"
     )
-    @Mapping( target = "platform", source = "platform.id")
     AccountResponse fromQueryToAccountResponse(AccountDetailsQuery query);
 
     @Mapping(
         target = "email",
         qualifiedByName = "stringToEmail"
+    )
+    @Mapping(
+        target = "id",
+        source = "accountId"
     )
     UpdateAccountCommand fromUpdateRequestToUpdateCommand(AccountId accountId, UpdateAccountRequest request);
 

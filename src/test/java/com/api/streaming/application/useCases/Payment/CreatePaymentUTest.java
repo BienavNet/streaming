@@ -1,9 +1,13 @@
 package com.api.streaming.application.useCases.Payment;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +22,8 @@ import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 import com.api.streaming.domain.models.Payment;
 import com.api.streaming.domain.valueObjects.PaymentId;
+
+import jakarta.persistence.EntityExistsException;
 
 @ExtendWith(MockitoExtension.class)
 public class CreatePaymentUTest {
@@ -61,6 +67,17 @@ public class CreatePaymentUTest {
         .isNotNull()
         .usingRecursiveComparison()
         .isEqualTo(expectedPayment);
+    }
+
+    @Test
+    void shouldThrowExceptionWhenNumberIsAlreadyRegistered() {
+        Payment payment = new Payment(expectedId, "4554544545545445", 10, 2026, "123", null);
+        when(this.paymentInterface.getPaymentByNumber(anyString())).thenReturn(Optional.of(payment));
+
+        assertThatThrownBy(() -> this.createPaymentUseCase.execute(command))
+        .isInstanceOf(EntityExistsException.class)
+        .hasMessage("A payment has been registered with this number and you cannot register it again.");
+
     }
 
 }

@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +34,7 @@ import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,6 +113,27 @@ public class CreateAccountUTest {
         assertThatThrownBy(() -> this.createAccountUseCase.execute(this.command))
         .isInstanceOf(EntityNotFoundException.class)
         .hasMessage("Platform ID doesn't exists.");
+
+        verify(this.paymentInterface, times(1)).getPayment(this.command.payment());
+        verify(this.platformInterface, times(1)).getPlatform(this.command.platform());
+        verify(this.accountInterface, never()).saveAccount(any());
+
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailIsAlreadyRegisteredWithAPlatform() {
+
+        Account expectedAccount = new Account(expectedId, new Email("test@test.com"), "123456789", false, LocalDate.now(), LocalDate.MAX, LocalDate.now(), platform.getId(), payment.getId(), null);
+        List<Account> expectedList = List.of(expectedAccount, expectedAccount);
+
+
+        when(this.paymentInterface.getPayment(this.command.payment())).thenReturn(Optional.of(this.payment));
+        when(this.platformInterface.getPlatform(this.command.platform())).thenReturn(Optional.of(this.platform));
+        when(this.accountInterface.getAccountByEmailAndPlatform(expectedAccount.getEmail(), expectedAccount.getPlatform())).thenReturn(expectedList);
+
+        assertThatThrownBy(() -> this.createAccountUseCase.execute(this.command))
+        .isInstanceOf(EntityExistsException.class)
+        .hasMessage("There is already an account registered with this email for this platform.");
 
         verify(this.paymentInterface, times(1)).getPayment(this.command.payment());
         verify(this.platformInterface, times(1)).getPlatform(this.command.platform());

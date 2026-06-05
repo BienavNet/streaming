@@ -59,7 +59,7 @@ public class AccountController {
                 .body(response);
     }
 
-    @PutMapping("deactivate/{id}")
+    @PutMapping("/deactivate/{id}")
     public ResponseEntity<GenericResponse> deactivateAccount(@PathVariable String id) {
 
         AccountId accountId = new AccountId(id);

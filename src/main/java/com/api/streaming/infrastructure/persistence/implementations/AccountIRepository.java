@@ -14,6 +14,7 @@ import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapper;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
@@ -98,6 +99,12 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
 
                     return this.mapper.fromEntityToQuery(entity, platform, payment);
                 });
+    }
+
+    @Override
+    public List<Account> getAccountByEmailAndPlatform(Email email, PlatformId platformId) {
+        List<AccountEntity> entities = this.jpa.findByEmailAndPlatform(email.value(), platformId.value());
+        return this.mapper.fromEntityListToDomainList(entities);
     }
 
 

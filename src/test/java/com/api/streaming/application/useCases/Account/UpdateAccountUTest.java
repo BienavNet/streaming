@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -39,6 +40,7 @@ import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
 import com.api.streaming.infrastructure.mappers.PlatformMapper;
 import com.api.streaming.infrastructure.mappers.PlatformMapperImpl;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 @ExtendWith(MockitoExtension.class)
@@ -134,8 +136,6 @@ public class UpdateAccountUTest {
     @Test
     void shouldThrowExceptionWhenAccountDoesNotExist() {
         when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.empty());
-        when(this.paymentInterface.getPayment(this.payment.getId())).thenReturn(Optional.of(this.payment));
-        when(this.platformInterface.getPlatform(this.platform.getId())).thenReturn(Optional.of(this.platform));
 
         assertThatThrownBy(() -> this.updateAccountUseCase.execute(this.command))
         .isInstanceOf(EntityNotFoundException.class)
@@ -147,6 +147,7 @@ public class UpdateAccountUTest {
 
     @Test
     void shouldThrowExceptionWhenPaymentDoesNotExist() {
+        when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.of(this.account));
         when(this.paymentInterface.getPayment(this.payment.getId())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> this.updateAccountUseCase.execute(this.command))
@@ -160,12 +161,32 @@ public class UpdateAccountUTest {
 
     @Test
     void shouldThrowExceptionWhenPlatformDoesNotExist() {
+        when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.of(this.account));
         when(this.paymentInterface.getPayment(this.payment.getId())).thenReturn(Optional.of(this.payment));
         when(this.platformInterface.getPlatform(this.platform.getId())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> this.updateAccountUseCase.execute(this.command))
         .isInstanceOf(EntityNotFoundException.class)
         .hasMessage("New platform is not registered yet.");
+
+        verify(this.accountInterface, never()).saveAccount(any());
+        verify(this.accountMapper, never()).updateAccountFromCommand(any(), any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenEmailIsUsedByOtherAccount() {
+
+        Account expectedAccount = new Account(expectedId, new Email("testing@test.com"), "123456789", false, LocalDate.now(), LocalDate.MAX, LocalDate.now(), platform.getId(), payment.getId(), null);
+        List<Account> expectedList = List.of(expectedAccount, expectedAccount);
+
+        when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.of(this.account));
+        when(this.paymentInterface.getPayment(this.payment.getId())).thenReturn(Optional.of(this.payment));
+        when(this.platformInterface.getPlatform(this.platform.getId())).thenReturn(Optional.of(this.platform));
+        when(this.accountInterface.getAccountByEmailAndPlatform(this.command.email(), expectedAccount.getPlatform())).thenReturn(expectedList);
+
+        assertThatThrownBy(() -> this.updateAccountUseCase.execute(this.command))
+        .isInstanceOf(EntityExistsException.class)
+        .hasMessage("There is already an account registered with this email for this platform.");
 
         verify(this.accountInterface, never()).saveAccount(any());
         verify(this.accountMapper, never()).updateAccountFromCommand(any(), any());

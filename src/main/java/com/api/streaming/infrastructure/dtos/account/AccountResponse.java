@@ -3,6 +3,7 @@ package com.api.streaming.infrastructure.dtos.account;
 import java.time.LocalDate;
 
 import com.api.streaming.infrastructure.dtos.payment.PaymentResponse;
+import com.api.streaming.infrastructure.dtos.platform.PlatformResponse;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class AccountResponse {
     private LocalDate membershipBuyDate;
     private LocalDate membershipExpireDate;
     private LocalDate registeredAt;
-    private String platform;
+    private PlatformResponse platform;
     private PaymentResponse payment;
     private String status;
 }

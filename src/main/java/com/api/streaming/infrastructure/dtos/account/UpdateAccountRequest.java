@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class UpdateAccountRequest {
     private String email;
     private String password;
-    private boolean isFreeTrial;
+    private String isFreeTrial;
     private LocalDate membershipBuyDate;
     private LocalDate membershipExpireDate;
     private String platform;

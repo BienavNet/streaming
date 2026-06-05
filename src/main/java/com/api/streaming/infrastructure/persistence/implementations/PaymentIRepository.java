@@ -44,5 +44,11 @@ public class PaymentIRepository implements PaymentInterface {
     public void deletePayment(PaymentId paymentId) {
         this.jpa.deleteById(paymentId.value());
     }
+
+    @Override
+    public Optional<Payment> getPaymentByNumber(String number) {
+        return this.jpa.findByNumber(number)
+            .map(this.mapper::fromEntityToDomain);
+    }
     
 }

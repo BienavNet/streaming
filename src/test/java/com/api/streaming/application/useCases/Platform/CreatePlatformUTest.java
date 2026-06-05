@@ -43,7 +43,7 @@ public class CreatePlatformUTest {
 
     @BeforeEach
     void setUp() {
-        this.command = new CreatePlatformCommand("Netflix", "https://www.netflix.com", "netflix-icon");
+        this.command = new CreatePlatformCommand("netflix", "https://www.netflix.com", "netflix-icon");
 
         this.expectedId = new PlatformId("uuid-23472");
     }
@@ -78,13 +78,13 @@ public class CreatePlatformUTest {
 
     @Test
     void shouldThrowEntityExistsExceptionWhenPlatformAlreadyExists() {
-        Platform existingPlatform = new Platform(expectedId, "Netflix", "https://www.netflix.com", "netflix-icon");
+        Platform existingPlatform = new Platform(expectedId, "netflix", "https://www.netflix.com", "netflix-icon");
 
         when(this.platformInterface.getByName(this.command.name())).thenReturn(Optional.of(existingPlatform));
 
         assertThatThrownBy(() -> this.createPlatformUseCase.execute(command))
         .isInstanceOf(EntityExistsException.class)
-        .hasMessage("Already exists a platform registered whit that Id.");
+        .hasMessage("Already exists a platform registered whit that Name.");
 
         // Validaciones de seguridad
         verify(this.generateIdInterface, never()).generatePlatformId();
