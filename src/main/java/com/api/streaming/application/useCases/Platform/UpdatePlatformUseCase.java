@@ -14,13 +14,13 @@ public class UpdatePlatformUseCase {
     private final PlatformInterface platformInterface;
     private final PlatformMapper mapper;
 
-    public Platform execute(UpdatePlatformCommand command) {
+    public PlatformId execute(UpdatePlatformCommand command) {
         Platform currentPlatform = this.checkIfPlatformExists(command.id());
         this.mapper.UpdatePlatformFromCommand(command, currentPlatform);
 
         Platform platformUpdated = this.platformInterface.savePlatform(currentPlatform);
 
-        return platformUpdated;
+        return platformUpdated.getId();
 
     }
 
