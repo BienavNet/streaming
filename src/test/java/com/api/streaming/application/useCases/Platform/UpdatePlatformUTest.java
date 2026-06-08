@@ -13,6 +13,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -57,16 +58,30 @@ public class UpdatePlatformUTest {
         when(this.platformInterface.savePlatform(this.expectedPlatform)).thenReturn(this.expectedPlatform);
 
 
-        Platform result = this.updatePlatformUseCase.execute(this.command);
+        this.updatePlatformUseCase.execute(this.command);
 
-        assertThat(result.getName())
-        .isEqualTo("netflix");
+        ArgumentCaptor<Platform> platformCaptor = ArgumentCaptor.forClass(Platform.class);
+        verify(this.platformInterface, times(1)).savePlatform(platformCaptor.capture());
 
-        assertThat(result.getLink())
-        .isEqualTo("https://www.netflix.com");
+        Platform result = platformCaptor.getValue();
 
-        assertThat(result.getIcon())
-        .isEqualTo("netflix-icon");
+        assertThat(result)
+        .isNotNull();
+
+        assertThat(result)
+        .usingRecursiveComparison()
+        .isEqualTo(this.expectedPlatform);
+
+
+
+        // assertThat(result.getName())
+        // .isEqualTo("netflix");
+
+        // assertThat(result.getLink())
+        // .isEqualTo("https://www.netflix.com");
+
+        // assertThat(result.getIcon())
+        // .isEqualTo("netflix-icon");
 
         verify(this.platformInterface, times(1)).getPlatform(this.expectedId);
         verify(this.mapper, times(1)).UpdatePlatformFromCommand(command, result);

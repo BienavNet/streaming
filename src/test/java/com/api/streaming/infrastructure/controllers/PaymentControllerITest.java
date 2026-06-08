@@ -53,10 +53,12 @@ public class PaymentControllerITest {
     @Test
     void shouldCreatePaymentAndReturnOK() throws Exception {
         CreatePaymentRequest request = new CreatePaymentRequest("4554454545545445", 10, 2026, "123", "");
-        
         PaymentId paymentId = new PaymentId("uuid-239842");
+        Payment createdPayment = new Payment(paymentId, "4554545445454554", 10, 2026, "000", null);
+        
         
         when(this.createPaymentUseCase.execute(any(CreatePaymentCommand.class))).thenReturn(paymentId);
+        when(this.getPaymentDetailsUseCase.execute(paymentId)).thenReturn(createdPayment);
 
 
         mockMvc.perform(
@@ -64,7 +66,7 @@ public class PaymentControllerITest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(request))
         )
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
 
     }
 
@@ -76,8 +78,7 @@ public class PaymentControllerITest {
 
         mockMvc.perform(
             delete("/api/payment/{id}", idToDelete)
-        ).andExpect(status().isOk())
-        .andExpect(jsonPath("$.id").value(idToDelete));
+        ).andExpect(status().isNoContent());
 
         verify(this.deletePaymentUseCase, times(1)).execute(paymentIdToDelete);
     }

@@ -66,8 +66,10 @@ public class AccountControllerITest {
     @Test
     void shouldCreateAccountAndReturnOK() throws Exception {
         AccountId accountId = new AccountId("uudi-982893");
+        AccountDetailsQuery createdAccount = new AccountDetailsQuery(new AccountId("uuid-32422"), new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE);
 
         when(this.createAccountUseCase.execute(any(CreateAccountCommand.class))).thenReturn(accountId);
+        when(this.getAccountFromIdUseCase.execute(accountId)).thenReturn(createdAccount);
 
         String jsonManual = """
         {
@@ -86,7 +88,7 @@ public class AccountControllerITest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(jsonManual)
         ).andDo(print())
-        .andExpect(status().isOk());
+        .andExpect(status().isCreated());
     }
 
     @Test
@@ -106,7 +108,7 @@ public class AccountControllerITest {
         
         this.mockMvc.perform(
             delete("/api/account/{id}", accountId.value())
-        ).andExpect(status().isOk());
+        ).andExpect(status().isNoContent());
 
         verify(this.deleteAccountUseCase, times(1)).execute(accountId);
     }

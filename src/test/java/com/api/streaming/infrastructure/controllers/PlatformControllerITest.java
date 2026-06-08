@@ -67,8 +67,10 @@ public class PlatformControllerITest {
         CreatePlatformRequest request = new CreatePlatformRequest("netflix", "https://www.netflix.com", "icon");
 
         PlatformId platformId = new PlatformId("uuid-23422");
+        Platform createdPlatform = new Platform(platformId, "netflix", "netflix.com", "netflix-icon");
 
         when(this.createPlatformUseCase.execute(any(CreatePlatformCommand.class))).thenReturn(platformId);
+        when(this.getPlatformUseCase.execute(platformId)).thenReturn(createdPlatform);
 
         this.mockMvc.perform(
             post("/api/platform")
@@ -122,11 +124,10 @@ public class PlatformControllerITest {
     @Test
     void shouldUpdateAnExistingPlatformAndReturnOK() throws JacksonException, Exception {
         PlatformId platformId = new PlatformId("uuid-234298");
-        Platform platformMockUpdated = new Platform( platformId, "netflix", "www.netflix.com", "icon");
 
         UpdatePlatformCommand command = new UpdatePlatformCommand(platformId, "null", "null", "null");
 
-        when(this.updatePlatformUseCase.execute(command)).thenReturn(platformMockUpdated);
+        when(this.updatePlatformUseCase.execute(command)).thenReturn(platformId);
 
         this.mockMvc.perform(
             put("/api/platform/{id}", platformId.value())
