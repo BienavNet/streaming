@@ -40,5 +40,5 @@ public interface PaymentMapper {
     CreatePaymentCommand createPaymentFromDtoToCommand(CreatePaymentRequest request);
 
     @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
-    PaymentResponse fromDomainToPaymentResponse(Payment payment);
+    PaymentResponse fromDomainToDto(Payment payment);
 }

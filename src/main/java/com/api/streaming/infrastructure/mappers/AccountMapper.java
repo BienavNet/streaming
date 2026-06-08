@@ -14,7 +14,6 @@ import com.api.streaming.application.commands.CreateAccountCommand;
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.domain.models.Account;
-import com.api.streaming.domain.models.Platform;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PaymentId;
@@ -71,13 +70,6 @@ public interface AccountMapper {
     AccountDetailsQuery fromEntityToQuery(AccountEntity account, PlatformEntity platform, PaymentEntity payment);
 
 
-    // List<AccountDetailsQuery> fromEntityToAccountDetailsQuery(List<AccountEntity> entities);
-
-    // @Mapping(
-    //     target = "email",
-    //     qualifiedByName = "emailToString"
-    // )
-    // AccountResponse fromDomainToResponseDto(Account account);
 
     @Mapping(
         target = "email",
@@ -150,18 +142,8 @@ public interface AccountMapper {
         return new PlatformId(id);
     }
 
-    @Named(value = "platformIdToString")
-    default String mapPlatformIdToString(PlatformId id) {
-        return id == null ? null : id.value();
-    }
-
     @Named( value = "stringToPaymentId")
     default PaymentId mapStringToPaymentId(String payment) {
         return new PaymentId(payment);
-    }
-
-    @Named(value = "paymentIdToString")
-    default PlatformId mapPaymentIdToString(Platform platform) {
-        return platform.getId();
     }
 }

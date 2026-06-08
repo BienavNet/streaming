@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenericResponse {
+public class GenericResponse<T> {
     private String id;
     private int status;
     private String message;
+    private T data;
 }
