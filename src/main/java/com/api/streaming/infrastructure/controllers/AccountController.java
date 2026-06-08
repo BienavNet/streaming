@@ -50,23 +50,35 @@ public class AccountController {
     private final AccountMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse> saveAccount(@RequestBody CreateAccountRequest request) {
+    public ResponseEntity<GenericResponse<AccountResponse>> saveAccount(@RequestBody CreateAccountRequest request) {
         CreateAccountCommand command = this.mapper.toCreateAccountCommandFromDto(request);
-        String id = this.createAccountUseCase.execute(command).value();
-        GenericResponse response = GenericResponse.builder().id(id).status(HttpStatus.OK.value()).build();
+
+        AccountId createdAccountId = this.createAccountUseCase.execute(command);
+        AccountDetailsQuery createdAccount = this.getAccountFromIdUseCase.execute(createdAccountId);
+
+        GenericResponse<AccountResponse> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setId(createdAccountId.value());
+        response.setMessage("Account created successfully.");
+        response.setData(this.mapper.fromQueryToAccountResponse(createdAccount));
+
+        
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @PutMapping("/deactivate/{id}")
-    public ResponseEntity<GenericResponse> deactivateAccount(@PathVariable String id) {
+    public ResponseEntity<GenericResponse<Void>> deactivateAccount(@PathVariable String id) {
 
         AccountId accountId = new AccountId(id);
 
         this.deactivateAccountUseCase.execute(accountId);
 
-        GenericResponse response = GenericResponse.builder().id(id).status(HttpStatus.OK.value()).message("Account deactivate successfully").build();
+        GenericResponse<Void> response = new GenericResponse<>();
+        response.setId(accountId.value());
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Account deactivate successfully");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -74,55 +86,61 @@ public class AccountController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GenericResponse> deleteAccount(@PathVariable String id) {
+    public ResponseEntity<Void> deleteAccount(@PathVariable String id) {
+        AccountId accountId = new AccountId(id);
+        this.deleteAccountUseCase.execute(accountId);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @GetMapping("/details")
+    public ResponseEntity<GenericResponse<List<AccountDetailsResponse>>> getAccountDetails() {
+        List<AccountDetailsQuery> accounts = this.getAllAccountsUseCase.execute();
+
+        GenericResponse<List<AccountDetailsResponse>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromQueryToResponse(accounts));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GenericResponse<AccountResponse>> getPaymentById(@PathVariable String id) {
         AccountId accountId = new AccountId(id);
 
-        this.deleteAccountUseCase.execute(accountId);
-        GenericResponse response = GenericResponse.builder().id(id).status(HttpStatus.OK.value()).build();
+        AccountDetailsQuery account = this.getAccountFromIdUseCase.execute(accountId);
+
+        GenericResponse<AccountResponse> response = new GenericResponse<>();
+        response.setData(this.mapper.fromQueryToAccountResponse(account));
+        response.setStatus(HttpStatus.OK.value());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
     }
 
-    @GetMapping("/details")
-    public ResponseEntity<List<AccountDetailsResponse>> getAccountDetails() {
-        List<AccountDetailsQuery> accounts = this.getAllAccountsUseCase.execute();
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(this.mapper.fromQueryToResponse(accounts));
-
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<AccountResponse> getPaymentById(@PathVariable String id) {
-        AccountId accountId = new AccountId(id);
-
-        AccountDetailsQuery account = this.getAccountFromIdUseCase.execute(accountId);
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(this.mapper.fromQueryToAccountResponse(account));
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse> updateAccount(@PathVariable String id, @RequestBody UpdateAccountRequest request) {
+    public ResponseEntity<GenericResponse<AccountResponse>> updateAccount(@PathVariable String id, @RequestBody UpdateAccountRequest request) {
         AccountId accountId = new AccountId(id);
 
         UpdateAccountCommand command = this.mapper.fromUpdateRequestToUpdateCommand(accountId, request);
 
         this.updateAccountUseCase.execute(command);
 
-        GenericResponse response = GenericResponse.builder().id(accountId.value()).status(HttpStatus.OK.value()).message("Entity updated successfully").build();
+        AccountDetailsQuery accountUpdated = this.getAccountFromIdUseCase.execute(accountId);
+
+        GenericResponse<AccountResponse> response = new GenericResponse<>();
+        response.setId(accountId.value());
+        response.setStatus(HttpStatus.OK.value());
+        response.setMessage("Entity updated successfully");
+        response.setData(this.mapper.fromQueryToAccountResponse(accountUpdated));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(response);
-
-
     }
-    
-    
-    
 }

@@ -37,45 +37,48 @@ public class PaymentController {
     private final PaymentMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse> createPayment(@RequestBody CreatePaymentRequest request) {
+    public ResponseEntity<GenericResponse<PaymentResponse>> createPayment(@RequestBody CreatePaymentRequest request) {
         CreatePaymentCommand command = this.mapper.createPaymentFromDtoToCommand(request);
 
-        String id = this.createPaymentUseCase.execute(command).value();
+        PaymentId createdPaymentId = this.createPaymentUseCase.execute(command);
 
-        GenericResponse response = GenericResponse.builder().id(id).status(HttpStatus.OK.value()).build();
+        Payment createdPayment = this.getPaymentDetailsUseCase.execute(createdPaymentId);
+
+        GenericResponse<PaymentResponse> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setId(createdPayment.getId().value());
+        response.setMessage("Payment created successfully.");
+        response.setData(this.mapper.fromDomainToDto(createdPayment));
 
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GenericResponse> deletePayment(@PathVariable String id) {
+    public ResponseEntity<Void> deletePayment(@PathVariable String id) {
         PaymentId paymentId = new PaymentId(id);
 
         this.deletePaymentUseCase.execute(paymentId);
-        GenericResponse response = GenericResponse
-                                    .builder()
-                                    .id(id)
-                                    .status(HttpStatus.OK.value())
-                                    .build();
         
         return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(response);
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaymentResponse> getPayment(@PathVariable String id) {
+    public ResponseEntity<GenericResponse<PaymentResponse>> getPayment(@PathVariable String id) {
         PaymentId paymentId = new PaymentId(id);
 
         Payment payment = this.getPaymentDetailsUseCase.execute(paymentId);
 
+        GenericResponse<PaymentResponse> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainToDto(payment));
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.mapper.fromDomainToPaymentResponse(payment));
-
-        
+                .body(response);
     }
     
     

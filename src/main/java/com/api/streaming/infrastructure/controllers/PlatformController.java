@@ -46,11 +46,17 @@ public class PlatformController {
     private final PlatformMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse> createPlatform(@RequestBody CreatePlatformRequest request) {
+    public ResponseEntity<GenericResponse<Platform>> createPlatform(@RequestBody CreatePlatformRequest request) {
         CreatePlatformCommand command = this.mapper.createPlatformFromDtoToCommand(request);
-        String id = this.createPlatformUseCase.execute(command).value();
+        PlatformId savedPlatformId = this.createPlatformUseCase.execute(command);
 
-        GenericResponse response = GenericResponse.builder().id(id).status(HttpStatus.CREATED.value()).build();
+        Platform savedPlatform = this.getPlatformUseCase.execute(savedPlatformId);
+
+        GenericResponse<Platform> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.CREATED.value());
+        response.setId(savedPlatform.getId().value());
+        response.setMessage("Platform created succesfully.");
+        response.setData(savedPlatform);
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
@@ -58,47 +64,53 @@ public class PlatformController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<GenericResponse> deletePlatform(@PathVariable String id) {
+    public ResponseEntity<Void> deletePlatform(@PathVariable String id) {
         PlatformId platformId = new PlatformId(id);
         this.deletePlatformUseCase.execute(platformId);
-
-        GenericResponse response = GenericResponse
-                                        .builder()
-                                        .id(id)
-                                        .status(HttpStatus.NO_CONTENT.value())
-                                        .build();
         
         return ResponseEntity
                 .status(HttpStatus.NO_CONTENT)
-                .body(response);
+                .build();
     }
 
     @GetMapping("")
-    public ResponseEntity<List<PlatformResponse>> getPlatforms() {
+    public ResponseEntity<GenericResponse<List<PlatformResponse>>> getPlatforms() {
         List<Platform> platforms = this.getAllPlatformsUseCase.execute();
+
+        GenericResponse<List<PlatformResponse>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainListToDtoList(platforms));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.mapper.fromDomainListToDtoList(platforms));
+                .body(response);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PlatformResponse> getPlatform(@PathVariable String id) {
+    public ResponseEntity<GenericResponse<PlatformResponse>> getPlatform(@PathVariable String id) {
         PlatformId platformId = new PlatformId(id);
         Platform platform = this.getPlatformUseCase.execute(platformId);
 
+        GenericResponse<PlatformResponse> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainToDto(platform));
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.mapper.fromDomainToDto(platform));
+                .body(response);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<GenericResponse> updatePlatform(@PathVariable String id, @RequestBody UpdatePlatformRequest platformRequest) {
+    public ResponseEntity<GenericResponse<PlatformResponse>> updatePlatform(@PathVariable String id, @RequestBody UpdatePlatformRequest platformRequest) {
         UpdatePlatformCommand command = new UpdatePlatformCommand(new PlatformId(id), platformRequest.getName(), platformRequest.getLink(), platformRequest.getIcon());
 
-        this.updatePlatformUseCase.execute(command);
+        PlatformId updatedPlatformId = this.updatePlatformUseCase.execute(command);
 
-        GenericResponse response = GenericResponse.builder().id(id).status(HttpStatus.OK.value()).build();
+        Platform updatedPlatform = this.getPlatformUseCase.execute(updatedPlatformId);
+
+        GenericResponse<PlatformResponse> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainToDto(updatedPlatform));
 
         return ResponseEntity
                 .status(HttpStatus.OK)
