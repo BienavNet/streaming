@@ -46,17 +46,17 @@ public class PlatformController {
     private final PlatformMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse<Platform>> createPlatform(@RequestBody CreatePlatformRequest request) {
+    public ResponseEntity<GenericResponse<PlatformResponse>> createPlatform(@RequestBody CreatePlatformRequest request) {
         CreatePlatformCommand command = this.mapper.createPlatformFromDtoToCommand(request);
         PlatformId savedPlatformId = this.createPlatformUseCase.execute(command);
 
         Platform savedPlatform = this.getPlatformUseCase.execute(savedPlatformId);
 
-        GenericResponse<Platform> response = new GenericResponse<>();
+        GenericResponse<PlatformResponse> response = new GenericResponse<>();
         response.setStatus(HttpStatus.CREATED.value());
         response.setId(savedPlatform.getId().value());
         response.setMessage("Platform created succesfully.");
-        response.setData(savedPlatform);
+        response.setData(this.mapper.fromDomainToDto(savedPlatform));
 
         return ResponseEntity
             .status(HttpStatus.CREATED)
