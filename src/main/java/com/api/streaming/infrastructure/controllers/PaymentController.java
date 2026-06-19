@@ -7,6 +7,7 @@ import com.api.streaming.application.commands.CreatePaymentCommand;
 import com.api.streaming.application.useCases.Payment.CreatePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
+import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
 import com.api.streaming.domain.models.Payment;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
@@ -16,6 +17,7 @@ import com.api.streaming.infrastructure.mappers.PaymentMapper;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -34,6 +38,7 @@ public class PaymentController {
     private final CreatePaymentUseCase createPaymentUseCase;
     private final DeletePaymentUseCase deletePaymentUseCase;
     private final GetPaymentDetailsUseCase getPaymentDetailsUseCase;
+    private final GetPaymentsUseCase getPaymentsUseCase;
     private final PaymentMapper mapper;
 
     @PostMapping("")
@@ -80,6 +85,20 @@ public class PaymentController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @GetMapping("")
+    public ResponseEntity<GenericResponse<List<PaymentResponse>>> getAllPayments() {
+        List<Payment> payments = this.getPaymentsUseCase.execute();
+
+        GenericResponse<List<PaymentResponse>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainListToDtoList(payments));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+    
     
     
 }

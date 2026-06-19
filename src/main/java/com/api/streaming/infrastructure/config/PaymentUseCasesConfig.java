@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import com.api.streaming.application.useCases.Payment.CreatePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
+import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 
@@ -32,5 +33,12 @@ public class PaymentUseCasesConfig {
         PaymentInterface paymentInterface
     ) {
         return new GetPaymentDetailsUseCase(paymentInterface);
+    }
+
+    @Bean
+    GetPaymentsUseCase getPaymentsUseCase(
+        PaymentInterface paymentInterface
+    ) {
+        return new GetPaymentsUseCase(paymentInterface);
     }
 }

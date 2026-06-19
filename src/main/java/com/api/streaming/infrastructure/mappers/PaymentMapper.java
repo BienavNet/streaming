@@ -41,4 +41,7 @@ public interface PaymentMapper {
 
     @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
     PaymentResponse fromDomainToDto(Payment payment);
+
+    @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
+    List<PaymentResponse> fromDomainListToDtoList(List<Payment> payments);
 }
