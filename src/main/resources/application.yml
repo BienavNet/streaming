@@ -11,3 +11,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+springdoc:
+  swagger-ui:
+    path: /docs
+    operations-sorter: alpha
