@@ -1,0 +1,32 @@
+package com.api.streaming.domain.models;
+
+import com.api.streaming.domain.valueObjects.MembershipConfigId;
+import com.api.streaming.domain.valueObjects.PlatformId;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class MembershipConfig {
+    private MembershipConfigId id;
+    private PlatformId platform;
+    private String plan;
+    private int profiles;
+
+
+    public MembershipConfig(MembershipConfigId id, PlatformId platform, String plan, int profiles) {
+        this.id = id;
+        this.platform = platform;
+        this.plan = plan;
+        this.profiles = profiles;
+
+        this.validate();
+    }
+
+    private void validate() {
+        // Profiles cannot be 0 or less than that 
+        if (this.profiles <=0 )
+            throw new IllegalArgumentException("Profiles amount should be more than 0.");
+    }
+}
