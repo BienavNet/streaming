@@ -33,21 +33,7 @@ public class AccountEntity {
     private LocalDate membershipExpireDate;
     @Nonnull
     private LocalDate registeredAt;
-
-    // @ManyToOne(
-    //     fetch = FetchType.LAZY
-    // )
-    // @JoinColumn (name = "platform_id", nullable = false)
-    // private String platform;
-
-    // @OneToOne(
-    //     mappedBy = "account",
-    //     fetch = FetchType.LAZY,
-    //     cascade = CascadeType.ALL
-    // )
-    // @JoinColumn (name = "payment_id", nullable = false)
-    // private PaymentEntity payment;
-
+    
     @Nonnull
     @Column(name = "platform_id")
     private String platform;
