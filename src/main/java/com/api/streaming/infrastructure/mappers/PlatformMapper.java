@@ -26,25 +26,27 @@ public interface PlatformMapper {
 
     PlatformMapper INSTANCE = Mappers.getMapper(PlatformMapper.class);
 
-    default String mapPlatformIdToString(PlatformId id) {
-        return id != null ? id.value() : null;
-    }
-
-    default PlatformId mapStringToPlatformId(String id) {
-        return id == null ? null : new PlatformId(id);
-    }
-
+    
     Platform fromEntityToDomain(PlatformEntity entity);
     PlatformEntity fromDomainToEntity(Platform domain);
-
+    
     List<Platform> fromEntityListToDomainList(List<PlatformEntity> entities);
-
+    
     CreatePlatformCommand createPlatformFromDtoToCommand(CreatePlatformRequest request);
-
-    PlatformResponse fromDomainToDto(Platform platform);
+    
+    PlatformResponse fromDomainToDto(Platform domain);
     List<PlatformResponse> fromDomainListToDtoList(List<Platform> platforms);
     
     // Mapping for updating from Command to Domain
     @Mapping(source = "id", target = "id", ignore = true)
     void UpdatePlatformFromCommand(UpdatePlatformCommand source, @MappingTarget Platform target);
+
+
+    default String mapPlatformIdToString(PlatformId platform) {
+        return platform != null ? platform.value() : null;
+    }
+
+    default PlatformId mapStringToPlatformId(String platform) {
+        return platform == null ? null : new PlatformId(platform);
+    }
 }

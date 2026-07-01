@@ -24,6 +24,21 @@ public interface PaymentMapper {
 
     PaymentMapper INSTANCE = Mappers.getMapper(PaymentMapper.class);
 
+    
+    Payment fromEntityToDomain(PaymentEntity entity);
+    PaymentEntity fromDomainToEntity(Payment domain);
+    List<Payment> fromEntityListToDomainList(List<PaymentEntity> entities);
+    
+    
+    CreatePaymentCommand createPaymentFromDtoToCommand(CreatePaymentRequest request);
+    
+    @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
+    PaymentResponse fromDomainToDto(Payment payment);
+    
+    @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
+    List<PaymentResponse> fromDomainListToDtoList(List<Payment> payments);
+
+    
     default PaymentId mapStringToPaymentId(String id) {
         return id == null ? null : new PaymentId(id);
     }
@@ -31,17 +46,4 @@ public interface PaymentMapper {
     default String mapPaymentIdToString(PaymentId id) {
         return id == null ? null : id.value();
     }
-
-    Payment fromEntityToDomain(PaymentEntity entity);
-    PaymentEntity fromDomainToEntity(Payment domain);
-    List<Payment> fromEntityListToDomainList(List<PaymentEntity> entities);
-
-
-    CreatePaymentCommand createPaymentFromDtoToCommand(CreatePaymentRequest request);
-
-    @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
-    PaymentResponse fromDomainToDto(Payment payment);
-
-    @Mapping(target = "card", expression = "java(payment.getNumber() + \"|\" + payment.getMonth() + \"|\" + payment.getYear() + \"|\" + payment.getCvv())")
-    List<PaymentResponse> fromDomainListToDtoList(List<Payment> payments);
 }
