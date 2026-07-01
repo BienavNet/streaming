@@ -19,6 +19,7 @@ import com.api.streaming.infrastructure.dtos.account.AccountDetailsResponse;
 import com.api.streaming.infrastructure.dtos.account.AccountResponse;
 import com.api.streaming.infrastructure.dtos.account.CreateAccountRequest;
 import com.api.streaming.infrastructure.dtos.account.UpdateAccountRequest;
+import com.api.streaming.infrastructure.persistence.dtos.AccountDetailsProjection;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
 import com.api.streaming.infrastructure.persistence.entities.PaymentEntity;
 import com.api.streaming.infrastructure.persistence.entities.PlatformEntity;
@@ -72,6 +73,13 @@ public interface AccountMapper {
         source = "accountId"
     )
     UpdateAccountCommand fromUpdateRequestToUpdateCommand(AccountId accountId, UpdateAccountRequest request);
+
+    // @Mapping(target = "platform", expression = "new com.api.streaming.domain.models.Platform(projection.platformId, projection.platformName, projection.platformLink, projection.platformIcon)")
+    // @Mapping(target = "payment", expression = "new com.api.streaming.domain.models.Payment(projection.paymentId, projection.paymentNumber, projection.paymentMonth, projection.paymentYear, projection.paymentCvv, projection.paymentBankName)")
+    // @Mapping(target = "membership", expression = "new com.api.streaming.application.queries.MembershipDetailsQuery(projection.membershipId, new com.api.streaming.domain.models.MembershipConfig(projection.membershipConfigId, projection.platformId, projection.plan, projection.profiles))")
+    AccountDetailsQuery fromProjectionToQuery(AccountDetailsProjection projection);
+
+    List<AccountDetailsQuery> fromProjectionListToQueryList(List<AccountDetailsProjection> projection);
 
     default AccountId mapStringToAccountId(String id) {
         return id != null ? new AccountId(id) : null;
