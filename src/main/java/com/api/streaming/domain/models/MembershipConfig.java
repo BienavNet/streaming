@@ -12,10 +12,10 @@ public class MembershipConfig {
     private MembershipConfigId id;
     private PlatformId platform;
     private String plan;
-    private int profiles;
+    private Integer profiles;
 
 
-    public MembershipConfig(MembershipConfigId id, PlatformId platform, String plan, int profiles) {
+    public MembershipConfig(MembershipConfigId id, PlatformId platform, String plan, Integer profiles) {
         this.id = id;
         this.platform = platform;
         this.plan = plan;
