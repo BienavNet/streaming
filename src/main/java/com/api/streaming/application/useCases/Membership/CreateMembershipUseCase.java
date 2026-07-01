@@ -1,12 +1,15 @@
 package com.api.streaming.application.useCases.Membership;
 
-import java.util.List;
+import java.util.Optional;
 
 import com.api.streaming.application.commands.CreateMembershipCommand;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
+import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
+import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.models.Membership;
+import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
@@ -22,10 +25,12 @@ public class CreateMembershipUseCase {
 
     //Externals services
     private final AccountInterface accountInterface;
+    private final MembershipConfigInterface membershipConfigInterface;
 
     public MembershipId execute(CreateMembershipCommand command) {
         this.checkIfAccountExists(command.account());
-        this.checkIfAccountMembershipIsNotAlreadyDefined(command.account(), command.membershipConfig());
+        this.checkIfAccountMembershipIsNotAlreadyDefined(command.account());
+        this.checkIfAccountPlatformMatchWithMembershipConfigPlatform(command.account(), command.membershipConfig());
 
         MembershipId id = this.generateIdInterface.generatMembershipId();
 
@@ -41,13 +46,20 @@ public class CreateMembershipUseCase {
             .orElseThrow(() -> new EntityNotFoundException("This account does not exists."));
     }
 
-    private void checkIfAccountMembershipIsNotAlreadyDefined(AccountId accountId, MembershipConfigId membershipConfigId) {
+    private void checkIfAccountMembershipIsNotAlreadyDefined(AccountId accountId) {
+        Optional<Membership> membershipOptional = this.membershipInterface.getMembershipByAccount(accountId);
 
-        List<Membership> list = this.membershipInterface.getMembershipsByAccount(accountId);
-        
-        for (Membership item : list) {
-            if(item.getMembershipConfig().equals(membershipConfigId))
-                throw new EntityExistsException("Is already registered an account with this membership.");
+        if(membershipOptional.isPresent())
+            throw new EntityExistsException("This account already has a membership registered.");
+    }
+
+    private void checkIfAccountPlatformMatchWithMembershipConfigPlatform(AccountId account, MembershipConfigId membershipConfig) {
+        MembershipConfig config = this.membershipConfigInterface.getMembershipConfig(membershipConfig).orElseThrow(() -> new EntityNotFoundException("This membership config does not exists, so couldn't attach to this membership."));
+
+        Account acc = this.accountInterface.getAccount(account).orElseThrow(() -> new EntityNotFoundException("You cannot attach a membership to an account that does not exist."));
+
+        if (!acc.getPlatform().equals(config.getPlatform())) {
+            throw new IllegalArgumentException("Your platform account must be match with membership platform.");
         }
     }
 
