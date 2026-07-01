@@ -2,6 +2,7 @@ package com.api.streaming.domain.models;
 
 import java.time.LocalDate;
 
+import com.api.streaming.domain.enums.OrderType;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
 
@@ -13,20 +14,22 @@ import lombok.Setter;
 public class Order {
     private OrderId id;
     private AccountId account;
-    private int profileAmount;
+    private Integer profileAmount;
     private LocalDate buyDate;
     private LocalDate finishDate;
-    private double paymentAmount;
+    private Double paymentAmount;
+    private OrderType orderType;
 
 
-    public Order(OrderId id, AccountId account, int profileAmount, LocalDate buyDate, LocalDate finishDate,
-            double paymentAmount) {
+    public Order(OrderId id, AccountId account, Integer profileAmount, LocalDate buyDate, LocalDate finishDate,
+            Double paymentAmount, OrderType orderType) {
         this.id = id;
         this.account = account;
         this.profileAmount = profileAmount;
         this.buyDate = buyDate;
         this.finishDate = finishDate;
         this.paymentAmount = paymentAmount;
+        this.orderType = orderType;
 
         this.validate();
     }
@@ -47,22 +50,22 @@ public class Order {
         this.finishDate = date;
     }
 
-    public void setPaymentAmount(double amount) {
+    public void setPaymentAmount(Double amount) {
         this.validatePaymentAmount(amount);
         this.paymentAmount = amount;
     }
 
-    public void setProfileAmount(int profileAmount) {
+    public void setProfileAmount(Integer profileAmount) {
         this.validateProfileAmount(profileAmount);
         this.profileAmount = profileAmount;
     }
 
-    private void validatePaymentAmount(double amount){
+    private void validatePaymentAmount(Double amount){
         if (amount < 0) 
             throw new IllegalArgumentException("Payment amount cannot be less than 0.");
     }
 
-    private void validateProfileAmount(int profile) {
+    private void validateProfileAmount(Integer profile) {
         if (profile < 0)
             throw new IllegalArgumentException("Profile amount should be more than 0.");
     }
