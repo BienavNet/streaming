@@ -18,5 +18,6 @@ public record AccountDetailsQuery(
     LocalDate registeredAt,
     Platform platform,
     Payment payment,
-    AccountStatus status
+    AccountStatus status,
+    MembershipDetailsQuery membership
 ) {}
