@@ -26,12 +26,6 @@ public class AccountEntity {
     @Nonnull
     private String password;
     @Nonnull
-    private boolean isFreeTrial;
-    @Nonnull
-    private LocalDate membershipBuyDate;
-    @Nonnull
-    private LocalDate membershipExpireDate;
-    @Nonnull
     private LocalDate registeredAt;
     
     @Nonnull

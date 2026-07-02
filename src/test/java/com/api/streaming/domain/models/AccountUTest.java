@@ -28,7 +28,7 @@ public class AccountUTest {
         LocalDate membershipStart = LocalDate.now();
         LocalDate membershipEnd = LocalDate.of(2050, 6, 29);
         
-        this.account = new Account(accountId, email, "123456789", false, membershipStart, membershipEnd, LocalDate.now(), platformId, paymentId, status);
+        this.account = new Account(accountId, email, "123456789", LocalDate.now(), platformId, paymentId, status);
     }
 
     @Test
@@ -63,12 +63,6 @@ public class AccountUTest {
         assertThatThrownBy(() -> this.account.setEmail(null))
         .isInstanceOf(IllegalArgumentException.class);
 
-        assertThatThrownBy(() -> this.account.setMembershipExpireDate(LocalDate.MIN))
-        .isInstanceOf(IllegalArgumentException.class);
-
-        assertThatThrownBy(() -> this.account.setMembershipBuyDate(LocalDate.MAX))
-        .isInstanceOf(IllegalArgumentException.class);
-
         assertThatThrownBy(() -> this.account.setPlatform(null))
         .isInstanceOf(IllegalArgumentException.class);
 
@@ -81,14 +75,6 @@ public class AccountUTest {
         this.account.setEmail("email@email.com");
         assertThat(this.account.getEmail().value())
         .isEqualTo("email@email.com");
-        
-        this.account.setMembershipExpireDate(LocalDate.MAX);
-        assertThat(this.account.getMembershipExpireDate())
-        .isEqualTo(LocalDate.MAX);
-
-        this.account.setMembershipBuyDate(LocalDate.MIN);
-        assertThat(this.account.getMembershipBuyDate())
-        .isEqualTo(LocalDate.MIN);
 
         this.account.setPlatform("23lk4j2");
         assertThat(this.account.getPlatform().value())

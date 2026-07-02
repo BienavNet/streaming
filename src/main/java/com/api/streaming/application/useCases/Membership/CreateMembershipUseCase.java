@@ -34,7 +34,14 @@ public class CreateMembershipUseCase {
 
         MembershipId id = this.generateIdInterface.generatMembershipId();
 
-        Membership membership = new Membership(id, command.account(), command.membershipConfig());
+        Membership membership = new Membership(
+            id, 
+            command.account(), 
+            command.membershipConfig(),
+            command.isFreeTrial(), 
+            command.membershipBuyDate(), 
+            command.membershipExpireDate()
+        );
 
         this.membershipInterface.saveMembership(membership);
 

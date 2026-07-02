@@ -43,7 +43,7 @@ public class DeactivateAccountUTest {
     @BeforeEach
     void setup() {
         this.expectedId = new AccountId("uuid-4565");
-        this.expectedAccount = new Account(this.expectedId, new Email("email@test.com"), "123456789", false, LocalDate.MIN, LocalDate.MAX, LocalDate.now(), new PlatformId("uuid-123"), new PaymentId("uuid-789"), AccountStatus.ACTIVE);
+        this.expectedAccount = new Account(this.expectedId, new Email("email@test.com"), "123456789", LocalDate.now(), new PlatformId("uuid-123"), new PaymentId("uuid-789"), AccountStatus.ACTIVE);
     }
 
     @Test

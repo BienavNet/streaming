@@ -49,12 +49,12 @@ public class CreateOrderUseCase {
     }
 
     private void checkIfAccountExistsAndIsActive(AccountId accountId) {
-        Account account = this.accountInterface.getAccount(accountId)
+        Membership membership = this.membershipInterface.getMembershipByAccount(accountId)
                 .orElseThrow(
-                        () -> new EntityNotFoundException("You cannot create an order if account does not exist."));
+                        () -> new EntityNotFoundException("You cannot create an order if this account has not a membership."));
 
-        if (account.getMembershipExpireDate().isBefore(LocalDate.now()))
-                throw new IllegalArgumentException("You cannot create a new order with an account that is expired.");
+        if (membership.getMembershipExpireDate().isBefore(LocalDate.now()))
+                throw new IllegalArgumentException("You cannot create a new order with an expired memberhsip.");
     }
 
     private void checkSlotProfilesAvailable(AccountId accountId, int profilesRequired, OrderType orderType) {

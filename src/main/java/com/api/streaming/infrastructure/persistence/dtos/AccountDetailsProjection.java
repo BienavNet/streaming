@@ -9,7 +9,7 @@ public interface AccountDetailsProjection
     String getPassword();
     Boolean getIsFreeTrial();
     LocalDate getMembershipBuyDate();
-    LocalDate getMembershipExpiredDate();
+    LocalDate getMembershipExpireDate();
     LocalDate getRegisteredAt();
     String getStatus();
     String getPlatformId();

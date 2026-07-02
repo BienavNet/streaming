@@ -17,11 +17,11 @@ import lombok.NoArgsConstructor;
 public class CreateAccountRequest {
     private String email;
     private String password;
-    private boolean isFreeTrial;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate membershipBuyDate;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate membershipExpireDate;
+    // private boolean isFreeTrial;
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    // private LocalDate membershipBuyDate;
+    // @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    // private LocalDate membershipExpireDate;
     private String platform;
     private String payment;
 }

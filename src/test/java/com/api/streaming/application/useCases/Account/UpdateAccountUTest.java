@@ -79,9 +79,9 @@ public class UpdateAccountUTest {
 
         this.payment = new Payment(new PaymentId("uuid-456"), "4545454545454545", 10, 2026, "123", "Banco de Colombia.");
 
-        this.command = new UpdateAccountCommand(expectedId, new Email("testing@gmail.com"), "123498723", false, LocalDate.MIN, LocalDate.MAX, this.platform.getId(), this.payment.getId());
+        this.command = new UpdateAccountCommand(expectedId, new Email("testing@gmail.com"), "123498723", this.platform.getId(), this.payment.getId());
 
-        this.account = new Account(this.expectedId, new Email("test@test.com"), "123456789", false, LocalDate.now(), LocalDate.MAX, LocalDate.now(), platform.getId(), payment.getId(), AccountStatus.ACTIVE);
+        this.account = new Account(this.expectedId, new Email("test@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId(), AccountStatus.ACTIVE);
 
         org.springframework.test.util.ReflectionTestUtils.setField(accountMapper, "platformMapper", platformMapper);
         org.springframework.test.util.ReflectionTestUtils.setField(accountMapper, "paymentMapper", paymentMapper);
@@ -113,18 +113,12 @@ public class UpdateAccountUTest {
         .extracting(
             Account::getEmail, 
             Account::getPassword,
-            Account::isFreeTrial,
-            Account::getMembershipBuyDate,
-            Account::getMembershipExpireDate,
             Account::getPlatform,
             Account::getPayment
         )
         .containsExactly(
             command.email(),
             command.password(),
-            command.isFreeTrial(),
-            command.membershipBuyDate(),
-            command.membershipExpireDate(),
             command.platform(),
             command.payment()
         );
@@ -176,7 +170,7 @@ public class UpdateAccountUTest {
     @Test
     void shouldThrowExceptionWhenEmailIsUsedByOtherAccount() {
 
-        Account expectedAccount = new Account(expectedId, new Email("testing@test.com"), "123456789", false, LocalDate.now(), LocalDate.MAX, LocalDate.now(), platform.getId(), payment.getId(), null);
+        Account expectedAccount = new Account(expectedId, new Email("testing@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId(), null);
         List<Account> expectedList = List.of(expectedAccount, expectedAccount);
 
         when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.of(this.account));

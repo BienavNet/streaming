@@ -18,24 +18,17 @@ public class Account {
     private AccountId id;
     private Email email;
     private String password;
-    private boolean isFreeTrial;
-    private LocalDate membershipBuyDate;
-    private LocalDate membershipExpireDate;
     private LocalDate registeredAt;
     private PlatformId platform;
     private PaymentId payment;
     private AccountStatus status;
     // private User createdBy;
     
-    public Account(AccountId id, Email email, String password, boolean isFreeTrial, LocalDate membershipBuyDate,
-        LocalDate membershipExpireDate, LocalDate registeredAt, PlatformId platform, PaymentId payment,
+    public Account(AccountId id, Email email, String password, LocalDate registeredAt, PlatformId platform, PaymentId payment,
         AccountStatus status) {
             this.id = id;
             this.email = email;
             this.password = password;
-            this.isFreeTrial = isFreeTrial;
-            this.membershipBuyDate = membershipBuyDate;
-            this.membershipExpireDate = membershipExpireDate;
             this.registeredAt = registeredAt;
             this.platform = platform;
             this.payment = payment;
@@ -56,22 +49,6 @@ public class Account {
         this.payment = new PaymentId(rawPaymentId);
     }
 
-    public void setMembershipBuyDate(LocalDate date) {
-        if (date != null && date.isBefore(this.membershipExpireDate)){
-            this.membershipBuyDate = date;
-            return;
-        }
-        throw new IllegalArgumentException("The new buy date has to be before than expired date.");
-    }
-
-    public void setMembershipExpireDate(LocalDate date) {
-        if ( date!=null && date.isAfter(this.membershipBuyDate)) {
-            this.membershipExpireDate = date;
-            return;
-        }
-        throw new IllegalArgumentException("The new expire date has to be after than expired date.");
-    }
-
     public void deactivateAccount() {
         if (this.status.equals(AccountStatus.fromValue(AccountStatus.DEACTIVE.getValue())))
             throw new IllegalArgumentException("Account is already deactivated.");
@@ -86,13 +63,10 @@ public class Account {
 
 
     private void validate() {
-        this.validateMembershipDates();
+        // this.validateMembershipDates();
     }
 
-    private void validateMembershipDates() {
-        if (this.membershipExpireDate.isBefore(this.membershipBuyDate))
-            throw new IllegalArgumentException("Expired date cannot be before that buy membership date.");
-    }
+    
 
 
 }

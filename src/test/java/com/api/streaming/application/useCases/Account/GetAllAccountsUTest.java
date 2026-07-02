@@ -43,11 +43,11 @@ public class GetAllAccountsUTest {
         
         Payment payment = new Payment(new PaymentId("uuid-456"), "4545454545454545", 10, 2026, "123", "Banco de Colombia.");
 
-        MembershipDetailsQuery membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), platform.getId(), "plan 1", 5));
+        MembershipDetailsQuery membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), platform.getId(), "plan 1", 5), false, LocalDate.MIN, LocalDate.MAX);
         
-        AccountDetailsQuery account1 = new AccountDetailsQuery(new AccountId("uuid-12312"), new Email("email@test.com"), "122344521", false, LocalDate.MIN, LocalDate.MAX, LocalDate.now(), platform, payment, AccountStatus.ACTIVE, membershipDetailsQuery);
+        AccountDetailsQuery account1 = new AccountDetailsQuery(new AccountId("uuid-12312"), new Email("email@test.com"), "122344521", LocalDate.now(), platform, payment, AccountStatus.ACTIVE, membershipDetailsQuery);
         
-        AccountDetailsQuery account2 = new AccountDetailsQuery(new AccountId("uuid-12314"), new Email("email@test.com"), "122344521", false, LocalDate.MIN, LocalDate.MAX, LocalDate.now(), platform, payment, AccountStatus.ACTIVE, membershipDetailsQuery);
+        AccountDetailsQuery account2 = new AccountDetailsQuery(new AccountId("uuid-12314"), new Email("email@test.com"), "122344521", LocalDate.now(), platform, payment, AccountStatus.ACTIVE, membershipDetailsQuery);
         
         List<AccountDetailsQuery> mock = List.of(account1, account2);
         

@@ -61,9 +61,6 @@ public class AccountIRepoITest {
         entity.setId(id);
         entity.setEmail(email);
         entity.setPassword("123456789");
-        entity.setFreeTrial(false);
-        entity.setMembershipBuyDate(LocalDate.MIN);
-        entity.setMembershipExpireDate(LocalDate.MAX);
         entity.setRegisteredAt(LocalDate.now());
         entity.setPlatform(platformEntity);
         entity.setPayment(paymentEntity);
@@ -94,7 +91,7 @@ public class AccountIRepoITest {
     }
 
     private MembershipEntity createAndSaveMembership(String membershipId, String accountId, String membershipConfigId) {
-        MembershipEntity entity = new MembershipEntity(membershipId, accountId, membershipConfigId);
+        MembershipEntity entity = new MembershipEntity(membershipId, accountId, membershipConfigId, false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31));
         return this.membershipJpaRepository.saveAndFlush(entity);
     }
 
@@ -173,7 +170,7 @@ public class AccountIRepoITest {
         PlatformEntity platformEntity = this.createAndSavePlatform();
         // AccountEntity accountEntity = this.createAccountEntity(accountId.value(), "test@gmail.com", platformEntity, paymentEntity);
 
-        Account accountToSave = new Account(accountId, new Email("test@gmail.com"), "12423524", false, LocalDate.MIN, LocalDate.MAX, LocalDate.now(), new PlatformId(platformEntity.getId()), new PaymentId(paymentEntity.getId()), AccountStatus.ACTIVE);
+        Account accountToSave = new Account(accountId, new Email("test@gmail.com"), "12423524", LocalDate.now(), new PlatformId(platformEntity.getId()), new PaymentId(paymentEntity.getId()), AccountStatus.ACTIVE);
 
 
         Account savedAccount = this.accountIRepository.saveAccount(accountToSave);

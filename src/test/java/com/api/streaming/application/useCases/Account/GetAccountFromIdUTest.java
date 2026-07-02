@@ -51,8 +51,8 @@ public class GetAccountFromIdUTest {
         this.accountId = new AccountId("uuid-2134");
         this.platform = new Platform(new PlatformId("uuid-123"), "netflix", "https://www.netflix.com", "netflix-icon");
         this.payment = new Payment(new PaymentId("uuid-456"), "4545454545454545", 10, 2026, "123", "Banco de Colombia.");
-        this.membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), this.platform.getId(), "plan 1", 5));
-        this.expectedAccount = new AccountDetailsQuery(accountId, new Email("email@test.com"), "122344521", false, LocalDate.MIN, LocalDate.MAX, LocalDate.now(), this.platform, this.payment, AccountStatus.ACTIVE, this.membershipDetailsQuery);
+        this.membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), this.platform.getId(), "plan 1", 5), false, LocalDate.MIN, LocalDate.MAX);
+        this.expectedAccount = new AccountDetailsQuery(accountId, new Email("email@test.com"), "122344521", LocalDate.now(), this.platform, this.payment, AccountStatus.ACTIVE, this.membershipDetailsQuery);
     }
 
     @Test

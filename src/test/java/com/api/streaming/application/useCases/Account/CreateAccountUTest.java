@@ -63,7 +63,7 @@ public class CreateAccountUTest {
         
         this.platform = new Platform(new PlatformId("uuid-123"), "netflix", "https://www.netflix.com", "netflix-icon");
         this.payment = new Payment(new PaymentId("uuid-456"), "4545454545454545", 10, 2026, "123", "Banco de Colombia.");
-        this.command = new CreateAccountCommand(new Email("test@test.com"), "123456789", false, LocalDate.now(), LocalDate.MAX, platform.getId(), payment.getId());
+        this.command = new CreateAccountCommand(new Email("test@test.com"), "123456789", platform.getId(), payment.getId());
     }
 
     @Test
@@ -78,7 +78,7 @@ public class CreateAccountUTest {
         verify(this.accountInterface, times(1)).saveAccount(accountCaptor.capture());
 
         Account savedAccount = accountCaptor.getValue();
-        Account expectedAccount = new Account(resultId, command.email(), command.password(), command.isFreeTrial(), command.membershipBuyDate(), command.membershipExpireDate(), LocalDate.now(), command.platform(), command.payment(), AccountStatus.ACTIVE);
+        Account expectedAccount = new Account(resultId, command.email(), command.password(), LocalDate.now(), command.platform(), command.payment(), AccountStatus.ACTIVE);
 
         assertThat(resultId)
         .isNotNull()
@@ -123,7 +123,7 @@ public class CreateAccountUTest {
     @Test
     void shouldThrowExceptionWhenEmailIsAlreadyRegisteredWithAPlatform() {
 
-        Account expectedAccount = new Account(expectedId, new Email("test@test.com"), "123456789", false, LocalDate.now(), LocalDate.MAX, LocalDate.now(), platform.getId(), payment.getId(), null);
+        Account expectedAccount = new Account(expectedId, new Email("test@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId(), null);
         List<Account> expectedList = List.of(expectedAccount, expectedAccount);
 
 

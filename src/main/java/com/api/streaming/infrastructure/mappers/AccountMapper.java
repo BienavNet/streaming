@@ -113,7 +113,10 @@ public interface AccountMapper {
                         new com.api.streaming.domain.valueObjects.PlatformId(projection.getPlatformId()), 
                         projection.getConfigPlan(), 
                         projection.getConfigProfiles()
-                    )
+                    ),
+                    projection.getIsFreeTrial(),
+                    projection.getMembershipBuyDate(),
+                    projection.getMembershipExpireDate()
                 )
             )
         """
