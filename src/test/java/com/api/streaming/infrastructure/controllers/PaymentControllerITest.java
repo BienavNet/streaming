@@ -18,6 +18,7 @@ import com.api.streaming.application.commands.CreatePaymentCommand;
 import com.api.streaming.application.useCases.Payment.CreatePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
+import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
 import com.api.streaming.domain.models.Payment;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.infrastructure.dtos.payment.CreatePaymentRequest;
@@ -49,6 +50,9 @@ public class PaymentControllerITest {
 
     @MockitoBean
     private GetPaymentDetailsUseCase getPaymentDetailsUseCase;
+
+    @MockitoBean
+    private GetPaymentsUseCase getPaymentsUseCase;
 
     @Test
     void shouldCreatePaymentAndReturnOK() throws Exception {

@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.api.streaming.application.commands.CreateAccountCommand;
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
+import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeactivateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
@@ -32,8 +33,12 @@ import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
 import com.api.streaming.application.useCases.Account.UpdateAccountUseCase;
 import com.api.streaming.domain.enums.AccountStatus;
+import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
+import com.api.streaming.domain.valueObjects.MembershipConfigId;
+import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
 import com.api.streaming.infrastructure.mappers.PlatformMapperImpl;
@@ -66,7 +71,8 @@ public class AccountControllerITest {
     @Test
     void shouldCreateAccountAndReturnOK() throws Exception {
         AccountId accountId = new AccountId("uudi-982893");
-        AccountDetailsQuery createdAccount = new AccountDetailsQuery(new AccountId("uuid-32422"), new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE);
+        MembershipDetailsQuery membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), new PlatformId("uuid-28930"), "plan 1", 5));
+        AccountDetailsQuery createdAccount = new AccountDetailsQuery(new AccountId("uuid-32422"), new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE, membershipDetailsQuery);
 
         when(this.createAccountUseCase.execute(any(CreateAccountCommand.class))).thenReturn(accountId);
         when(this.getAccountFromIdUseCase.execute(accountId)).thenReturn(createdAccount);
@@ -116,7 +122,8 @@ public class AccountControllerITest {
     @Test
     void shouldGetAccountDetailsAndReturnOK() throws Exception {
         AccountId accountId = new AccountId("uuid-23422");
-        AccountDetailsQuery mockAccount = new AccountDetailsQuery(accountId, new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE);
+        MembershipDetailsQuery membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), new PlatformId("uuid-28930"), "plan 1", 5));
+        AccountDetailsQuery mockAccount = new AccountDetailsQuery(accountId, new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE, membershipDetailsQuery);
 
         when(this.getAccountFromIdUseCase.execute(accountId)).thenReturn(mockAccount);
 
@@ -128,7 +135,8 @@ public class AccountControllerITest {
 
     @Test
     void shouldGetAllAccountDetailsAndReturnOK() throws Exception {
-        AccountDetailsQuery mock = new AccountDetailsQuery(new AccountId("uuid-32422"), new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE);
+        MembershipDetailsQuery membershipDetailsQuery = new MembershipDetailsQuery(new MembershipId("uuid-234982"), new MembershipConfig(new MembershipConfigId("uuid-289218"), new PlatformId("uuid-28930"), "plan 1", 5));
+        AccountDetailsQuery mock = new AccountDetailsQuery(new AccountId("uuid-32422"), new Email("test@gmail.com"), "23424234", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31), LocalDate.now(), null, null, AccountStatus.ACTIVE, membershipDetailsQuery);
         List<AccountDetailsQuery> mockList = List.of(mock, mock);
 
         when(this.getAllAccountsUseCase.execute()).thenReturn(mockList);

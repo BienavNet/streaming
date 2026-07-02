@@ -16,15 +16,20 @@ import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
+import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
 import com.api.streaming.infrastructure.mappers.PlatformMapperImpl;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
+import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
+import com.api.streaming.infrastructure.persistence.entities.MembershipEntity;
 import com.api.streaming.infrastructure.persistence.entities.PaymentEntity;
 import com.api.streaming.infrastructure.persistence.entities.PlatformEntity;
 import com.api.streaming.infrastructure.persistence.repositories.AccountJpaRepository;
+import com.api.streaming.infrastructure.persistence.repositories.MembershipConfigJpaRepository;
+import com.api.streaming.infrastructure.persistence.repositories.MembershipJpaRepository;
 import com.api.streaming.infrastructure.persistence.repositories.PaymentJpaRepository;
 import com.api.streaming.infrastructure.persistence.repositories.PlatformJpaRepository;
 
@@ -43,6 +48,12 @@ public class AccountIRepoITest {
 
     @Autowired
     private PaymentJpaRepository paymentJpaRepository;
+
+    @Autowired
+    private MembershipJpaRepository membershipJpaRepository;
+    
+    @Autowired
+    private MembershipConfigJpaRepository membershipConfigJpaRepository;
 
 
     private AccountEntity createAccountEntity(String id, String email, String platformEntity, String paymentEntity) {
@@ -80,6 +91,16 @@ public class AccountIRepoITest {
         entity.setBankName("Banco");
 
         return this.paymentJpaRepository.saveAndFlush(entity);
+    }
+
+    private MembershipEntity createAndSaveMembership(String accountId, String membershipConfigId) {
+        MembershipEntity entity = new MembershipEntity("uuid-234982", accountId, membershipConfigId);
+        return this.membershipJpaRepository.saveAndFlush(entity);
+    }
+
+    private MembershipConfigEntity createAndSaveMembershipConfig(String platform) {
+        return this.membershipConfigJpaRepository
+                .saveAndFlush(new MembershipConfigEntity("uuid-23422", platform, "basic", 10));
     }
 
     @Test
@@ -193,6 +214,10 @@ public class AccountIRepoITest {
 
         AccountEntity accountEntity2 = this.createAccountEntity(accountId2.value(), "tests@gmail.com", platformEntity.getId(), paymentEntity.getId());
 
+        MembershipConfigEntity membershipConfigEntity = this.createAndSaveMembershipConfig(platformEntity.getId());
+        this.createAndSaveMembership(accountId1.value(), membershipConfigEntity.getId());
+        this.createAndSaveMembership(accountId2.value(), membershipConfigEntity.getId());
+
         this.jpaRepository.saveAllAndFlush(List.of(accountEntity1, accountEntity2));
 
         List<AccountDetailsQuery> results = this.accountIRepository.getAccountsDetails();
@@ -208,11 +233,15 @@ public class AccountIRepoITest {
         PaymentEntity paymentEntity = this.createAndSavePayment();
         PlatformEntity platformEntity = this.createAndSavePlatform();
         AccountEntity accountEntity = this.createAccountEntity(accountId.value(), "test@gmail.com", platformEntity.getId(), paymentEntity.getId());
+        MembershipConfigEntity membershipConfigEntity = this.createAndSaveMembershipConfig(platformEntity.getId());
+        this.createAndSaveMembership(accountId.value(), membershipConfigEntity.getId());
 
         this.jpaRepository.saveAndFlush(accountEntity);
 
         Optional<AccountDetailsQuery> result = this.accountIRepository.getAccountDetailById(accountId);
         assertThat(result).isPresent();
+
+        System.out.println(result);
 
         assertThat(result.get().id().value())
         .isEqualTo(accountEntity.getId());
@@ -225,5 +254,5 @@ public class AccountIRepoITest {
 
     }
 
-
+ 
 }

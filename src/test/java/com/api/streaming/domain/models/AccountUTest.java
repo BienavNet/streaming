@@ -26,7 +26,7 @@ public class AccountUTest {
         Email email = new Email("test@example.com");
         AccountStatus status = AccountStatus.ACTIVE;
         LocalDate membershipStart = LocalDate.now();
-        LocalDate membershipEnd = LocalDate.of(2026, 6, 29);
+        LocalDate membershipEnd = LocalDate.of(2050, 6, 29);
         
         this.account = new Account(accountId, email, "123456789", false, membershipStart, membershipEnd, LocalDate.now(), platformId, paymentId, status);
     }
