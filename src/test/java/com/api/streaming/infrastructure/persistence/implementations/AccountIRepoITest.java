@@ -93,8 +93,8 @@ public class AccountIRepoITest {
         return this.paymentJpaRepository.saveAndFlush(entity);
     }
 
-    private MembershipEntity createAndSaveMembership(String accountId, String membershipConfigId) {
-        MembershipEntity entity = new MembershipEntity("uuid-234982", accountId, membershipConfigId);
+    private MembershipEntity createAndSaveMembership(String membershipId, String accountId, String membershipConfigId) {
+        MembershipEntity entity = new MembershipEntity(membershipId, accountId, membershipConfigId);
         return this.membershipJpaRepository.saveAndFlush(entity);
     }
 
@@ -215,8 +215,8 @@ public class AccountIRepoITest {
         AccountEntity accountEntity2 = this.createAccountEntity(accountId2.value(), "tests@gmail.com", platformEntity.getId(), paymentEntity.getId());
 
         MembershipConfigEntity membershipConfigEntity = this.createAndSaveMembershipConfig(platformEntity.getId());
-        this.createAndSaveMembership(accountId1.value(), membershipConfigEntity.getId());
-        this.createAndSaveMembership(accountId2.value(), membershipConfigEntity.getId());
+        this.createAndSaveMembership("uuid-12983", accountId1.value(), membershipConfigEntity.getId());
+        this.createAndSaveMembership("uuid-129823", accountId2.value(), membershipConfigEntity.getId());
 
         this.jpaRepository.saveAllAndFlush(List.of(accountEntity1, accountEntity2));
 
@@ -234,7 +234,7 @@ public class AccountIRepoITest {
         PlatformEntity platformEntity = this.createAndSavePlatform();
         AccountEntity accountEntity = this.createAccountEntity(accountId.value(), "test@gmail.com", platformEntity.getId(), paymentEntity.getId());
         MembershipConfigEntity membershipConfigEntity = this.createAndSaveMembershipConfig(platformEntity.getId());
-        this.createAndSaveMembership(accountId.value(), membershipConfigEntity.getId());
+        this.createAndSaveMembership("uuid-12983", accountId.value(), membershipConfigEntity.getId());
 
         this.jpaRepository.saveAndFlush(accountEntity);
 
