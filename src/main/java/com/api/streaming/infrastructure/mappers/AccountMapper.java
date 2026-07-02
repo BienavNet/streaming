@@ -74,9 +74,50 @@ public interface AccountMapper {
     )
     UpdateAccountCommand fromUpdateRequestToUpdateCommand(AccountId accountId, UpdateAccountRequest request);
 
-    // @Mapping(target = "platform", expression = "new com.api.streaming.domain.models.Platform(projection.platformId, projection.platformName, projection.platformLink, projection.platformIcon)")
-    // @Mapping(target = "payment", expression = "new com.api.streaming.domain.models.Payment(projection.paymentId, projection.paymentNumber, projection.paymentMonth, projection.paymentYear, projection.paymentCvv, projection.paymentBankName)")
-    // @Mapping(target = "membership", expression = "new com.api.streaming.application.queries.MembershipDetailsQuery(projection.membershipId, new com.api.streaming.domain.models.MembershipConfig(projection.membershipConfigId, projection.platformId, projection.plan, projection.profiles))")
+    @Mapping(
+        target = "platform", 
+        expression = """
+            java(
+                new com.api.streaming.domain.models.Platform(
+                    new com.api.streaming.domain.valueObjects.PlatformId(projection.getPlatformId()),
+                    projection.getPlatformName(), 
+                    projection.getPlatformLink(), 
+                    projection.getPlatformIcon()
+                    )
+                )
+        """
+    ) 
+    @Mapping(
+        target = "payment", 
+        expression = """
+            java(
+                new com.api.streaming.domain.models.Payment(
+                    new com.api.streaming.domain.valueObjects.PaymentId(projection.getPaymentId()), 
+                    projection.getPaymentNumber(), 
+                    projection.getPaymentMonth(), 
+                    projection.getPaymentYear(), 
+                    projection.getPaymentCvv(), 
+                    projection.getPaymentBankName()
+                )
+            )         
+        """        
+    )
+    @Mapping(
+        target = "membership", 
+        expression = """
+            java(
+                new com.api.streaming.application.queries.MembershipDetailsQuery(
+                    new com.api.streaming.domain.valueObjects.MembershipId(projection.getMembershipId()), 
+                    new com.api.streaming.domain.models.MembershipConfig(
+                        new com.api.streaming.domain.valueObjects.MembershipConfigId(projection.getMembershipConfigId()), 
+                        new com.api.streaming.domain.valueObjects.PlatformId(projection.getPlatformId()), 
+                        projection.getConfigPlan(), 
+                        projection.getConfigProfiles()
+                    )
+                )
+            )
+        """
+    )
     AccountDetailsQuery fromProjectionToQuery(AccountDetailsProjection projection);
 
     List<AccountDetailsQuery> fromProjectionListToQueryList(List<AccountDetailsProjection> projection);
