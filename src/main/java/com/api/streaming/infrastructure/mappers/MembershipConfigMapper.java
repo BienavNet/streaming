@@ -8,6 +8,7 @@ import org.mapstruct.ReportingPolicy;
 
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
+import com.api.streaming.infrastructure.dtos.membershipConfig.MembershipConfigResponse;
 import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
 
 @Mapper(
@@ -24,6 +25,9 @@ public interface MembershipConfigMapper {
     MembershipConfigEntity fromDomainToEntity(MembershipConfig domain);
 
     List<MembershipConfig> fromEntityListToDomainList(List<MembershipConfigEntity> entities);
+
+    MembershipConfigResponse fromDomainToDtoResponse(MembershipConfig domain);
+    List<MembershipConfigResponse> fromDomainListToDtoResponseList(List<MembershipConfig> domain);
 
 
     default MembershipConfigId mapFromStringToMembershipConfigId(String id) {

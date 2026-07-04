@@ -4,12 +4,15 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
+import com.api.streaming.application.commands.UpdateMembershipCommand;
 import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.domain.models.Membership;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.infrastructure.dtos.membership.UpdateMembershipRequest;
 import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
 import com.api.streaming.infrastructure.persistence.entities.MembershipEntity;
 
@@ -24,6 +27,8 @@ public interface MembershipMapper {
     Membership fromEntityToDomain(MembershipEntity entity);
     MembershipEntity fromDomainToEntity(Membership domain);
 
+    void updateMembershipFromCommand(UpdateMembershipCommand command, @MappingTarget Membership target);
+
     List<Membership> fromEntityListToDomainList(List<MembershipEntity> entityList);
 
     @Mapping(
@@ -31,6 +36,12 @@ public interface MembershipMapper {
         source = "details"
     )
     MembershipDetailsQuery fromEntityToQuery(String id, MembershipConfigEntity details);
+
+    @Mapping(
+        target = "membershipId",
+        source = "id"
+    )
+    UpdateMembershipCommand fromUpdateRequestToUpdateCommand(MembershipId id, UpdateMembershipRequest request);
 
 
     default MembershipId mapFromStringToMembershipId(String id) {
