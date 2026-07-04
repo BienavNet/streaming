@@ -18,9 +18,6 @@ public class AccountResponse {
     private String id;
     private String email;
     private String password;
-    // private boolean isFreeTrial;
-    // private LocalDate membershipBuyDate;
-    // private LocalDate membershipExpireDate;
     private LocalDate registeredAt;
     private PlatformResponse platform;
     private PaymentResponse payment;
