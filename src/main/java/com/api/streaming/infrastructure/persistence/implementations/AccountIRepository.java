@@ -25,12 +25,6 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
 
     private final AccountJpaRepository jpa;
     private final AccountMapper mapper;
-    
-    //External Repositories
-    // private final PlatformJpaRepository platformJpaRepository;
-    // private final PaymentJpaRepository paymentJpaRepository;
-    // private final MembershipJpaRepository membershipJpaRepository;
-    // private final MembershipConfigJpaRepository membershipConfigJpaRepository;
 
     @Override
     public Optional<Account> getAccount(AccountId accountId) {
@@ -69,31 +63,6 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
 
     @Override
     public List<AccountDetailsQuery> getAccountsDetails() {
-        // List<AccountEntity> accounts = this.jpa.findAll();
-
-        // if (accounts.isEmpty())
-        //     return Collections.emptyList();
-
-        // Map<String, PlatformEntity> platforms = this.platformJpaRepository.findAll()
-        //     .stream()
-        //     .collect(Collectors.toMap(PlatformEntity::getId, Function.identity()));
-
-
-        // return accounts
-        // .stream()
-        // .map(account -> {
-        //     PlatformEntity platform = platforms.get(account.getPlatform());
-        //     PaymentEntity payment = this.paymentJpaRepository.findById(account.getPayment()).get();
-
-        //     MembershipEntity membershipEntity = this.membershipJpaRepository.findByAccount(account.getId()).get();
-        //     MembershipConfigEntity membershipConfigEntity = this.membershipConfigJpaRepository.findById(membershipEntity.getMembershipConfig()).get();
-        //     // MembershipDetailsQuery membershipDetails = new MembershipDetailsQuery(membershipEntity.getId(), membershipConfigEntity);
-        //     String membershipId = membershipEntity.getId();
-
-        //     return this.mapper.fromEntityToQuery(account, platform, payment, membershipId, membershipConfigEntity);
-        // })
-        // .collect(Collectors.toList());
-
         List<AccountDetailsProjection> accountsProjections = this.jpa.findAllAccountDetails();
         return this.mapper.fromProjectionListToQueryList(accountsProjections);
     }
@@ -105,15 +74,6 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
                 .map(projection -> {
                     return this.mapper.fromProjectionToQuery(projection);
                 });
-        // return this.jpa.findById(accountId.value())
-        //         .map(entity -> {
-        //             PlatformEntity platform = this.platformJpaRepository.findById(entity.getPlatform())
-        //                                 .orElseThrow(() -> new EntityNotFoundException("Platform Entity not registered for this account."));
-                    
-        //             PaymentEntity payment = this.paymentJpaRepository.findById(entity.getPayment()).orElseThrow(() -> new EntityNotFoundException("Payment Entity not registered for this account."));
-
-        //             return this.mapper.fromEntityToQuery(entity, platform, payment);
-        //         });
     }
 
 
