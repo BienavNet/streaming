@@ -10,4 +10,5 @@ import com.api.streaming.domain.valueObjects.OrderId;
 public interface OrderDetailsInterface {
     List<OrderDetailsQuery> getOrdersDetailsByAccountId(AccountId accountId);
     Optional<OrderDetailsQuery> getOrderDetailsById(OrderId orderId);
+    List<OrderDetailsQuery> getOrdersDetails();
 }
