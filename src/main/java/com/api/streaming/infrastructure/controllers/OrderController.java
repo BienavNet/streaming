@@ -1,0 +1,109 @@
+package com.api.streaming.infrastructure.controllers;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.api.streaming.application.commands.CreateOrderCommand;
+import com.api.streaming.application.queries.OrderDetailsQuery;
+import com.api.streaming.application.useCases.Order.CreateOrderUseCase;
+import com.api.streaming.application.useCases.Order.DeleteOrderByIdUseCase;
+import com.api.streaming.application.useCases.Order.GetOrderDetailsByIdUseCase;
+import com.api.streaming.application.useCases.Order.GetOrdersByAccountIdUseCase;
+import com.api.streaming.application.useCases.Order.GetOrdersUseCase;
+import com.api.streaming.application.useCases.Order.UpdateOrderUseCase;
+import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.OrderId;
+import com.api.streaming.infrastructure.dtos.GenericResponse;
+import com.api.streaming.infrastructure.dtos.order.OrderDetailsResponse;
+import com.api.streaming.infrastructure.dtos.order.OrderResponse;
+import com.api.streaming.infrastructure.mappers.OrderMapper;
+
+import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
+
+
+
+@RestController
+@RequestMapping("/api/order")
+@RequiredArgsConstructor
+public class OrderController {
+    private final CreateOrderUseCase createOrderUseCase;
+    private final DeleteOrderByIdUseCase deleteOrderByIdUseCase;
+    private final GetOrderDetailsByIdUseCase getOrderDetailsByIdUseCase;
+    private final GetOrdersByAccountIdUseCase getOrdersByAccountIdUseCase;
+    private final GetOrdersUseCase getOrdersUseCase;
+
+    private final OrderMapper mapper;
+
+    @PostMapping("")
+    public ResponseEntity<GenericResponse<String>> saveOrder(@RequestBody CreateOrderCommand command) {
+        
+        OrderId orderId = this.createOrderUseCase.execute(command);
+
+        GenericResponse<String> response = new GenericResponse<String>(orderId.value(), HttpStatus.CREATED.value(), "Order created successfully.", orderId.value());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GenericResponse<Void>> deleteOrder(@PathVariable String id) {
+        OrderId orderId = new OrderId(id);
+
+        this.deleteOrderByIdUseCase.execute(orderId);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<GenericResponse<OrderDetailsResponse>> getOrderDetails(@PathVariable String id) {
+        
+        OrderId orderId = new OrderId(id);
+        OrderDetailsQuery order = this.getOrderDetailsByIdUseCase.execute(orderId);
+
+        OrderDetailsResponse details = this.mapper.fromQueryToResponseDto(order);
+
+        GenericResponse<OrderDetailsResponse> response = new GenericResponse<OrderDetailsResponse>(id, HttpStatus.OK.value(), null, details);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/orders/{account}")
+    public ResponseEntity<GenericResponse<List<OrderDetailsResponse>>> getOrdersFromAnAccount(@PathVariable String account) {
+        
+        AccountId accountId = new AccountId(account);
+
+        List<OrderDetailsQuery> orders = this.getOrdersByAccountIdUseCase.execute(accountId);
+
+        List<OrderDetailsResponse> ordersResponse = this.mapper.fromQueryListToResponseDtoList(orders);
+
+        GenericResponse<List<OrderDetailsResponse>> response = new GenericResponse<List<OrderDetailsResponse>>(account, HttpStatus.OK.value(), null, ordersResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @GetMapping("/orders")
+    public ResponseEntity<GenericResponse<List<OrderResponse>>> getOrdersDetails() {
+        List<OrderDetailsQuery> ordersQuery = this.getOrdersUseCase.execute();
+
+        List<OrderResponse> orderResponse = this.mapper.fromQueryListToOrderResponseDto(ordersQuery);
+
+        GenericResponse<List<OrderResponse>> response = new GenericResponse<List<OrderResponse>>(null, HttpStatus.OK.value(), null, orderResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+    
+
+}
