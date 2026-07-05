@@ -107,5 +107,19 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
                     return this.mapper.fromEntityToQuery(accountEntity.getEmail(), platformEntity.getName(), platformEntity.getIcon(), configEntity.getPlan(), order);
                 });
     }
+
+    @Override
+    public List<OrderDetailsQuery> getOrdersDetails() {
+        return this.jpa.findAll()
+                .stream()
+                .map(order -> {
+                    AccountEntity  accountEntity = this.accountJpaRepository.findById(order.getAccount()).get();
+                    PlatformEntity platformEntity = this.platformJpaRepository.findById(accountEntity.getPlatform()).get();
+                    MembershipEntity membershipEntity = this.membershipJpaRepository.findByAccount(order.getAccount()).get();
+                    MembershipConfigEntity configEntity = this.membershipConfigJpaRepository.findById(membershipEntity.getMembershipConfig()).get();
+                    return this.mapper.fromEntityToQuery(accountEntity.getEmail(), platformEntity.getName(), platformEntity.getIcon(), configEntity.getPlan(), order);
+                })
+                .collect(Collectors.toList());
+    }
     
 }
