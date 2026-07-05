@@ -5,12 +5,10 @@ import java.util.List;
 
 import com.api.streaming.application.commands.CreateOrderCommand;
 import com.api.streaming.domain.enums.OrderType;
-import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
 import com.api.streaming.domain.interfaces.OrderInterface;
-import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.models.Membership;
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.models.Order;
@@ -27,7 +25,6 @@ public class CreateOrderUseCase {
     private final GenerateIdInterface generateIdInterface;
 
     // external services
-    private final AccountInterface accountInterface;
     private final MembershipConfigInterface membershipConfigInterface;
     private final MembershipInterface membershipInterface;
 
