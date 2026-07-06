@@ -41,13 +41,13 @@ public class GenerateIdService implements GenerateIdInterface{
     }
 
     @Override
-    public MembershipConfigId generatMembershipConfigId() {
+    public MembershipConfigId generateMembershipConfigId() {
         UUID uuid = Generators.timeBasedEpochGenerator().generate();
         return new MembershipConfigId(uuid.toString());
     }
 
     @Override
-    public MembershipId generatMembershipId() {
+    public MembershipId generateMembershipId() {
         UUID uuid = Generators.timeBasedEpochGenerator().generate();
         return new MembershipId(uuid.toString());
     }

@@ -7,6 +7,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import com.api.streaming.application.commands.UpdateMembershipCommand;
 import com.api.streaming.application.queries.MembershipDetailsQuery;
@@ -23,8 +24,12 @@ import com.api.streaming.infrastructure.persistence.entities.MembershipEntity;
     uses = {AccountMapper.class, MembershipConfigMapper.class}
 )
 public interface MembershipMapper {
+
+    MembershipMapper INSTANCE = Mappers.getMapper(MembershipMapper.class);
     
     Membership fromEntityToDomain(MembershipEntity entity);
+
+
     MembershipEntity fromDomainToEntity(Membership domain);
 
     void updateMembershipFromCommand(UpdateMembershipCommand command, @MappingTarget Membership target);
@@ -32,10 +37,10 @@ public interface MembershipMapper {
     List<Membership> fromEntityListToDomainList(List<MembershipEntity> entityList);
 
     @Mapping(
-        target = "details",
-        source = "details"
+        target = "id",
+        source = "entity.id"
     )
-    MembershipDetailsQuery fromEntityToQuery(String id, MembershipConfigEntity details);
+    MembershipDetailsQuery fromEntityToQuery(MembershipEntity entity, MembershipConfigEntity details);
 
     @Mapping(
         target = "membershipId",

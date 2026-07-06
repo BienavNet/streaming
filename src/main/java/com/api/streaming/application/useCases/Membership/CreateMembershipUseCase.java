@@ -32,7 +32,7 @@ public class CreateMembershipUseCase {
         this.checkIfAccountMembershipIsNotAlreadyDefined(command.account());
         this.checkIfAccountPlatformMatchWithMembershipConfigPlatform(command.account(), command.membershipConfig());
 
-        MembershipId id = this.generateIdInterface.generatMembershipId();
+        MembershipId id = this.generateIdInterface.generateMembershipId();
 
         Membership membership = new Membership(
             id, 

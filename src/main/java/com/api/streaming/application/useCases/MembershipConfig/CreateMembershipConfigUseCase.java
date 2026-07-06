@@ -22,7 +22,7 @@ public class CreateMembershipConfigUseCase {
     public MembershipConfigId execute(CreateMembershipConfigCommand command) {
         this.checkIfPlatformExists(command.platform());
 
-        MembershipConfigId id = this.generateIdInterface.generatMembershipConfigId();
+        MembershipConfigId id = this.generateIdInterface.generateMembershipConfigId();
         MembershipConfig membershipConfig = new MembershipConfig(id, command.platform(), command.plan(), command.profiles());
 
         this.membershipConfigInterface.saveMembershipConfig(membershipConfig);

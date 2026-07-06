@@ -25,8 +25,6 @@ public class AccountUTest {
         PaymentId paymentId = new PaymentId("234xasdf");
         Email email = new Email("test@example.com");
         AccountStatus status = AccountStatus.ACTIVE;
-        LocalDate membershipStart = LocalDate.now();
-        LocalDate membershipEnd = LocalDate.of(2050, 6, 29);
         
         this.account = new Account(accountId, email, "123456789", LocalDate.now(), platformId, paymentId, status);
     }
@@ -71,7 +69,7 @@ public class AccountUTest {
     }
 
     @Test
-    void shouldThrowExceptionWhenUpdatingAccountWithCorrectValues() {
+    void shouldUpdateAccountWithCorrectValues() {
         this.account.setEmail("email@email.com");
         assertThat(this.account.getEmail().value())
         .isEqualTo("email@email.com");

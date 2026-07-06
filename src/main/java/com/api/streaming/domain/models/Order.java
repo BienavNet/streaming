@@ -71,13 +71,13 @@ public class Order {
     }
 
     private void validateDates(LocalDate buyingDates, LocalDate finishingDates) {
-        if (this.buyDate == null || this.finishDate == null)
+        if (buyingDates == null || finishingDates == null)
             throw new IllegalArgumentException("Dates cannot be blank.");
 
-        if (this.buyDate.isAfter(this.finishDate))
+        if (buyingDates.isAfter(finishingDates))
             throw new IllegalArgumentException("Buying date cannot be greater than finish date membership.");
 
-        if (this.finishDate.isBefore(this.buyDate))
+        if (finishingDates.isBefore(buyingDates))
             throw new IllegalArgumentException("Finishing date cannot be lower than buy date membership.");
     }
     

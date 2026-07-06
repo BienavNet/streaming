@@ -5,6 +5,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
+import org.mapstruct.factory.Mappers;
 
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
@@ -20,6 +21,7 @@ import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEnt
 
 public interface MembershipConfigMapper {
 
+    MembershipConfigMapper INSTANCE = Mappers.getMapper(MembershipConfigMapper.class);
 
     MembershipConfig fromEntityToDomain(MembershipConfigEntity entity);
     MembershipConfigEntity fromDomainToEntity(MembershipConfig domain);

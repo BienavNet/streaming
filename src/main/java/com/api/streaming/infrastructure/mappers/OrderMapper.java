@@ -67,4 +67,8 @@ public interface OrderMapper {
     default String mapFromOrderTypeToString(OrderType type) {
         return type!=null ? type.getValue() : null;
     }
+
+    default OrderType mapFromStringToOrderType(String type) {
+        return type!=null ? OrderType.fromValue(type) : null;
+    }
 }

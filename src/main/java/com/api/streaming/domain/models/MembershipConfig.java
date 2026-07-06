@@ -24,9 +24,17 @@ public class MembershipConfig {
         this.validate();
     }
 
+    public void setProfiles(Integer amount) {
+        if (amount <=0)
+            throw new IllegalArgumentException("Profiles amount should be more than 0.");
+        this.profiles = amount;
+    }   
+
     private void validate() {
         // Profiles cannot be 0 or less than that 
         if (this.profiles <=0 )
             throw new IllegalArgumentException("Profiles amount should be more than 0.");
     }
+
+
 }

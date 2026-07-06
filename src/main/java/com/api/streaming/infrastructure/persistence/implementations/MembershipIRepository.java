@@ -80,7 +80,7 @@ public class MembershipIRepository implements MembershipInterface, MembershipDet
         return membershipList
             .stream()
             .map(membership -> {
-                return this.mapper.fromEntityToQuery(membership.getId(), config.get(membership.getMembershipConfig()));
+                return this.mapper.fromEntityToQuery(membership, config.get(membership.getMembershipConfig()));
             })
             .collect(Collectors.toList());
     }
@@ -91,7 +91,7 @@ public class MembershipIRepository implements MembershipInterface, MembershipDet
             .map(entity -> {
                 Optional<MembershipConfigEntity> configEntity = this.membershipConfigjpa.findById(entity.getMembershipConfig());
 
-                return this.mapper.fromEntityToQuery(entity.getId(), configEntity.get());
+                return this.mapper.fromEntityToQuery(entity, configEntity.get());
             });
     }
 
@@ -101,7 +101,7 @@ public class MembershipIRepository implements MembershipInterface, MembershipDet
             .map(entity -> {
                 Optional<MembershipConfigEntity> configEntity = this.membershipConfigjpa.findById(entity.getMembershipConfig());
 
-                return this.mapper.fromEntityToQuery(entity.getId(), configEntity.get());
+                return this.mapper.fromEntityToQuery(entity, configEntity.get());
             });
     }
 

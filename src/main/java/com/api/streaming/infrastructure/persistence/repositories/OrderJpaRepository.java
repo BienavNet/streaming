@@ -8,5 +8,5 @@ import com.api.streaming.infrastructure.persistence.entities.OrderEntity;
 
 public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
     List<OrderEntity> findByAccount(String account);
-    List<OrderEntity> findByIdAndOrderType(String id, String orderType);
+    List<OrderEntity> findByAccountAndOrderType(String id, String orderType);
 }

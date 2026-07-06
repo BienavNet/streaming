@@ -12,6 +12,6 @@ public interface GenerateIdInterface {
     AccountId generateAccountId();
     PaymentId generatePaymentId();
     OrderId generateOrderId();
-    MembershipConfigId generatMembershipConfigId();
-    MembershipId generatMembershipId();
+    MembershipConfigId generateMembershipConfigId();
+    MembershipId generateMembershipId();
 }

@@ -60,7 +60,7 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
 
     @Override
     public List<Order> getOrdersByAccountIdAndOrderType(AccountId accountId, OrderType orderType) {
-        List<OrderEntity> entities = this.jpa.findByIdAndOrderType(accountId.value(), orderType.getValue());
+        List<OrderEntity> entities = this.jpa.findByAccountAndOrderType(accountId.value(), orderType.getValue());
         return this.mapper.fromEntityListToDomainList(entities);
     }
 
