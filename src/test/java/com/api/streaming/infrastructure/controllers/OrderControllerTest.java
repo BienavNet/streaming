@@ -22,6 +22,7 @@ import com.api.streaming.domain.models.Order;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.OrderId;
+import com.api.streaming.infrastructure.dtos.order.CreateOrderRequest;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.OrderMapperImpl;
 import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
@@ -83,7 +84,9 @@ public class OrderControllerTest {
 
     @Test
     void shouldCreateOrderAndReturnCreated() throws Exception {
-        CreateOrderCommand command = new CreateOrderCommand(new AccountId("acc-4565"), 1, LocalDate.now(), LocalDate.now().plusMonths(1), 50.0, OrderType.PROFILE);
+
+        CreateOrderRequest request = new CreateOrderRequest("acc-4565", 1, LocalDate.now(), LocalDate.now().plusMonths(1), 50.0, OrderType.PROFILE.getValue());
+
         OrderId orderId = new OrderId("order-123");
 
         when(this.createOrderUseCase.execute(any(CreateOrderCommand.class))).thenReturn(orderId);
@@ -91,7 +94,7 @@ public class OrderControllerTest {
         mockMvc.perform(
             post("/api/order")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(command))
+                .content(objectMapper.writeValueAsString(request))
         )
         .andExpect(status().isCreated());
     }
@@ -149,7 +152,7 @@ public class OrderControllerTest {
 
     @Test
     void shouldThrowExceptionWhenErrorCreatingOrder() throws Exception {
-        CreateOrderCommand command = new CreateOrderCommand(new AccountId("acc-4565"), 1, LocalDate.now(), LocalDate.now().plusMonths(1), 50.0, OrderType.PROFILE);
+        CreateOrderRequest request = new CreateOrderRequest("acc-4565", 1, LocalDate.now(), LocalDate.now().plusMonths(1), 50.0, OrderType.PROFILE.getValue());
 
         when(this.createOrderUseCase.execute(any(CreateOrderCommand.class)))
             .thenThrow(new IllegalArgumentException());
@@ -157,7 +160,7 @@ public class OrderControllerTest {
         mockMvc.perform(
             post("/api/order")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(command))
+                .content(objectMapper.writeValueAsString(request))
         )
         .andExpect(status().isBadRequest());
     }

@@ -21,6 +21,7 @@ import com.api.streaming.application.useCases.Membership.UpdateMembershipUseCase
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.infrastructure.dtos.membership.CreateMembershipRequest;
 import com.api.streaming.infrastructure.dtos.membership.UpdateMembershipRequest;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.MembershipConfigMapperImpl;
@@ -78,7 +79,7 @@ public class MembershipControllerTest {
 
     @Test
     void shouldCreateMembershipAndReturnCreated() throws Exception {
-        CreateMembershipCommand command = new CreateMembershipCommand(new AccountId("ACC-1231"), new MembershipConfigId("cfg-46452"), false, LocalDate.now(), LocalDate.now().plusMonths(1));
+        CreateMembershipRequest request = new CreateMembershipRequest("ACC-1231", "cfg-46452", false, LocalDate.now(), LocalDate.now().plusMonths(1));
         MembershipId membershipId = new MembershipId("mem-123");
 
         when(this.createMembershipUseCase.execute(any(CreateMembershipCommand.class))).thenReturn(membershipId);
@@ -86,7 +87,7 @@ public class MembershipControllerTest {
         mockMvc.perform(
             post("/api/membership/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(command))
+                .content(objectMapper.writeValueAsString(request))
         )
         .andExpect(status().isCreated());
     }
@@ -149,7 +150,7 @@ public class MembershipControllerTest {
         mockMvc.perform(
             post("/api/membership/")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(command))
+                .content(objectMapper.writeValueAsString(new CreateMembershipRequest(null, null, false, null, null)))
         )
         .andExpect(status().isBadRequest());
     }

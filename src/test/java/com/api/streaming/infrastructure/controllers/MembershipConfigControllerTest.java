@@ -18,6 +18,7 @@ import com.api.streaming.application.useCases.MembershipConfig.GetMembershipConf
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.PlatformId;
+import com.api.streaming.infrastructure.dtos.membershipConfig.CreateMembershipConfigRequest;
 import com.api.streaming.infrastructure.mappers.MembershipConfigMapperImpl;
 import com.api.streaming.infrastructure.mappers.PlatformMapperImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -72,7 +73,7 @@ public class MembershipConfigControllerTest {
     @Test
     void shouldCreateMembershipConfigAndReturnCreated() throws Exception {
 
-        CreateMembershipConfigCommand command = new CreateMembershipConfigCommand(new PlatformId("plat-8787"), "basic", 10);
+        CreateMembershipConfigRequest request = new CreateMembershipConfigRequest("plat-8787", "basic", 10);
 
         MembershipConfigId configId = new MembershipConfigId("config-123");
 
@@ -81,7 +82,7 @@ public class MembershipConfigControllerTest {
         mockMvc.perform(
             post("/api/membership/config")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(command))
+                .content(objectMapper.writeValueAsString(request))
         )
         .andExpect(status().isCreated());
     }
