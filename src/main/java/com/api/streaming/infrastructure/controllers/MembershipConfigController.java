@@ -12,6 +12,7 @@ import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
+import com.api.streaming.infrastructure.dtos.membershipConfig.CreateMembershipConfigRequest;
 import com.api.streaming.infrastructure.dtos.membershipConfig.MembershipConfigResponse;
 import com.api.streaming.infrastructure.mappers.MembershipConfigMapper;
 
@@ -41,8 +42,9 @@ public class MembershipConfigController {
     private final MembershipConfigMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse<String>> saveMembershipConfig(@RequestBody CreateMembershipConfigCommand command) {
+    public ResponseEntity<GenericResponse<String>> saveMembershipConfig(@RequestBody CreateMembershipConfigRequest request) {
 
+        CreateMembershipConfigCommand command = this.mapper.fromCreateConfigRequestToCreateConfigCommand(request);
         MembershipConfigId configId = this.createMembershipConfigUseCase.execute(command);
 
         GenericResponse<String> response = new GenericResponse<>();

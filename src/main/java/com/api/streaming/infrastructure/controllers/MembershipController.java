@@ -13,6 +13,7 @@ import com.api.streaming.application.useCases.Membership.UpdateMembershipUseCase
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
+import com.api.streaming.infrastructure.dtos.membership.CreateMembershipRequest;
 import com.api.streaming.infrastructure.dtos.membership.UpdateMembershipRequest;
 import com.api.streaming.infrastructure.mappers.MembershipMapper;
 
@@ -44,7 +45,8 @@ public class MembershipController {
 
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse<String>> saveMembership(@RequestBody CreateMembershipCommand command) {
+    public ResponseEntity<GenericResponse<String>> saveMembership(@RequestBody CreateMembershipRequest request) {
+        CreateMembershipCommand command = this.mapper.fromCreateRequestToCreateCommand(request);
         MembershipId id = this.createMembershipUseCase.execute(command);
 
         GenericResponse<String> response = new GenericResponse<>();

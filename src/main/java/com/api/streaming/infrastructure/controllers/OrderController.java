@@ -13,6 +13,7 @@ import com.api.streaming.application.useCases.Order.GetOrdersUseCase;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
+import com.api.streaming.infrastructure.dtos.order.CreateOrderRequest;
 import com.api.streaming.infrastructure.dtos.order.OrderDetailsResponse;
 import com.api.streaming.infrastructure.dtos.order.OrderResponse;
 import com.api.streaming.infrastructure.mappers.OrderMapper;
@@ -46,7 +47,9 @@ public class OrderController {
     private final OrderMapper mapper;
 
     @PostMapping("")
-    public ResponseEntity<GenericResponse<String>> saveOrder(@RequestBody CreateOrderCommand command) {
+    public ResponseEntity<GenericResponse<String>> saveOrder(@RequestBody CreateOrderRequest request) {
+        
+        CreateOrderCommand command = this.mapper.fromCreateOrderRequestToCreateOrderCommand(request);
         
         OrderId orderId = this.createOrderUseCase.execute(command);
 

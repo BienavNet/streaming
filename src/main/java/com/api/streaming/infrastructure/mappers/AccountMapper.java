@@ -106,6 +106,7 @@ public interface AccountMapper {
         target = "membership", 
         expression = """
             java(
+                projection.getMembershipId() == null ? null :
                 new com.api.streaming.application.queries.MembershipDetailsQuery(
                     new com.api.streaming.domain.valueObjects.MembershipId(projection.getMembershipId()), 
                     new com.api.streaming.domain.models.MembershipConfig(

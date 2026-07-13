@@ -7,8 +7,10 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import com.api.streaming.application.commands.CreateMembershipConfigCommand;
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
+import com.api.streaming.infrastructure.dtos.membershipConfig.CreateMembershipConfigRequest;
 import com.api.streaming.infrastructure.dtos.membershipConfig.MembershipConfigResponse;
 import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
 
@@ -30,6 +32,9 @@ public interface MembershipConfigMapper {
 
     MembershipConfigResponse fromDomainToDtoResponse(MembershipConfig domain);
     List<MembershipConfigResponse> fromDomainListToDtoResponseList(List<MembershipConfig> domain);
+
+
+    CreateMembershipConfigCommand fromCreateConfigRequestToCreateConfigCommand(CreateMembershipConfigRequest request);
 
 
     default MembershipConfigId mapFromStringToMembershipConfigId(String id) {

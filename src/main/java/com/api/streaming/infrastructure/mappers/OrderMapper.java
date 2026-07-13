@@ -9,11 +9,13 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import com.api.streaming.application.commands.CreateOrderCommand;
 import com.api.streaming.application.commands.UpdateOrderCommand;
 import com.api.streaming.application.queries.OrderDetailsQuery;
 import com.api.streaming.domain.enums.OrderType;
 import com.api.streaming.domain.models.Order;
 import com.api.streaming.domain.valueObjects.OrderId;
+import com.api.streaming.infrastructure.dtos.order.CreateOrderRequest;
 import com.api.streaming.infrastructure.dtos.order.OrderDetailsResponse;
 import com.api.streaming.infrastructure.dtos.order.OrderResponse;
 import com.api.streaming.infrastructure.persistence.entities.OrderEntity;
@@ -53,6 +55,9 @@ public interface OrderMapper {
     @Mapping( target = "orderType", source = "order.orderDetails.orderType")
     OrderResponse orderDetailsQueryToOrderResponse(OrderDetailsQuery order);
     List<OrderResponse> fromQueryListToOrderResponseDto(List<OrderDetailsQuery> orders);
+
+
+    CreateOrderCommand fromCreateOrderRequestToCreateOrderCommand(CreateOrderRequest request);
 
 
 
