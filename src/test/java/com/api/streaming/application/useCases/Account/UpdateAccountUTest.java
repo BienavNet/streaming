@@ -24,6 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.interfaces.AccountInterface;
+import com.api.streaming.domain.interfaces.MembershipInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 import com.api.streaming.domain.interfaces.PlatformInterface;
 import com.api.streaming.domain.models.Account;
@@ -52,6 +53,8 @@ public class UpdateAccountUTest {
     private PaymentInterface paymentInterface;
     @Mock
     private PlatformInterface platformInterface;
+    @Mock
+    private MembershipInterface membershipInterface;
 
     @Spy
     private PlatformMapper platformMapper = new PlatformMapperImpl();
@@ -90,12 +93,9 @@ public class UpdateAccountUTest {
     @Test
     void shouldUpdateAccountSuccesfully() {
         when(this.paymentInterface.getPayment(this.payment.getId())).thenReturn(Optional.of(this.payment));
-
         when(this.platformInterface.getPlatform(this.platform.getId())).thenReturn(Optional.of(this.platform));
-
         when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.of(this.account));
-
-        // when(this.accountInterface.saveAccount(any(Account.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(this.membershipInterface.getMembershipByAccount(this.expectedId)).thenReturn(Optional.empty());
 
         AccountId resultId = this.updateAccountUseCase.execute(command);
 

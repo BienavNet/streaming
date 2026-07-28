@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.domain.interfaces.AccountInterface;
+import com.api.streaming.domain.interfaces.MembershipInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 import com.api.streaming.domain.interfaces.PlatformInterface;
 import com.api.streaming.domain.models.Account;
@@ -24,6 +25,10 @@ public class UpdateAccountUseCase {
     private final PlatformInterface platformInterface;
     private final AccountMapper mapper;
 
+    // Repo added to check if user wants to update platform, this match with membership registered
+    private final MembershipInterface membershipInterface;
+    
+
     public AccountId execute(UpdateAccountCommand command) {
 
         //Validations
@@ -33,8 +38,10 @@ public class UpdateAccountUseCase {
             this.paymentExists(command.payment());
         
 
-        if (command.platform() != null)
+        if (command.platform() != null){
+            this.checkIfMembershipIsBoundAndPlatformsMatch(accountToUpdate.getId());
             this.platformExists(command.platform());
+        }
         
         if (command.platform() != null || command.email() != null)
             this.checkIfEmailIsRegisteredWithSamePlatform(command.email() != null ? command.email() : accountToUpdate.getEmail(), command.platform() != null ? command.platform() : accountToUpdate.getPlatform());
@@ -67,5 +74,10 @@ public class UpdateAccountUseCase {
 
         if (accounts.size() != 0)
             throw new EntityExistsException("There is already an account registered with this email for this platform.");
+    }
+
+    private void checkIfMembershipIsBoundAndPlatformsMatch(AccountId id) {
+        this.membershipInterface.getMembershipByAccount(id)
+            .ifPresent(e -> new EntityExistsException("Cannot update the platform for this account because this account has one membership registered."));
     }
 }

@@ -66,8 +66,9 @@ public class AccountUseCasesConfig {
         AccountInterface accountInterface,
         PaymentInterface paymentInterface,
         PlatformInterface platformInterface,
-        AccountMapper mapper
+        AccountMapper mapper,
+        MembershipInterface membershipInterface
     ) {
-        return new UpdateAccountUseCase(accountInterface, paymentInterface, platformInterface, mapper);
+        return new UpdateAccountUseCase(accountInterface, paymentInterface, platformInterface, mapper, membershipInterface);
     }
 }
