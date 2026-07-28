@@ -15,6 +15,7 @@ import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.domain.models.Membership;
 import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.infrastructure.dtos.membership.CreateMembershipRequest;
+import com.api.streaming.infrastructure.dtos.membership.MembershipDetailsResponse;
 import com.api.streaming.infrastructure.dtos.membership.UpdateMembershipRequest;
 import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
 import com.api.streaming.infrastructure.persistence.entities.MembershipEntity;
@@ -52,6 +53,8 @@ public interface MembershipMapper {
 
     
     CreateMembershipCommand fromCreateRequestToCreateCommand(CreateMembershipRequest request);
+
+    MembershipDetailsResponse fromMembershipQueryToMembershipResponse(MembershipDetailsQuery query);
 
     default MembershipId mapFromStringToMembershipId(String id) {
         return id!=null ? new MembershipId(id) : null;

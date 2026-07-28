@@ -14,6 +14,7 @@ import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
 import com.api.streaming.infrastructure.dtos.membership.CreateMembershipRequest;
+import com.api.streaming.infrastructure.dtos.membership.MembershipDetailsResponse;
 import com.api.streaming.infrastructure.dtos.membership.UpdateMembershipRequest;
 import com.api.streaming.infrastructure.mappers.MembershipMapper;
 
@@ -33,7 +34,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/api/membership/")
+@RequestMapping("/api/membership")
 @RequiredArgsConstructor
 public class MembershipController {
     private final CreateMembershipUseCase createMembershipUseCase;
@@ -68,14 +69,15 @@ public class MembershipController {
     }
 
     @GetMapping("/account/{id}")
-    public ResponseEntity<GenericResponse<MembershipDetailsQuery>> getMembershipDetails(@PathVariable String id) {
+    public ResponseEntity<GenericResponse<MembershipDetailsResponse>> getMembershipDetails(@PathVariable String id) {
         AccountId accountId = new AccountId(id);
 
         MembershipDetailsQuery query = this.getMembershipByAccountIdUseCase.execute(accountId);
+        MembershipDetailsResponse parsedQuery = this.mapper.fromMembershipQueryToMembershipResponse(query);
 
-        GenericResponse<MembershipDetailsQuery> response = new GenericResponse<>();
+        GenericResponse<MembershipDetailsResponse> response = new GenericResponse<>();
         response.setId(id);
-        response.setData(query);
+        response.setData(parsedQuery);
         response.setStatus(HttpStatus.OK.value());
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
