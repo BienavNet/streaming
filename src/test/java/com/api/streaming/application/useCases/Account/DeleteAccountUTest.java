@@ -6,6 +6,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -17,6 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.interfaces.AccountInterface;
+import com.api.streaming.domain.interfaces.MembershipInterface;
+import com.api.streaming.domain.interfaces.OrderInterface;
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
@@ -30,6 +34,10 @@ public class DeleteAccountUTest {
     
     @Mock
     private AccountInterface accountInterface;
+    @Mock
+    private MembershipInterface membershipInterface;
+    @Mock
+    private OrderInterface orderInterface;
 
     @InjectMocks
     private DeleteAccountUseCase deleteAccountUseCase;
@@ -47,6 +55,8 @@ public class DeleteAccountUTest {
     @Test
     void shouldDeleteAccountSuccessfully() {
         when(this.accountInterface.getAccount(this.accountId)).thenReturn(Optional.of(this.expectedAccount));
+        when(this.membershipInterface.getMembershipByAccount(this.accountId)).thenReturn(Optional.empty());
+        when(this.orderInterface.getOrdersByAccountId(this.accountId)).thenReturn(Collections.emptyList());
 
         this.deleteAccountUseCase.execute(this.accountId);
 

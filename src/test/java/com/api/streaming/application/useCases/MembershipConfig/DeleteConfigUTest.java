@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.api.streaming.application.interfaces.MembershipDetailsInterface;
 import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
@@ -28,6 +30,8 @@ public class DeleteConfigUTest {
 
     @Mock
     private MembershipConfigInterface membershipConfigInterface;
+    @Mock
+    private MembershipDetailsInterface membershipDetailsInterface;
 
     @InjectMocks
     private DeleteMembershipConfigUseCase useCase;
@@ -47,6 +51,9 @@ public class DeleteConfigUTest {
         // Given
         when(this.membershipConfigInterface.getMembershipConfig(this.configId))
             .thenReturn(Optional.of(this.membershipConfig));
+
+        when(this.membershipDetailsInterface.getMembershipsByMembershipConfig(configId))
+            .thenReturn(Collections.emptyList());
 
         // When
         this.useCase.execute(this.configId);
