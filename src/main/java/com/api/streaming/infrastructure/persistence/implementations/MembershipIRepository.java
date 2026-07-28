@@ -13,6 +13,7 @@ import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.domain.interfaces.MembershipInterface;
 import com.api.streaming.domain.models.Membership;
 import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.infrastructure.mappers.MembershipMapper;
 import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
@@ -103,6 +104,18 @@ public class MembershipIRepository implements MembershipInterface, MembershipDet
 
                 return this.mapper.fromEntityToQuery(entity, configEntity.get());
             });
+    }
+
+    @Override
+    public List<MembershipDetailsQuery> getMembershipsByMembershipConfig(MembershipConfigId id) {
+        return this.jpa.findByMembershipConfig(id.value())
+            .stream()
+            .map(entity -> {
+                Optional<MembershipConfigEntity> configEntity = this.membershipConfigjpa.findById(entity.getMembershipConfig());
+
+                return this.mapper.fromEntityToQuery(entity, configEntity.get());
+            })
+            .collect(Collectors.toList());
     }
 
     

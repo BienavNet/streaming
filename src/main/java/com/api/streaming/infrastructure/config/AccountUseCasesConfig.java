@@ -12,6 +12,8 @@ import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
 import com.api.streaming.application.useCases.Account.UpdateAccountUseCase;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
+import com.api.streaming.domain.interfaces.MembershipInterface;
+import com.api.streaming.domain.interfaces.OrderInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 import com.api.streaming.domain.interfaces.PlatformInterface;
 import com.api.streaming.infrastructure.mappers.AccountMapper;
@@ -38,9 +40,11 @@ public class AccountUseCasesConfig {
 
     @Bean
     DeleteAccountUseCase deleteAccountUseCase(
-        AccountInterface accountInterface
+        AccountInterface accountInterface, 
+        MembershipInterface membershipInterface,
+        OrderInterface orderInterface
     ) {
-        return new DeleteAccountUseCase(accountInterface);
+        return new DeleteAccountUseCase(accountInterface, membershipInterface, orderInterface);
     }
 
     @Bean

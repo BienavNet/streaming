@@ -8,7 +8,9 @@ import com.api.streaming.application.useCases.Platform.DeletePlatformUseCase;
 import com.api.streaming.application.useCases.Platform.GetAllPlatformsUseCase;
 import com.api.streaming.application.useCases.Platform.GetPlatformUseCase;
 import com.api.streaming.application.useCases.Platform.UpdatePlatformUseCase;
+import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
+import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.interfaces.PlatformInterface;
 import com.api.streaming.infrastructure.mappers.PlatformMapper;
 
@@ -25,9 +27,11 @@ public class PlatformUseCasesConfig {
 
     @Bean
     DeletePlatformUseCase deletePlatformUseCase(
-        PlatformInterface platformInterface
+        PlatformInterface platformInterface,
+        AccountInterface accountInterface,
+        MembershipConfigInterface membershipConfigInterface
     ) {
-        return new DeletePlatformUseCase(platformInterface);
+        return new DeletePlatformUseCase(platformInterface, accountInterface, membershipConfigInterface);
     }
 
     @Bean

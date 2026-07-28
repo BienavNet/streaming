@@ -3,6 +3,7 @@ package com.api.streaming.infrastructure.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.api.streaming.application.interfaces.MembershipDetailsInterface;
 import com.api.streaming.application.useCases.MembershipConfig.CreateMembershipConfigUseCase;
 import com.api.streaming.application.useCases.MembershipConfig.DeleteMembershipConfigUseCase;
 import com.api.streaming.application.useCases.MembershipConfig.GetAllMembershipConfigByPlatformUseCase;
@@ -24,9 +25,10 @@ public class MembershipConfigUseCasesConfig {
 
     @Bean
     DeleteMembershipConfigUseCase deleteMembershipConfigUseCase(
-        MembershipConfigInterface membershipConfigInterface
+        MembershipConfigInterface membershipConfigInterface,
+        MembershipDetailsInterface membershipDetailsInterface
     ) {
-        return new DeleteMembershipConfigUseCase(membershipConfigInterface);
+        return new DeleteMembershipConfigUseCase(membershipConfigInterface, membershipDetailsInterface);
     }
 
     @Bean
