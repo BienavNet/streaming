@@ -78,7 +78,7 @@ public class CreateAccountUTest {
         verify(this.accountInterface, times(1)).saveAccount(accountCaptor.capture());
 
         Account savedAccount = accountCaptor.getValue();
-        Account expectedAccount = new Account(resultId, command.email(), command.password(), LocalDate.now(), command.platform(), command.payment(), AccountStatus.ACTIVE);
+        Account expectedAccount = new Account(resultId, command.email(), command.password(), LocalDate.now(), command.platform(), command.payment());
 
         assertThat(resultId)
         .isNotNull()
@@ -123,7 +123,7 @@ public class CreateAccountUTest {
     @Test
     void shouldThrowExceptionWhenEmailIsAlreadyRegisteredWithAPlatform() {
 
-        Account expectedAccount = new Account(expectedId, new Email("test@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId(), null);
+        Account expectedAccount = new Account(expectedId, new Email("test@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId());
         List<Account> expectedList = List.of(expectedAccount, expectedAccount);
 
 

@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 
 import com.api.streaming.application.interfaces.AccountQueriesInterface;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
-import com.api.streaming.application.useCases.Account.DeactivateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
 import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
@@ -29,13 +28,6 @@ public class AccountUseCasesConfig {
         GenerateIdInterface generateIdInterface
     ) {
         return new CreateAccountUseCase(accountInterface, paymentInterface, platformInterface, generateIdInterface);
-    }
-
-    @Bean
-    DeactivateAccountUseCase deactivateAccountUseCase(
-        AccountInterface accountInterface
-    ) {
-        return new DeactivateAccountUseCase(accountInterface);
     }
 
     @Bean

@@ -24,36 +24,13 @@ public class AccountUTest {
         PlatformId platformId = new PlatformId("50asdf");
         PaymentId paymentId = new PaymentId("234xasdf");
         Email email = new Email("test@example.com");
-        AccountStatus status = AccountStatus.ACTIVE;
         
-        this.account = new Account(accountId, email, "123456789", LocalDate.now(), platformId, paymentId, status);
+        this.account = new Account(accountId, email, "123456789", LocalDate.now(), platformId, paymentId);
     }
 
     @Test
     void shouldCreateValidAccount() {
         assertThat(this.account).isNotNull().isInstanceOf(Account.class);
-    }
-
-    @Test
-    void shouldDeactivateAndActivateAccount(){
-        this.account.deactivateAccount();
-        assertThat(this.account.getStatus().getValue().toLowerCase()).isEqualTo(AccountStatus.DEACTIVE.getValue().toLowerCase());
-
-        this.account.activateAccount();
-        assertThat(this.account.getStatus().getValue().toLowerCase()).isEqualTo(AccountStatus.ACTIVE.getValue().toLowerCase());
-    }
-
-    @Test
-    void shouldThrowExceptionDeactivatingWhenAccountIsAlreadyDeactivated() {
-        this.account.deactivateAccount();
-        assertThatThrownBy(() -> this.account.deactivateAccount())
-        .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void shouldThrowExceptionActivatingWhenAccountIsAlreadyActivated() {
-        assertThatThrownBy(() -> this.account.activateAccount())
-        .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

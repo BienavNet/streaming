@@ -98,17 +98,6 @@ public class AccountControllerITest {
     }
 
     @Test
-    void shouldDeactivateAccountAndReturnOK() throws Exception {
-        AccountId accountId = new AccountId("uuid0023");
-        
-        this.mockMvc.perform(
-            put("/api/account/deactivate/{id}", accountId.value())
-        ).andDo(print()).andExpect(status().isOk());
-
-        verify(this.deactivateAccountUseCase, times(1)).execute(accountId);
-    }
-
-    @Test
     void shouldDeleteAccountAndReturnOK() throws Exception {
         AccountId accountId = new AccountId("uuid0023");
         

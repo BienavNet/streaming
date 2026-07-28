@@ -21,5 +21,4 @@ public class AccountResponse {
     private LocalDate registeredAt;
     private PlatformResponse platform;
     private PaymentResponse payment;
-    private String status;
 }

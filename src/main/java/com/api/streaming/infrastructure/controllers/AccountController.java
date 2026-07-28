@@ -7,7 +7,6 @@ import com.api.streaming.application.commands.CreateAccountCommand;
 import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
-import com.api.streaming.application.useCases.Account.DeactivateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
 import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
@@ -42,7 +41,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AccountController {
 
     private final CreateAccountUseCase createAccountUseCase;
-    private final DeactivateAccountUseCase deactivateAccountUseCase;
     private final DeleteAccountUseCase deleteAccountUseCase;
     private final GetAccountFromIdUseCase getAccountFromIdUseCase;
     private final GetAllAccountsUseCase getAllAccountsUseCase;
@@ -65,23 +63,6 @@ public class AccountController {
         
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(response);
-    }
-
-    @PutMapping("/deactivate/{id}")
-    public ResponseEntity<GenericResponse<Void>> deactivateAccount(@PathVariable String id) {
-
-        AccountId accountId = new AccountId(id);
-
-        this.deactivateAccountUseCase.execute(accountId);
-
-        GenericResponse<Void> response = new GenericResponse<>();
-        response.setId(accountId.value());
-        response.setStatus(HttpStatus.OK.value());
-        response.setMessage("Account deactivate successfully");
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
                 .body(response);
     }
 

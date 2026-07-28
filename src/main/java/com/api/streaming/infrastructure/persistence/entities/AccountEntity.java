@@ -34,7 +34,4 @@ public class AccountEntity {
     @NonNull
      @Column(name = "payment_id")
     private String payment;
-
-    @Nonnull
-    private String status;
 }

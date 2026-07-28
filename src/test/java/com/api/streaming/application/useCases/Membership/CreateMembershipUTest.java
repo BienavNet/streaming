@@ -84,7 +84,7 @@ public class CreateMembershipUTest {
 
         // Inicializar entidades mockeadas básicas
         // Asumiendo un constructor para Account que reciba id y platform (puedes mockearlo si no tiene constructor público fácil)
-        this.account = new Account(accountId, new Email("email@gmail.com"), "123456789", LocalDate.now(), this.platformId, new PaymentId("uuid-98234"), AccountStatus.ACTIVE);
+        this.account = new Account(accountId, new Email("email@gmail.com"), "123456789", LocalDate.now(), this.platformId, new PaymentId("uuid-98234"));
         this.membershipConfig = new MembershipConfig(this.configId, this.platformId, "premium", 15);
         this.membership = new Membership(
             this.newMembershipId,

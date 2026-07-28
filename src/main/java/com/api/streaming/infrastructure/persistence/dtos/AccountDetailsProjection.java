@@ -11,7 +11,6 @@ public interface AccountDetailsProjection
     LocalDate getMembershipBuyDate();
     LocalDate getMembershipExpireDate();
     LocalDate getRegisteredAt();
-    String getStatus();
     String getPlatformId();
     String getPlatformName();
     String getPlatformLink();

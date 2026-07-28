@@ -63,7 +63,6 @@ public class AccountIRepoITest {
         entity.setRegisteredAt(LocalDate.now());
         entity.setPlatform(platformEntity);
         entity.setPayment(paymentEntity);
-        entity.setStatus("ACTIVE");
 
         return entity;
     }
@@ -169,7 +168,7 @@ public class AccountIRepoITest {
         PlatformEntity platformEntity = this.createAndSavePlatform();
         // AccountEntity accountEntity = this.createAccountEntity(accountId.value(), "test@gmail.com", platformEntity, paymentEntity);
 
-        Account accountToSave = new Account(accountId, new Email("test@gmail.com"), "12423524", LocalDate.now(), new PlatformId(platformEntity.getId()), new PaymentId(paymentEntity.getId()), AccountStatus.ACTIVE);
+        Account accountToSave = new Account(accountId, new Email("test@gmail.com"), "12423524", LocalDate.now(), new PlatformId(platformEntity.getId()), new PaymentId(paymentEntity.getId()));
 
 
         Account savedAccount = this.accountIRepository.saveAccount(accountToSave);

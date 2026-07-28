@@ -48,7 +48,7 @@ public class DeleteAccountUTest {
     @BeforeEach
     void setup() {
         this.accountId  = new AccountId("uuid-4654");
-        this.expectedAccount = new Account(this.accountId, new Email("email@test.com"), "123456789", LocalDate.now(), new PlatformId("uuid-123"), new PaymentId("uuid-789"), AccountStatus.ACTIVE);
+        this.expectedAccount = new Account(this.accountId, new Email("email@test.com"), "123456789", LocalDate.now(), new PlatformId("uuid-123"), new PaymentId("uuid-789"));
     }
 
     @Test

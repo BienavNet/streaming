@@ -84,7 +84,7 @@ public class UpdateAccountUTest {
 
         this.command = new UpdateAccountCommand(expectedId, new Email("testing@gmail.com"), "123498723", this.platform.getId(), this.payment.getId());
 
-        this.account = new Account(this.expectedId, new Email("test@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId(), AccountStatus.ACTIVE);
+        this.account = new Account(this.expectedId, new Email("test@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId());
 
         org.springframework.test.util.ReflectionTestUtils.setField(accountMapper, "platformMapper", platformMapper);
         org.springframework.test.util.ReflectionTestUtils.setField(accountMapper, "paymentMapper", paymentMapper);
@@ -170,7 +170,7 @@ public class UpdateAccountUTest {
     @Test
     void shouldThrowExceptionWhenEmailIsUsedByOtherAccount() {
 
-        Account expectedAccount = new Account(expectedId, new Email("testing@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId(), null);
+        Account expectedAccount = new Account(expectedId, new Email("testing@test.com"), "123456789", LocalDate.now(), platform.getId(), payment.getId());
         List<Account> expectedList = List.of(expectedAccount, expectedAccount);
 
         when(this.accountInterface.getAccount(this.expectedId)).thenReturn(Optional.of(this.account));

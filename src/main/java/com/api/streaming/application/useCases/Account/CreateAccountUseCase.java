@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.api.streaming.application.commands.CreateAccountCommand;
-import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
@@ -34,7 +33,6 @@ public class CreateAccountUseCase {
         this.checkIfEmailIsRegisteredWithSamePlatform(command.email(), command.platform());
 
         AccountId id = this.generateIdInterface.generateAccountId();
-        AccountStatus initialStatus = AccountStatus.ACTIVE;
         LocalDate registeredAt = LocalDate.now();
 
         Account createdAccount = new Account(
@@ -43,8 +41,7 @@ public class CreateAccountUseCase {
             command.password(), 
             registeredAt, 
             command.platform(), 
-            command.payment(), 
-            initialStatus
+            command.payment()
         );
 
         this.accountInterface.saveAccount(createdAccount);

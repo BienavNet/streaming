@@ -13,5 +13,4 @@ public class AccountDetailsResponse {
     private String id;
     private String email;
     private String platformName;
-    private String status;
 }
