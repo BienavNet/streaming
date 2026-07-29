@@ -16,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
 import com.api.streaming.domain.interfaces.OrderInterface;

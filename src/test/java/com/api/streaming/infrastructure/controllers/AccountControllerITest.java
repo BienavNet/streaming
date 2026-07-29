@@ -27,7 +27,6 @@ import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
-import com.api.streaming.application.useCases.Account.DeactivateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
 import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
@@ -56,8 +55,6 @@ public class AccountControllerITest {
 
     @MockitoBean
     private CreateAccountUseCase createAccountUseCase;
-    @MockitoBean
-    private DeactivateAccountUseCase deactivateAccountUseCase;
     @MockitoBean
     private DeleteAccountUseCase deleteAccountUseCase;
     @MockitoBean

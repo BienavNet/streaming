@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PaymentId;

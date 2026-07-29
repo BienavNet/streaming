@@ -22,7 +22,6 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.api.streaming.application.commands.UpdateAccountCommand;
-import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;

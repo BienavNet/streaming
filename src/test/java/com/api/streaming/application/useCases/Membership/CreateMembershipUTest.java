@@ -21,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.api.streaming.application.commands.CreateMembershipCommand;
-import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.MembershipConfigInterface;

@@ -12,7 +12,6 @@ import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import com.api.streaming.application.queries.AccountDetailsQuery;
-import com.api.streaming.domain.enums.AccountStatus;
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
