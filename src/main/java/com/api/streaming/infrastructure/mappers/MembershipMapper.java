@@ -17,8 +17,8 @@ import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.infrastructure.dtos.membership.CreateMembershipRequest;
 import com.api.streaming.infrastructure.dtos.membership.MembershipDetailsResponse;
 import com.api.streaming.infrastructure.dtos.membership.UpdateMembershipRequest;
-import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
 import com.api.streaming.infrastructure.persistence.entities.MembershipEntity;
+import com.api.streaming.infrastructure.persistence.projections.MembershipDetailsProjection;
 
 @Mapper(
     componentModel = "spring",
@@ -39,12 +39,7 @@ public interface MembershipMapper {
 
     List<Membership> fromEntityListToDomainList(List<MembershipEntity> entityList);
 
-    @Mapping(
-        target = "id",
-        source = "entity.id"
-    )
-    MembershipDetailsQuery fromEntityToQuery(MembershipEntity entity, MembershipConfigEntity details);
-
+    
     @Mapping(
         target = "membershipId",
         source = "id"
@@ -55,6 +50,23 @@ public interface MembershipMapper {
     CreateMembershipCommand fromCreateRequestToCreateCommand(CreateMembershipRequest request);
 
     MembershipDetailsResponse fromMembershipQueryToMembershipResponse(MembershipDetailsQuery query);
+
+
+    @Mapping(
+        target = "details",
+        expression = """
+                java(
+                    projection.getMembershipConfigId() == null ? null :
+                    new com.api.streaming.domain.models.MembershipConfig(
+                        new com.api.streaming.domain.valueObjects.MembershipConfigId(projection.getMembershipConfigId()),
+                        new com.api.streaming.domain.valueObjects.PlatformId(projection.getPlatformId()),
+                        projection.getPlan()j,
+                        projection.getProfiles()
+                    )
+                )
+                """
+    )
+    MembershipDetailsQuery fromProjectionToDetailsQuery(MembershipDetailsProjection projection);
 
     default MembershipId mapFromStringToMembershipId(String id) {
         return id!=null ? new MembershipId(id) : null;

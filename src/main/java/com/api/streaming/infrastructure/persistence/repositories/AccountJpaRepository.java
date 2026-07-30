@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import com.api.streaming.infrastructure.persistence.dtos.AccountDetailsProjection;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
+import com.api.streaming.infrastructure.persistence.projections.AccountDetailsProjection;
 
 public interface AccountJpaRepository extends JpaRepository<AccountEntity, String> {
     List<AccountEntity> findByPlatform(String id);

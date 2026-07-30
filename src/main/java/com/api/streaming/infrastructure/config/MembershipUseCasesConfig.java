@@ -13,6 +13,7 @@ import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
+import com.api.streaming.domain.interfaces.OrderInterface;
 import com.api.streaming.infrastructure.mappers.MembershipMapper;
 
 @Configuration
@@ -52,8 +53,10 @@ public class MembershipUseCasesConfig {
     @Bean
     UpdateMembershipUseCase updateMembershipUseCase(
         MembershipInterface membershipInterface,
-        MembershipMapper mapper
+        MembershipMapper mapper,
+        MembershipConfigInterface configInterface,
+        OrderInterface orderInterface
     ){
-        return new UpdateMembershipUseCase(membershipInterface, mapper);
+        return new UpdateMembershipUseCase(membershipInterface, mapper, configInterface, orderInterface);
     }
 }

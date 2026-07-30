@@ -14,16 +14,8 @@ import com.api.streaming.domain.models.Order;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
 import com.api.streaming.infrastructure.mappers.OrderMapper;
-import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
-import com.api.streaming.infrastructure.persistence.entities.MembershipConfigEntity;
-import com.api.streaming.infrastructure.persistence.entities.MembershipEntity;
 import com.api.streaming.infrastructure.persistence.entities.OrderEntity;
-import com.api.streaming.infrastructure.persistence.entities.PlatformEntity;
-import com.api.streaming.infrastructure.persistence.repositories.AccountJpaRepository;
-import com.api.streaming.infrastructure.persistence.repositories.MembershipConfigJpaRepository;
-import com.api.streaming.infrastructure.persistence.repositories.MembershipJpaRepository;
 import com.api.streaming.infrastructure.persistence.repositories.OrderJpaRepository;
-import com.api.streaming.infrastructure.persistence.repositories.PlatformJpaRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,12 +25,6 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
 
     private final OrderJpaRepository jpa;
     private final OrderMapper mapper;
-
-    //External repositories
-    private final AccountJpaRepository accountJpaRepository;
-    private final PlatformJpaRepository platformJpaRepository;
-    private final MembershipConfigJpaRepository membershipConfigJpaRepository;
-    private final MembershipJpaRepository membershipJpaRepository;
 
     @Override
     public Optional<Order> getOrderById(OrderId orderId) {
@@ -79,45 +65,31 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
 
     @Override
     public List<OrderDetailsQuery> getOrdersDetailsByAccountId(AccountId accountId) {
-        AccountEntity accountEntity = this.accountJpaRepository.findById(accountId.value()).get();
-        PlatformEntity platformEntity = this.platformJpaRepository.findById(accountEntity.getPlatform()).get();
 
-        MembershipEntity membershipEntity = this.membershipJpaRepository.findByAccount(accountId.value()).get();
-
-        MembershipConfigEntity config = this.membershipConfigJpaRepository.findById(membershipEntity.getMembershipConfig()).get();
-
-        List<OrderEntity> orders = this.jpa.findByAccount(accountId.value());
-
-        return orders
-        .stream()
-        .map(order -> {
-            return this.mapper.fromEntityToQuery(accountEntity.getEmail(), platformEntity.getName(), platformEntity.getIcon(), config.getPlan(), order);
-        })
-        .collect(Collectors.toList());
+        return this.jpa.findOrderDetailsByAccountId(accountId.value())
+                .stream()
+                .map(entity -> {
+                    return this.mapper.fromProjectionToDetailsQuery(entity);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override
     public Optional<OrderDetailsQuery> getOrderDetailsById(OrderId orderId) {
-        return this.jpa.findById(orderId.value())
-                .map(order -> {
-                    AccountEntity  accountEntity = this.accountJpaRepository.findById(order.getAccount()).get();
-                    PlatformEntity platformEntity = this.platformJpaRepository.findById(accountEntity.getPlatform()).get();
-                    MembershipEntity membershipEntity = this.membershipJpaRepository.findByAccount(order.getAccount()).get();
-                    MembershipConfigEntity configEntity = this.membershipConfigJpaRepository.findById(membershipEntity.getMembershipConfig()).get();
-                    return this.mapper.fromEntityToQuery(accountEntity.getEmail(), platformEntity.getName(), platformEntity.getIcon(), configEntity.getPlan(), order);
+
+        return this.jpa.findOrderDetailsById(orderId.value())
+                .map(entity -> {
+                    return this.mapper.fromProjectionToDetailsQuery(entity);
                 });
     }
 
     @Override
     public List<OrderDetailsQuery> getOrdersDetails() {
-        return this.jpa.findAll()
+
+        return this.jpa.findAllOrderDetails()
                 .stream()
-                .map(order -> {
-                    AccountEntity  accountEntity = this.accountJpaRepository.findById(order.getAccount()).get();
-                    PlatformEntity platformEntity = this.platformJpaRepository.findById(accountEntity.getPlatform()).get();
-                    MembershipEntity membershipEntity = this.membershipJpaRepository.findByAccount(order.getAccount()).get();
-                    MembershipConfigEntity configEntity = this.membershipConfigJpaRepository.findById(membershipEntity.getMembershipConfig()).get();
-                    return this.mapper.fromEntityToQuery(accountEntity.getEmail(), platformEntity.getName(), platformEntity.getIcon(), configEntity.getPlan(), order);
+                .map(entity -> {
+                    return this.mapper.fromProjectionToDetailsQuery(entity);
                 })
                 .collect(Collectors.toList());
     }

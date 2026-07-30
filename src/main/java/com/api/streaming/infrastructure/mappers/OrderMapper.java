@@ -19,6 +19,7 @@ import com.api.streaming.infrastructure.dtos.order.CreateOrderRequest;
 import com.api.streaming.infrastructure.dtos.order.OrderDetailsResponse;
 import com.api.streaming.infrastructure.dtos.order.OrderResponse;
 import com.api.streaming.infrastructure.persistence.entities.OrderEntity;
+import com.api.streaming.infrastructure.persistence.projections.OrderDetailsProjection;
 
 @Mapper(
     componentModel = "spring",
@@ -58,6 +59,25 @@ public interface OrderMapper {
 
 
     CreateOrderCommand fromCreateOrderRequestToCreateOrderCommand(CreateOrderRequest request);
+
+
+    @Mapping(
+        target = "orderDetails",
+        expression = """
+                java(
+                    new com.api.streaming.domain.models.Order(
+                        new com.api.streaming.domain.valueObjects.AccountId(projection.getId()),
+                        new com.api.streaming.domain.valueObjects.AccountId(projection.getAccountId()),
+                        projection.getProfileAmount(),
+                        projection.getBuyDate(),
+                        projection.getFinishDate(),
+                        projection.getPaymentAmount(),
+                        new com.api.streaming.domain.enums.OrderType.fromValue(projection.getOrderType())
+                    )
+                )
+                """
+    )
+    OrderDetailsQuery fromProjectionToDetailsQuery(OrderDetailsProjection projection);
 
 
 

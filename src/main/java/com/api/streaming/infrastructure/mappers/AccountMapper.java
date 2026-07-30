@@ -19,10 +19,10 @@ import com.api.streaming.infrastructure.dtos.account.AccountDetailsResponse;
 import com.api.streaming.infrastructure.dtos.account.AccountResponse;
 import com.api.streaming.infrastructure.dtos.account.CreateAccountRequest;
 import com.api.streaming.infrastructure.dtos.account.UpdateAccountRequest;
-import com.api.streaming.infrastructure.persistence.dtos.AccountDetailsProjection;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
 import com.api.streaming.infrastructure.persistence.entities.PaymentEntity;
 import com.api.streaming.infrastructure.persistence.entities.PlatformEntity;
+import com.api.streaming.infrastructure.persistence.projections.AccountDetailsProjection;
 
 @Mapper(
     componentModel = "spring",

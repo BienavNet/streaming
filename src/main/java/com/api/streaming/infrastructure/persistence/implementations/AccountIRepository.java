@@ -13,8 +13,8 @@ import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapper;
-import com.api.streaming.infrastructure.persistence.dtos.AccountDetailsProjection;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
+import com.api.streaming.infrastructure.persistence.projections.AccountDetailsProjection;
 import com.api.streaming.infrastructure.persistence.repositories.AccountJpaRepository;
 
 import lombok.RequiredArgsConstructor;

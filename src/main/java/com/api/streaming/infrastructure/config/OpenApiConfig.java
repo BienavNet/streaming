@@ -13,9 +13,9 @@ public class OpenApiConfig {
     OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Mi API de Spring Boot")
+                        .title("StreamingAPP API")
                         .version("1.0.0")
-                        .description("Esta es la documentación oficial de los endpoints de mi aplicación.")
+                        .description("Streaming APP docs.")
                         .termsOfService("http://swagger.io/terms/")
                         .license(new License().name("Apache 2.0").url("http://springdoc.org")));
     }

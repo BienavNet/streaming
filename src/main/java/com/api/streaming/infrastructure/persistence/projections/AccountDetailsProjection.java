@@ -1,4 +1,4 @@
-package com.api.streaming.infrastructure.persistence.dtos;
+package com.api.streaming.infrastructure.persistence.projections;
 
 import java.time.LocalDate;
 
