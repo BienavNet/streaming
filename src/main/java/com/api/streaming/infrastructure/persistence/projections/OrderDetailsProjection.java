@@ -1,5 +1,7 @@
 package com.api.streaming.infrastructure.persistence.projections;
 
+import java.time.LocalDate;
+
 public interface OrderDetailsProjection {
     String getAccountEmail();
     String getPlatformName();
@@ -7,9 +9,9 @@ public interface OrderDetailsProjection {
     String getPlan();
     String getId();
     String getAccountId();
-    String getProfileAmount();
-    String getBuyDate();
-    String getFinishDate();
-    String getPaymentAmount();
+    Integer getProfileAmount();
+    LocalDate getBuyDate();
+    LocalDate getFinishDate();
+    Double getPaymentAmount();
     String getOrderType();
 }

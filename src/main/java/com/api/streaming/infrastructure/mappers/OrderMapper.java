@@ -66,13 +66,13 @@ public interface OrderMapper {
         expression = """
                 java(
                     new com.api.streaming.domain.models.Order(
-                        new com.api.streaming.domain.valueObjects.AccountId(projection.getId()),
+                        new com.api.streaming.domain.valueObjects.OrderId(projection.getId()),
                         new com.api.streaming.domain.valueObjects.AccountId(projection.getAccountId()),
                         projection.getProfileAmount(),
                         projection.getBuyDate(),
                         projection.getFinishDate(),
                         projection.getPaymentAmount(),
-                        new com.api.streaming.domain.enums.OrderType.fromValue(projection.getOrderType())
+                        com.api.streaming.domain.enums.OrderType.fromValue(projection.getOrderType())
                     )
                 )
                 """

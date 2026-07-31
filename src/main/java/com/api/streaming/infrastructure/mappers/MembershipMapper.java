@@ -60,7 +60,7 @@ public interface MembershipMapper {
                     new com.api.streaming.domain.models.MembershipConfig(
                         new com.api.streaming.domain.valueObjects.MembershipConfigId(projection.getMembershipConfigId()),
                         new com.api.streaming.domain.valueObjects.PlatformId(projection.getPlatformId()),
-                        projection.getPlan()j,
+                        projection.getPlan(),
                         projection.getProfiles()
                     )
                 )
