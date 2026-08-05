@@ -7,9 +7,11 @@ import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 
 public interface MembershipDetailsInterface {
-    List<MembershipDetailsQuery> getAllMembershipDetails();
+    Page<MembershipDetailsQuery> getAllMembershipDetails(Pageable pageable);
     List<MembershipDetailsQuery> getMembershipsByMembershipConfig(MembershipConfigId id);
     Optional<MembershipDetailsQuery> getMembershipDetailsByAccount(AccountId accountId);
     Optional<MembershipDetailsQuery> getMembershipDetailsById(MembershipId id);

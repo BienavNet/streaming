@@ -16,6 +16,8 @@ import com.api.streaming.domain.models.Membership;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.MembershipConfigMapperImpl;
 import com.api.streaming.infrastructure.mappers.MembershipMapperImpl;
@@ -140,11 +142,12 @@ public class MembershipRepoITest {
         MembershipEntity entity2 = this.createMembershipEntity("mem-2", "acc-2", "cfg-1");
         this.jpaRepository.saveAllAndFlush(List.of(entity1, entity2));
 
-        List<MembershipDetailsQuery> result = this.membershipIRepository.getAllMembershipDetails();
+        Pageable pageable = new Pageable(0, 2);
+        Page<MembershipDetailsQuery> result = this.membershipIRepository.getAllMembershipDetails(pageable);
 
-        assertThat(result).hasSize(2);
-        assertThat(result.get(0).details()).isNotNull();
-        assertThat(result.get(0).details().getPlan()).isEqualTo("PREMIUM");
+        assertThat(result.content()).hasSize(2);
+        assertThat(result.content().get(0).details()).isNotNull();
+        assertThat(result.content().get(0).details().getPlan()).isEqualTo("PREMIUM");
     }
 
     @Test

@@ -37,6 +37,8 @@ import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
@@ -125,12 +127,15 @@ public class AccountControllerITest {
         AccountDetailsQuery mock = new AccountDetailsQuery(new AccountId("uuid-32422"), new Email("test@gmail.com"), "23424234", LocalDate.now(), null, null, AccountStatus.ACTIVE, membershipDetailsQuery);
         List<AccountDetailsQuery> mockList = List.of(mock, mock);
 
-        when(this.getAllAccountsUseCase.execute()).thenReturn(mockList);
+        Pageable pageable = new Pageable(0, 10);
+        when(this.getAllAccountsUseCase.execute(pageable)).thenReturn(new Page<>(mockList, 2L, 1));
 
         this.mockMvc.perform(
-            get("/api/account/details")
+            get("/api/account/details/0/10")
             .accept(MediaType.APPLICATION_JSON)
-        ).andExpect(status().isOk());
+        )
+        .andDo(print())
+        .andExpect(status().isOk());
     }
 
     @Test

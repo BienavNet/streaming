@@ -23,6 +23,8 @@ import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 
@@ -49,13 +51,15 @@ public class GetAllAccountsUTest {
         
         AccountDetailsQuery account2 = new AccountDetailsQuery(new AccountId("uuid-12314"), new Email("email@test.com"), "122344521", LocalDate.now(), platform, payment, AccountStatus.ACTIVE, membershipDetailsQuery);
         
-        List<AccountDetailsQuery> mock = List.of(account1, account2);
-        
-        when(this.accountQueriesInterface.getAccountsDetails()).thenReturn(mock);
+        List<AccountDetailsQuery> mockList = List.of(account1, account2);
+        Page<AccountDetailsQuery> mock = new Page<AccountDetailsQuery>(mockList, 2L, 1);
 
-        assertThat(this.getAllAccountsUseCase.execute())
+        Pageable pageable = new Pageable(0, 10);
+        
+        when(this.accountQueriesInterface.getAccountsDetails(pageable)).thenReturn(mock);
+
+        assertThat(this.getAllAccountsUseCase.execute(pageable))
         .isNotNull()
-        .hasSize(2)
         .isEqualTo(mock);
 
 

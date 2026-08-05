@@ -15,6 +15,8 @@ import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.domain.models.Account;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
@@ -214,9 +216,14 @@ public class AccountIRepoITest {
 
         this.jpaRepository.saveAllAndFlush(List.of(accountEntity1, accountEntity2));
 
-        List<AccountDetailsQuery> results = this.accountIRepository.getAccountsDetails();
+        
+        Pageable pageable = new Pageable(0, 10);
+        Page<AccountDetailsQuery> results = this.accountIRepository.getAccountsDetails(pageable);
 
         assertThat(results)
+        .isNotNull();
+
+        assertThat(results.content())
         .isNotNull()
         .hasSize(2);
     }

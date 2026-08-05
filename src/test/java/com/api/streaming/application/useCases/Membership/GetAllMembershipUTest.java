@@ -2,6 +2,7 @@ package com.api.streaming.application.useCases.Membership;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -21,6 +22,9 @@ import com.api.streaming.application.interfaces.MembershipDetailsInterface;
 import com.api.streaming.application.queries.MembershipDetailsQuery;
 import com.api.streaming.domain.models.MembershipConfig;
 import com.api.streaming.domain.valueObjects.MembershipId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
+
 
 @ExtendWith(MockitoExtension.class)
 public class GetAllMembershipUTest {
@@ -40,7 +44,6 @@ public class GetAllMembershipUTest {
     void setup() {
         MembershipId membershipId = new MembershipId("uuid-memb-123");
         
-        // Creamos un registro dummy usando el record
         this.sampleQuery = new MembershipDetailsQuery(
             membershipId,
             this.membershipConfigMock,
@@ -51,37 +54,66 @@ public class GetAllMembershipUTest {
     }
 
     @Test
-    void shouldReturnListOfMembershipsSuccessfully() {
+    void shouldReturnPageOfMembershipsSuccessfully() {
         // Given
-        List<MembershipDetailsQuery> expectedList = List.of(this.sampleQuery);
-        when(this.membershipDetailsInterface.getAllMembershipDetails())
-            .thenReturn(expectedList);
+        Pageable pageable = new Pageable(0, 10);
+        Page<MembershipDetailsQuery> expectedPage = new Page<>(List.of(this.sampleQuery), 1L, 1);
+        
+        when(this.membershipDetailsInterface.getAllMembershipDetails(pageable))
+            .thenReturn(expectedPage);
 
         // When
-        List<MembershipDetailsQuery> resultList = this.useCase.execute();
+        Page<MembershipDetailsQuery> resultPage = this.useCase.execute(pageable);
 
         // Then
-        assertThat(resultList)
+        assertThat(resultPage).isNotNull();
+        assertThat(resultPage.getContent())
             .isNotEmpty()
             .hasSize(1)
             .containsExactly(this.sampleQuery);
+        assertThat(resultPage.getTotalElements()).isEqualTo(1L);
+        assertThat(resultPage.getTotalPages()).isEqualTo(1);
 
-        verify(this.membershipDetailsInterface, times(1)).getAllMembershipDetails();
+        verify(this.membershipDetailsInterface, times(1)).getAllMembershipDetails(pageable);
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoMembershipsExist() {
+    void shouldAssignDefaultPageableWhenNullIsProvided() {
         // Given
-        when(this.membershipDetailsInterface.getAllMembershipDetails())
-            .thenReturn(Collections.emptyList());
+        Pageable defaultPageable = new Pageable(0, 10);
+        Page<MembershipDetailsQuery> expectedPage = new Page<>(List.of(this.sampleQuery), 1L, 1);
+        
+        when(this.membershipDetailsInterface.getAllMembershipDetails(any(Pageable.class)))
+            .thenReturn(expectedPage);
 
         // When
-        List<MembershipDetailsQuery> resultList = this.useCase.execute();
+        Page<MembershipDetailsQuery> resultPage = this.useCase.execute(null);
 
         // Then
-        assertThat(resultList)
-            .isEmpty();
+        assertThat(resultPage).isNotNull();
+        assertThat(resultPage.getContent()).hasSize(1);
 
-        verify(this.membershipDetailsInterface, times(1)).getAllMembershipDetails();
+        // Verificamos que se llamó con el Pageable por defecto (page=0, offset=10)
+        verify(this.membershipDetailsInterface, times(1)).getAllMembershipDetails(defaultPageable);
+    }
+
+    @Test
+    void shouldReturnEmptyPageWhenNoMembershipsExist() {
+        // Given
+        Pageable pageable = new Pageable(0, 10);
+        Page<MembershipDetailsQuery> expectedPage = new Page<>(Collections.emptyList(), 0L, 0);
+        
+        when(this.membershipDetailsInterface.getAllMembershipDetails(pageable))
+            .thenReturn(expectedPage);
+
+        // When
+        Page<MembershipDetailsQuery> resultPage = this.useCase.execute(pageable);
+
+        // Then
+        assertThat(resultPage).isNotNull();
+        assertThat(resultPage.getContent()).isEmpty();
+        assertThat(resultPage.getTotalElements()).isEqualTo(0L);
+
+        verify(this.membershipDetailsInterface, times(1)).getAllMembershipDetails(pageable);
     }
 }

@@ -1,6 +1,7 @@
 package com.api.streaming.infrastructure.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.streaming.application.commands.CreateAccountCommand;
@@ -12,6 +13,8 @@ import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
 import com.api.streaming.application.useCases.Account.UpdateAccountUseCase;
 import com.api.streaming.domain.valueObjects.AccountId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
 import com.api.streaming.infrastructure.dtos.account.AccountDetailsResponse;
 import com.api.streaming.infrastructure.dtos.account.AccountResponse;
@@ -34,7 +37,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 
-
+ 
 @RestController
 @RequestMapping("/api/account")
 @RequiredArgsConstructor
@@ -75,13 +78,18 @@ public class AccountController {
                 .build();
     }
 
-    @GetMapping("/details")
-    public ResponseEntity<GenericResponse<List<AccountDetailsResponse>>> getAccountDetails() {
-        List<AccountDetailsQuery> accounts = this.getAllAccountsUseCase.execute();
+    @GetMapping("/details/{page}/{offset}")
+    public ResponseEntity<GenericResponse<Page<AccountDetailsResponse>>> getAccountDetails(@PathVariable int page, @PathVariable int offset) throws Exception {
 
-        GenericResponse<List<AccountDetailsResponse>> response = new GenericResponse<>();
+        Pageable pageable = new Pageable(page, offset);
+
+        Page<AccountDetailsResponse> accounts = this.getAllAccountsUseCase.execute(pageable).map(mapper::toResponse);
+
+        System.err.println(accounts);
+
+        GenericResponse<Page<AccountDetailsResponse>> response = new GenericResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setData(this.mapper.fromQueryToResponse(accounts));
+        response.setData(accounts);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

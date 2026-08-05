@@ -1,9 +1,10 @@
 package com.api.streaming.application.useCases.Membership;
 
-import java.util.List;
 
 import com.api.streaming.application.interfaces.MembershipDetailsInterface;
 import com.api.streaming.application.queries.MembershipDetailsQuery;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 
 import lombok.AllArgsConstructor;
 
@@ -11,7 +12,11 @@ import lombok.AllArgsConstructor;
 public class GetAllMembershipsUseCase {
     private final MembershipDetailsInterface membershipDetailsInterface;
 
-    public List<MembershipDetailsQuery> execute() {
-        return this.membershipDetailsInterface.getAllMembershipDetails();
+    public Page<MembershipDetailsQuery> execute(Pageable pageable) {
+
+        if (pageable == null)
+            pageable = new Pageable(0, 10);
+
+        return this.membershipDetailsInterface.getAllMembershipDetails(pageable);
     }
 }

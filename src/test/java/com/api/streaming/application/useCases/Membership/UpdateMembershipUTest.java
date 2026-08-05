@@ -10,6 +10,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import jakarta.persistence.EntityNotFoundException;
 
@@ -21,8 +22,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.api.streaming.application.commands.UpdateMembershipCommand;
+import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
+import com.api.streaming.domain.interfaces.OrderInterface;
 import com.api.streaming.domain.models.Membership;
+import com.api.streaming.domain.models.MembershipConfig;
+import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.MembershipConfigId;
 import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.infrastructure.mappers.MembershipMapper;
@@ -34,21 +39,33 @@ public class UpdateMembershipUTest {
     private MembershipInterface membershipInterface;
 
     @Mock
+    private MembershipConfigInterface configInterface;
+
+    @Mock
+    private OrderInterface orderInterface;
+
+    @Mock
     private MembershipMapper mapper;
 
     @Mock
     private Membership membershipMock; 
+
+    @Mock
+    private MembershipConfig configMock;
 
     @InjectMocks
     private UpdateMembershipUseCase useCase;
 
     private UpdateMembershipCommand command;
     private MembershipId membershipId;
+    private MembershipConfigId configId;
+    private AccountId accountId;
 
     @BeforeEach
     void setup() {
         this.membershipId = new MembershipId("uuid-memb-123");
-        MembershipConfigId configId = new MembershipConfigId("uuid-cfg-456");
+        this.configId = new MembershipConfigId("uuid-cfg-456");
+        this.accountId = new AccountId("uuid-1102");
 
         this.command = new UpdateMembershipCommand(
             this.membershipId,
@@ -57,16 +74,27 @@ public class UpdateMembershipUTest {
             LocalDate.now(),
             LocalDate.now().plusMonths(3)
         );
-
-        
     }
 
     @Test
     void shouldUpdateMembershipSuccessfully() {
         // Given
         when(this.membershipMock.getId()).thenReturn(this.membershipId);
+
+        when(this.membershipMock.getMembershipConfig()).thenReturn(this.configId);
+
+        when(this.membershipMock.getAccount()).thenReturn(this.accountId);
+
+        when(this.configMock.getProfiles()).thenReturn(2);
+
         when(this.membershipInterface.getMembership(this.membershipId))
             .thenReturn(Optional.of(this.membershipMock));
+
+        when(this.configInterface.getMembershipConfig(any(MembershipConfigId.class)))
+            .thenReturn(Optional.of(this.configMock));
+
+        when(this.orderInterface.getOrdersByAccountId(this.accountId))
+            .thenReturn(List.of());
 
         // When
         MembershipId resultId = this.useCase.execute(this.command);
