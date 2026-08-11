@@ -80,7 +80,7 @@ public interface OrderMapper {
     )
     OrderDetailsQuery fromProjectionToDetailsQuery(OrderDetailsProjection projection);
 
-
+    List<OrderDetailsQuery> fromProjectionListToQueryList(List<OrderDetailsProjection> projections);
 
     default OrderId mapFromStringToOrderId(String id) {
         return id!=null ? new OrderId(id) : null;

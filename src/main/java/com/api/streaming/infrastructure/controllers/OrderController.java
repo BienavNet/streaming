@@ -12,6 +12,8 @@ import com.api.streaming.application.useCases.Order.GetOrdersByAccountIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrdersUseCase;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
 import com.api.streaming.infrastructure.dtos.order.CreateOrderRequest;
 import com.api.streaming.infrastructure.dtos.order.OrderDetailsResponse;
@@ -94,15 +96,22 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
-    @GetMapping("/orders")
-    public ResponseEntity<GenericResponse<List<OrderResponse>>> getOrdersDetails() {
-        List<OrderDetailsQuery> ordersQuery = this.getOrdersUseCase.execute();
+    @GetMapping("/orders/{page}/{offset}")
+    public ResponseEntity<GenericResponse<Page<OrderResponse>>> getOrdersDetails(@PathVariable int page, @PathVariable int offset) throws Exception {
 
-        List<OrderResponse> orderResponse = this.mapper.fromQueryListToOrderResponseDto(ordersQuery);
+        Pageable pageable = new Pageable(page, offset);
 
-        GenericResponse<List<OrderResponse>> response = new GenericResponse<List<OrderResponse>>(null, HttpStatus.OK.value(), null, orderResponse);
+        Page<OrderResponse> orders = this.getOrdersUseCase.execute(pageable)
+            .map(mapper::orderDetailsQueryToOrderResponse);
 
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        GenericResponse<Page<OrderResponse>> response = new GenericResponse<>();
+
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(orders);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
     
 

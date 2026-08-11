@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.api.streaming.application.interfaces.OrderDetailsInterface;
@@ -15,6 +18,7 @@ import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
 import com.api.streaming.infrastructure.mappers.OrderMapper;
 import com.api.streaming.infrastructure.persistence.entities.OrderEntity;
+import com.api.streaming.infrastructure.persistence.projections.OrderDetailsProjection;
 import com.api.streaming.infrastructure.persistence.repositories.OrderJpaRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -84,14 +88,14 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
     }
 
     @Override
-    public List<OrderDetailsQuery> getOrdersDetails() {
+    public com.api.streaming.domain.valueObjects.Page<OrderDetailsQuery> getOrdersDetails(com.api.streaming.domain.valueObjects.Pageable pageable) {
 
-        return this.jpa.findAllOrderDetails()
-                .stream()
-                .map(entity -> {
-                    return this.mapper.fromProjectionToDetailsQuery(entity);
-                })
-                .toList();
+        Pageable springPageable = PageRequest.of(pageable.getPage(), pageable.getOffset());
+        Page<OrderDetailsProjection> springPage = this.jpa.findAllOrderDetails(springPageable);
+
+        List<OrderDetailsQuery> content = this.mapper.fromProjectionListToQueryList(springPage.getContent());
+
+        return new com.api.streaming.domain.valueObjects.Page<>(content, springPage.getTotalElements(), springPage.getTotalPages());
     }
     
 }
