@@ -83,8 +83,6 @@ public class AccountController {
 
         Page<AccountDetailsResponse> accounts = this.getAllAccountsUseCase.execute(pageable).map(mapper::toResponse);
 
-        System.err.println(accounts);
-
         GenericResponse<Page<AccountDetailsResponse>> response = new GenericResponse<>();
         response.setStatus(HttpStatus.OK.value());
         response.setData(accounts);
