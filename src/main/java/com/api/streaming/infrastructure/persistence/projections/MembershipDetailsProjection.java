@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public interface MembershipDetailsProjection {
     String getId();
-    String getMembershipConfigId();
+    String getConfigId();
     String getPlatformId();
     String getPlan();
     Integer getProfiles();

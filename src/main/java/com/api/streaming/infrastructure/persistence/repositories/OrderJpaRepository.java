@@ -31,7 +31,8 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
                 FROM orders o
                 LEFT JOIN account AS a ON o.account = a.id
                 LEFT JOIN platform AS p ON a.platform_id = p.id
-                LEFT JOIN membership_config AS c ON c.platform = p.id
+				LEFT JOIN membership AS m ON m.account = a.id
+                LEFT JOIN membership_config AS c ON m.membership_config = c.id
                 WHERE o.account = :id
                 """,
         nativeQuery = true
@@ -55,7 +56,8 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
                 FROM orders o
                 LEFT JOIN account AS a ON o.account = a.id
                 LEFT JOIN platform AS p ON a.platform_id = p.id
-                LEFT JOIN membership_config AS c ON c.platform = p.id
+				LEFT JOIN membership AS m ON m.account = a.id
+                LEFT JOIN membership_config AS c ON m.membership_config = c.id
                 WHERE o.id = :id
                 """,
         nativeQuery = true
@@ -79,7 +81,8 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
                 FROM orders o
                 LEFT JOIN account AS a ON o.account = a.id
                 LEFT JOIN platform AS p ON a.platform_id = p.id
-                LEFT JOIN membership_config AS c ON c.platform = p.id
+				LEFT JOIN membership AS m ON m.account = a.id
+                LEFT JOIN membership_config AS c ON m.membership_config = c.id;
                 """,
         nativeQuery = true
     )

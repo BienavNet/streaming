@@ -56,9 +56,8 @@ public interface MembershipMapper {
         target = "details",
         expression = """
                 java(
-                    projection.getMembershipConfigId() == null ? null :
                     new com.api.streaming.domain.models.MembershipConfig(
-                        new com.api.streaming.domain.valueObjects.MembershipConfigId(projection.getMembershipConfigId()),
+                        new com.api.streaming.domain.valueObjects.MembershipConfigId(projection.getConfigId()),
                         new com.api.streaming.domain.valueObjects.PlatformId(projection.getPlatformId()),
                         projection.getPlan(),
                         projection.getProfiles()

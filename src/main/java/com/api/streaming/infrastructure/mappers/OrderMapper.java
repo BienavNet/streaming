@@ -47,6 +47,7 @@ public interface OrderMapper {
     @Mapping(target = "finishDate", source = "query.orderDetails.finishDate")
     @Mapping(target = "paymentAmount", source = "query.orderDetails.paymentAmount")
     @Mapping(target = "orderType", source = "query.orderDetails.orderType")
+    @Mapping(target = "id", source = "query.orderDetails.id")
     OrderDetailsResponse fromQueryToResponseDto(OrderDetailsQuery query);
 
     List<OrderDetailsResponse> fromQueryListToResponseDtoList(List<OrderDetailsQuery> orders);
@@ -67,7 +68,7 @@ public interface OrderMapper {
                 java(
                     new com.api.streaming.domain.models.Order(
                         new com.api.streaming.domain.valueObjects.OrderId(projection.getId()),
-                        new com.api.streaming.domain.valueObjects.AccountId(projection.getAccountId()),
+                        new com.api.streaming.domain.valueObjects.AccountId(projection.getAccount()),
                         projection.getProfileAmount(),
                         projection.getBuyDate(),
                         projection.getFinishDate(),

@@ -8,7 +8,7 @@ public interface OrderDetailsProjection {
     String getPlatformIcon();
     String getPlan();
     String getId();
-    String getAccountId();
+    String getAccount();
     Integer getProfileAmount();
     LocalDate getBuyDate();
     LocalDate getFinishDate();

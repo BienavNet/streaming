@@ -1,7 +1,6 @@
 package com.api.streaming.infrastructure.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.streaming.application.commands.CreateAccountCommand;
@@ -24,7 +23,6 @@ import com.api.streaming.infrastructure.mappers.AccountMapper;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

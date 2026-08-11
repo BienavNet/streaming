@@ -21,11 +21,11 @@ public interface MembershipJpaRepository extends JpaRepository<MembershipEntity,
         value = """
                 SELECT 
                 m.id,
-                m.isFree_trial as isFreeTrial,
+                m.is_free_trial as isFreeTrial,
                 m.membership_buy_date as membershipBuyDate,
                 m.membership_expire_date as membershipExpireDate,
-                c.id,
-                c.platform_id as platformId,
+                c.id as config_id,
+                c.platform as platformId,
                 c.plan,
                 c.profiles
                 FROM 
@@ -41,11 +41,11 @@ public interface MembershipJpaRepository extends JpaRepository<MembershipEntity,
         value = """
                 SELECT 
                 m.id,
-                m.isFree_trial as isFreeTrial,
+                m.is_free_trial as isFreeTrial,
                 m.membership_buy_date as membershipBuyDate,
                 m.membership_expire_date as membershipExpireDate,
-                c.id,
-                c.platform_id as platformId,
+                c.id as config_id,
+                c.platform as platformId,
                 c.plan,
                 c.profiles
                 FROM 
@@ -61,11 +61,11 @@ public interface MembershipJpaRepository extends JpaRepository<MembershipEntity,
         value = """
                 SELECT 
                 m.id,
-                m.isFree_trial as isFreeTrial,
+                m.is_free_trial as isFreeTrial,
                 m.membership_buy_date as membershipBuyDate,
                 m.membership_expire_date as membershipExpireDate,
-                c.id,
-                c.platform_id as platformId,
+                c.id as config_id,
+                c.platform as platformId,
                 c.plan,
                 c.profiles
                 FROM 
@@ -81,11 +81,11 @@ public interface MembershipJpaRepository extends JpaRepository<MembershipEntity,
         value = """
                 SELECT 
                 m.id,
-                m.isFree_trial as isFreeTrial,
+                m.is_free_trial as isFreeTrial,
                 m.membership_buy_date as membershipBuyDate,
                 m.membership_expire_date as membershipExpireDate,
-                c.id,
-                c.platform_id as platformId,
+                c.id as config_id,
+                c.platform as platformId,
                 c.plan,
                 c.profiles
                 FROM 

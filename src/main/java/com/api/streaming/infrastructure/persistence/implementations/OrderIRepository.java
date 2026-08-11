@@ -91,7 +91,7 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
                 .map(entity -> {
                     return this.mapper.fromProjectionToDetailsQuery(entity);
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
     
 }
