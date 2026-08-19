@@ -121,7 +121,7 @@ public class PlatformController {
     }
     
     
-    @GetMapping("/filter/{field}/criteria")
+    @GetMapping("/filter/{field}/{criteria}")
     public ResponseEntity<GenericResponse<List<PlatformResponse>>> filterPlatforms(@PathVariable String field, @PathVariable String criteria) {
         
         List<Platform> platformsFiltered = this.filterPlatformUseCase.execute(field, criteria);
