@@ -15,6 +15,8 @@ import com.api.streaming.domain.enums.OrderType;
 import com.api.streaming.domain.models.Order;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.OrderMapperImpl;
 import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
@@ -228,8 +230,10 @@ public class OrderIRepoITest {
         OrderEntity order = this.createOrderEntity("order-888", "acc-all", "PROFILE");
         this.jpaRepository.saveAndFlush(order);
 
-        List<OrderDetailsQuery> result = this.orderIRepository.getOrdersDetails();
+        Pageable pageable = new Pageable(0, 10);
 
-        assertThat(result).isNotEmpty();
+        Page<OrderDetailsQuery> result = this.orderIRepository.getOrdersDetails(pageable);
+
+        assertThat(result.content()).isNotEmpty();
     }
 }

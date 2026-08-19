@@ -22,6 +22,8 @@ import com.api.streaming.domain.models.Order;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.OrderId;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.infrastructure.dtos.order.CreateOrderRequest;
 import com.api.streaming.infrastructure.mappers.AccountMapperImpl;
 import com.api.streaming.infrastructure.mappers.OrderMapperImpl;
@@ -141,7 +143,8 @@ public class OrderControllerTest {
 
     @Test
     void shouldGetOrdersDetailsAndReturnOk() throws Exception {
-        when(this.getOrdersUseCase.execute()).thenReturn(Collections.emptyList());
+        Pageable pageable = new Pageable(0, 10);
+        when(this.getOrdersUseCase.execute(pageable)).thenReturn(new Page<>(Collections.emptyList(), 2L, 1));
 
         mockMvc.perform(
             get("/api/order/orders")

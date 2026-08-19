@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.api.streaming.application.interfaces.OrderDetailsInterface;
 import com.api.streaming.application.queries.OrderDetailsQuery;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 
 @ExtendWith(MockitoExtension.class)
 public class GetOrdersUTest {
@@ -33,36 +35,44 @@ public class GetOrdersUTest {
     void shouldReturnAllOrdersSuccessfully() {
         // Given
         List<OrderDetailsQuery> expectedOrders = List.of(this.orderDetailsQueryMock);
-        when(this.orderDetailsInterface.getOrdersDetails())
-            .thenReturn(expectedOrders);
+        Page<OrderDetailsQuery> mock = new Page<>(expectedOrders, 2L, 1);
+        Pageable pageable = new Pageable(0, 10);
+
+        when(this.orderDetailsInterface.getOrdersDetails(pageable))
+            .thenReturn(mock);
 
         // When
-        List<OrderDetailsQuery> resultList = this.useCase.execute();
+        Page<OrderDetailsQuery> resultList = this.useCase.execute(pageable);
 
         // Then
-        assertThat(resultList)
+        assertThat(resultList.content())
             .isNotEmpty()
             .hasSize(1)
             .containsExactly(this.orderDetailsQueryMock);
 
-        verify(this.orderDetailsInterface, times(1)).getOrdersDetails();
+        verify(this.orderDetailsInterface, times(1)).getOrdersDetails(pageable);
     }
 
     @Test
     void shouldReturnEmptyListWhenNoOrdersExistInSystem() {
+
+        List<OrderDetailsQuery> expectedOrders = Collections.emptyList();
+        Page<OrderDetailsQuery> mock = new Page<>(expectedOrders, 2L, 1);
+        Pageable pageable = new Pageable(0, 10);
+
         // Given
-        when(this.orderDetailsInterface.getOrdersDetails())
-            .thenReturn(Collections.emptyList());
+        when(this.orderDetailsInterface.getOrdersDetails(pageable))
+            .thenReturn(mock);
 
         // When
-        List<OrderDetailsQuery> resultList = this.useCase.execute();
+        Page<OrderDetailsQuery> resultList = this.useCase.execute(pageable);
 
         // Then
-        assertThat(resultList)
+        assertThat(resultList.content())
             .isNotNull()
             .isEmpty();
 
-        verify(this.orderDetailsInterface, times(1)).getOrdersDetails();
+        verify(this.orderDetailsInterface, times(1)).getOrdersDetails(pageable);
     }
 }
 
