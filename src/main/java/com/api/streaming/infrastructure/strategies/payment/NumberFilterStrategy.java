@@ -10,7 +10,7 @@ import com.api.streaming.domain.models.Payment;
 
 import lombok.AllArgsConstructor;
 
-@Component("number")
+@Component("payment_number")
 @AllArgsConstructor
 public class NumberFilterStrategy implements PaymentFilterStrategy {
     private final PaymentInterface paymentInterface;

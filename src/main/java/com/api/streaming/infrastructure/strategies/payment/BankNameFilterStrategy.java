@@ -10,7 +10,7 @@ import com.api.streaming.domain.models.Payment;
 
 import lombok.AllArgsConstructor;
 
-@Component("bankName")
+@Component("payment_bankName")
 @AllArgsConstructor
 public class BankNameFilterStrategy implements PaymentFilterStrategy {
 

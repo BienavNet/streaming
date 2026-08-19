@@ -10,7 +10,7 @@ import com.api.streaming.domain.models.Platform;
 
 import lombok.AllArgsConstructor;
 
-@Component("platform_filter_name")
+@Component("platform_name")
 @AllArgsConstructor
 public class PlatformNameFilterStrategy implements PlatformFilterStrategy{
     
