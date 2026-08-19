@@ -64,12 +64,6 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
         return this.mapper.fromEntityListToDomainList(entities);
     }
 
-    // @Override
-    // public List<AccountDetailsQuery> getAccountsDetails() {
-    //     List<AccountDetailsProjection> accountsProjections = this.jpa.findAllAccountDetails();
-    //     return this.mapper.fromProjectionListToQueryList(accountsProjections);
-    // }
-
     @Override
     public Optional<AccountDetailsQuery> getAccountDetailById(AccountId accountId) {
 
@@ -87,6 +81,20 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
         List<AccountDetailsQuery> content = this.mapper.fromProjectionListToQueryList(springPage.getContent());
 
         return new Page<>(content, springPage.getTotalElements(), springPage.getTotalPages());
+    }
+
+    @Override
+    public List<AccountDetailsQuery> findByEmail(String email) {
+        List<AccountDetailsProjection> projections = this.jpa.findByEmailContainingIgnoreCase(email);
+
+        return this.mapper.fromProjectionListToQueryList(projections);
+    }
+
+    @Override
+    public List<AccountDetailsQuery> findByPlatform(String platform) {
+        List<AccountDetailsProjection> projections = this.jpa.findByPlatformNameContainingIgnoreCase(platform);
+
+        return this.mapper.fromProjectionListToQueryList(projections);
     }
 
 

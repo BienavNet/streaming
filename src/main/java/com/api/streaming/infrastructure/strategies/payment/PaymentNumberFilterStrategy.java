@@ -10,15 +10,13 @@ import com.api.streaming.domain.models.Payment;
 
 import lombok.AllArgsConstructor;
 
-@Component("payment_bankName")
+@Component("payment_number")
 @AllArgsConstructor
-public class BankNameFilterStrategy implements PaymentFilterStrategy {
-
+public class PaymentNumberFilterStrategy implements PaymentFilterStrategy {
     private final PaymentInterface paymentInterface;
 
     @Override
     public List<Payment> execute(String criteria) {
-        return this.paymentInterface.findByBankName(criteria);
+        return this.paymentInterface.findByNumber(criteria);
     }
-    
 }

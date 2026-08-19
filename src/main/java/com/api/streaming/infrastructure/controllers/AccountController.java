@@ -8,6 +8,7 @@ import com.api.streaming.application.commands.UpdateAccountCommand;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
+import com.api.streaming.application.useCases.Account.FilterAccountUseCase;
 import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
 import com.api.streaming.application.useCases.Account.UpdateAccountUseCase;
@@ -23,6 +24,7 @@ import com.api.streaming.infrastructure.mappers.AccountMapper;
 
 import lombok.RequiredArgsConstructor;
 
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+
 
 
 
@@ -46,6 +49,7 @@ public class AccountController {
     private final GetAccountFromIdUseCase getAccountFromIdUseCase;
     private final GetAllAccountsUseCase getAllAccountsUseCase;
     private final UpdateAccountUseCase updateAccountUseCase;
+    private final FilterAccountUseCase filterAccountUseCase;
     private final AccountMapper mapper;
 
     @PostMapping("")
@@ -128,4 +132,21 @@ public class AccountController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+    @GetMapping("/filter/{field}/{criteria}")
+    public ResponseEntity<GenericResponse<List<AccountDetailsResponse>>> filterAccounts(@PathVariable String field, @PathVariable String criteria) {
+        List<AccountDetailsResponse> accountsFiltered = this.filterAccountUseCase.execute(field, criteria)
+        .stream()
+        .map(this.mapper::toResponse)
+        .toList();
+
+        GenericResponse<List<AccountDetailsResponse>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(accountsFiltered);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+    
 }

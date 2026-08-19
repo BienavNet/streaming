@@ -1,11 +1,15 @@
 package com.api.streaming.infrastructure.config;
 
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.api.streaming.application.interfaces.AccountFilterStrategy;
 import com.api.streaming.application.interfaces.AccountQueriesInterface;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
+import com.api.streaming.application.useCases.Account.FilterAccountUseCase;
 import com.api.streaming.application.useCases.Account.GetAccountFromIdUseCase;
 import com.api.streaming.application.useCases.Account.GetAllAccountsUseCase;
 import com.api.streaming.application.useCases.Account.UpdateAccountUseCase;
@@ -62,5 +66,12 @@ public class AccountUseCasesConfig {
         MembershipInterface membershipInterface
     ) {
         return new UpdateAccountUseCase(accountInterface, paymentInterface, platformInterface, mapper, membershipInterface);
+    }
+
+    @Bean
+    FilterAccountUseCase filterAccountUseCase(
+        Map<String, AccountFilterStrategy> strategies
+    ) {
+        return new FilterAccountUseCase(strategies);
     }
 }
