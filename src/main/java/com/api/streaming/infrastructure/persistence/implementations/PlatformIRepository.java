@@ -50,5 +50,13 @@ public class PlatformIRepository implements PlatformInterface {
     public void deletePlatform(PlatformId platformId) {
         this.jpa.deleteById(platformId.value());
     }
+
+    @Override
+    public List<Platform> findByName(String name) {
+        return this.jpa.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(this.mapper::fromEntityToDomain)
+                .toList();
+    }
     
 }

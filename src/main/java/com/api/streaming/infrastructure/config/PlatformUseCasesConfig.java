@@ -1,10 +1,14 @@
 package com.api.streaming.infrastructure.config;
 
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.api.streaming.application.interfaces.PlatformFilterStrategy;
 import com.api.streaming.application.useCases.Platform.CreatePlatformUseCase;
 import com.api.streaming.application.useCases.Platform.DeletePlatformUseCase;
+import com.api.streaming.application.useCases.Platform.FilterPlatformUseCase;
 import com.api.streaming.application.useCases.Platform.GetAllPlatformsUseCase;
 import com.api.streaming.application.useCases.Platform.GetPlatformUseCase;
 import com.api.streaming.application.useCases.Platform.UpdatePlatformUseCase;
@@ -54,5 +58,12 @@ public class PlatformUseCasesConfig {
         PlatformMapper mapper
     ) {
         return new UpdatePlatformUseCase(platformInterface, mapper);
+    }
+
+    @Bean
+    FilterPlatformUseCase filterPlatformUseCase(
+        Map<String, PlatformFilterStrategy> strategies
+    ) {
+        return new FilterPlatformUseCase(strategies);
     }
 }

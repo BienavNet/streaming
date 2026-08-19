@@ -103,7 +103,7 @@ public class PaymentController {
 
 
     @GetMapping("/filter/{field}/{criteria}")
-    public ResponseEntity<GenericResponse<List<PaymentResponse>>> getMethodName(@PathVariable String field, @PathVariable String criteria) {
+    public ResponseEntity<GenericResponse<List<PaymentResponse>>> filterPayments(@PathVariable String field, @PathVariable String criteria) {
         List<Payment> paymentsFiltered = this.filterPaymentsUseCase.execute(field, criteria);
 
         GenericResponse<List<PaymentResponse>> response = new GenericResponse<>();

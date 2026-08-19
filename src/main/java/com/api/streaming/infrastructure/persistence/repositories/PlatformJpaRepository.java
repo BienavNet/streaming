@@ -1,5 +1,6 @@
 package com.api.streaming.infrastructure.persistence.repositories;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,4 +11,5 @@ public interface PlatformJpaRepository extends JpaRepository<PlatformEntity, Str
 
     Optional<PlatformEntity> findByName(String name);
     
+    List<PlatformEntity> findByNameContainingIgnoreCase(String name);
 }

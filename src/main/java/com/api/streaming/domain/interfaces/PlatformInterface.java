@@ -12,4 +12,7 @@ public interface PlatformInterface {
     List<Platform> getAllPlatforms();
     Platform savePlatform(Platform platform);
     void deletePlatform(PlatformId platformId);
+
+    //filters 
+    List<Platform> findByName(String name);
 }

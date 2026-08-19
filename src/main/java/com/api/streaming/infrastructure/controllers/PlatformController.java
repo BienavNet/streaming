@@ -7,6 +7,7 @@ import com.api.streaming.application.commands.CreatePlatformCommand;
 import com.api.streaming.application.commands.UpdatePlatformCommand;
 import com.api.streaming.application.useCases.Platform.CreatePlatformUseCase;
 import com.api.streaming.application.useCases.Platform.DeletePlatformUseCase;
+import com.api.streaming.application.useCases.Platform.FilterPlatformUseCase;
 import com.api.streaming.application.useCases.Platform.GetAllPlatformsUseCase;
 import com.api.streaming.application.useCases.Platform.GetPlatformUseCase;
 import com.api.streaming.application.useCases.Platform.UpdatePlatformUseCase;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 
+
 @RestController
 @RequestMapping("/api/platform")
 @RequiredArgsConstructor
@@ -43,6 +45,7 @@ public class PlatformController {
     private final GetAllPlatformsUseCase getAllPlatformsUseCase;
     private final GetPlatformUseCase getPlatformUseCase;
     private final UpdatePlatformUseCase updatePlatformUseCase;
+    private final FilterPlatformUseCase filterPlatformUseCase;
     private final PlatformMapper mapper;
 
     @PostMapping("")
@@ -118,6 +121,19 @@ public class PlatformController {
     }
     
     
+    @GetMapping("/filter/{field}/criteria")
+    public ResponseEntity<GenericResponse<List<PlatformResponse>>> filterPlatforms(@PathVariable String field, @PathVariable String criteria) {
+        
+        List<Platform> platformsFiltered = this.filterPlatformUseCase.execute(field, criteria);
+
+        GenericResponse<List<PlatformResponse>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainListToDtoList(platformsFiltered));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
     
 
 }
