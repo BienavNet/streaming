@@ -50,5 +50,21 @@ public class PaymentIRepository implements PaymentInterface {
         return this.jpa.findByNumber(number)
             .map(this.mapper::fromEntityToDomain);
     }
+
+    @Override
+    public List<Payment> findByBankName(String name) {
+        return this.jpa.findByBankNameContainingIgnoreCase(name)
+                .stream()
+                .map(this.mapper::fromEntityToDomain)
+                .toList();
+    }
+
+    @Override
+    public List<Payment> findByNumber(String number) {
+        return this.jpa.findByNumberContainingIgnoreCase(number)
+                .stream()
+                .map(this.mapper::fromEntityToDomain)
+                .toList();
+    }
     
 }

@@ -1,10 +1,14 @@
 package com.api.streaming.infrastructure.config;
 
+import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import com.api.streaming.application.interfaces.PaymentFilterStrategy;
 import com.api.streaming.application.useCases.Payment.CreatePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
+import com.api.streaming.application.useCases.Payment.FilterPaymentsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
@@ -40,5 +44,12 @@ public class PaymentUseCasesConfig {
         PaymentInterface paymentInterface
     ) {
         return new GetPaymentsUseCase(paymentInterface);
+    }
+
+    @Bean
+    FilterPaymentsUseCase filterPaymentsUseCase(
+        Map<String, PaymentFilterStrategy> strategies
+    ) {
+        return new FilterPaymentsUseCase(strategies);
     }
 }

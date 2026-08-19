@@ -12,4 +12,8 @@ public interface PaymentInterface {
     List<Payment> getPayments();
     Payment savePayment(Payment payment);
     void deletePayment(PaymentId paymentId);
+
+    // filters
+    List<Payment> findByBankName(String name);
+    List<Payment> findByNumber(String number);
 }

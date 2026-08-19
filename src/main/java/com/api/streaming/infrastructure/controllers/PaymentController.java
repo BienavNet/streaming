@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.api.streaming.application.commands.CreatePaymentCommand;
 import com.api.streaming.application.useCases.Payment.CreatePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
+import com.api.streaming.application.useCases.Payment.FilterPaymentsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
 import com.api.streaming.domain.models.Payment;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 
+
 @RestController
 @RequestMapping("/api/payment")
 @RequiredArgsConstructor
@@ -38,6 +40,7 @@ public class PaymentController {
     private final DeletePaymentUseCase deletePaymentUseCase;
     private final GetPaymentDetailsUseCase getPaymentDetailsUseCase;
     private final GetPaymentsUseCase getPaymentsUseCase;
+    private final FilterPaymentsUseCase filterPaymentsUseCase;
     private final PaymentMapper mapper;
 
     @PostMapping("")
@@ -97,6 +100,21 @@ public class PaymentController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+
+
+    @GetMapping("/filter/{field}/{criteria}")
+    public ResponseEntity<GenericResponse<List<PaymentResponse>>> getMethodName(@PathVariable String field, @PathVariable String criteria) {
+        List<Payment> paymentsFiltered = this.filterPaymentsUseCase.execute(field, criteria);
+
+        GenericResponse<List<PaymentResponse>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(this.mapper.fromDomainListToDtoList(paymentsFiltered));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+    
     
     
     
