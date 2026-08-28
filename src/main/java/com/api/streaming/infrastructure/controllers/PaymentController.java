@@ -10,6 +10,8 @@ import com.api.streaming.application.useCases.Payment.FilterPaymentsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
 import com.api.streaming.domain.models.Payment;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
 import com.api.streaming.infrastructure.dtos.payment.CreatePaymentRequest;
@@ -88,13 +90,16 @@ public class PaymentController {
                 .body(response);
     }
 
-    @GetMapping("")
-    public ResponseEntity<GenericResponse<List<PaymentResponse>>> getAllPayments() {
-        List<Payment> payments = this.getPaymentsUseCase.execute();
+    @GetMapping("/{page}/{offset}")
+    public ResponseEntity<GenericResponse<Page<PaymentResponse>>> getAllPayments(@PathVariable int page, @PathVariable int offset) throws Exception {
 
-        GenericResponse<List<PaymentResponse>> response = new GenericResponse<>();
+        Pageable pageable = new Pageable(page, offset);
+
+        Page<PaymentResponse> payments = this.getPaymentsUseCase.execute(pageable).map(this.mapper::fromDomainToDto);
+
+        GenericResponse<Page<PaymentResponse>> response = new GenericResponse<>();
         response.setStatus(HttpStatus.OK.value());
-        response.setData(this.mapper.fromDomainListToDtoList(payments));
+        response.setData(payments);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

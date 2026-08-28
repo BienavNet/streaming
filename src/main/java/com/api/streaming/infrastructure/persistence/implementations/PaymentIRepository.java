@@ -3,6 +3,9 @@ package com.api.streaming.infrastructure.persistence.implementations;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import com.api.streaming.domain.interfaces.PaymentInterface;
@@ -28,9 +31,14 @@ public class PaymentIRepository implements PaymentInterface {
     }
 
     @Override
-    public List<Payment> getPayments() {
-        List<PaymentEntity> entities = this.jpa.findAll();
-        return this.mapper.fromEntityListToDomainList(entities);
+    public com.api.streaming.domain.valueObjects.Page<Payment> getPayments(com.api.streaming.domain.valueObjects.Pageable pageable) {
+
+        Pageable springPageable =  PageRequest.of(pageable.getPage(), pageable.getOffset());
+        Page<PaymentEntity> springPage = this.jpa.findAll(springPageable);
+
+        List<Payment> content = springPage.getContent().stream().map(this.mapper::fromEntityToDomain).toList();
+
+        return new com.api.streaming.domain.valueObjects.Page<>(content, springPage.getTotalElements(), springPage.getTotalPages());
     }
 
     @Override
