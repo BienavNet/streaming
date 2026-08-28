@@ -14,6 +14,7 @@ import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.Email;
 import com.api.streaming.domain.valueObjects.Page;
 import com.api.streaming.domain.valueObjects.Pageable;
+import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
 import com.api.streaming.infrastructure.mappers.AccountMapper;
 import com.api.streaming.infrastructure.persistence.entities.AccountEntity;
@@ -95,6 +96,13 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
         List<AccountDetailsProjection> projections = this.jpa.findByPlatformNameContainingIgnoreCase(platform);
 
         return this.mapper.fromProjectionListToQueryList(projections);
+    }
+
+    @Override
+    public List<Account> getAccountsByPaymentId(PaymentId id) {
+        List<AccountEntity> results = this.jpa.findByPaymentId(id.value());
+
+        return this.mapper.fromEntityListToDomainList(results);
     }
 
 

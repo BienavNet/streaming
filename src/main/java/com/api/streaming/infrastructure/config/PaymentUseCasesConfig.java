@@ -11,6 +11,7 @@ import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.FilterPaymentsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentDetailsUseCase;
 import com.api.streaming.application.useCases.Payment.GetPaymentsUseCase;
+import com.api.streaming.domain.interfaces.AccountInterface;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.PaymentInterface;
 
@@ -27,9 +28,10 @@ public class PaymentUseCasesConfig {
 
     @Bean
     DeletePaymentUseCase deletePaymentUseCase(
-        PaymentInterface paymentInterface
+        PaymentInterface paymentInterface,
+        AccountInterface accountInterface
     ) {
-        return new DeletePaymentUseCase(paymentInterface);
+        return new DeletePaymentUseCase(paymentInterface, accountInterface);
     }
 
     @Bean
