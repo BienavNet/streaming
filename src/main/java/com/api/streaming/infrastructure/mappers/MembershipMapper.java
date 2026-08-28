@@ -35,6 +35,10 @@ public interface MembershipMapper {
 
     MembershipEntity fromDomainToEntity(Membership domain);
 
+    @Mapping(
+        target = "freeTrial",
+        source = "isFreeTrial"
+    )
     void updateMembershipFromCommand(UpdateMembershipCommand command, @MappingTarget Membership target);
 
     List<Membership> fromEntityListToDomainList(List<MembershipEntity> entityList);

@@ -5,5 +5,6 @@ import java.time.LocalDate;
 public record UpdateMembershipRequest(
     boolean isFreeTrial,
     LocalDate membershipBuyDate,
-    LocalDate membershipExpireDate
+    LocalDate membershipExpireDate,
+    String membershipConfigId
 ) {}

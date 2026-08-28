@@ -56,6 +56,9 @@ public class UpdateMembershipUseCase {
 
         List<Order> orders = this.orderInterface.getOrdersByAccountId(accountId);
         Integer orderProfilesUsed = 0;
+
+        if (currentConfig.getId().equals(newConfig.getId()))
+            return;
         
 
         if (orders.size() == 1)
@@ -72,6 +75,6 @@ public class UpdateMembershipUseCase {
 
         // validaciones con las ordenes a ver si aunque el nuevo profiles llega a ser menor, se pueda asignar si las ordenes no estan completas
         if (orderProfilesUsed >= newConfig.getProfiles())
-            throw new IllegalArgumentException("Cannot update new plan because new profile quantity is minor that current current profiles used.");
+            throw new IllegalArgumentException("Cannot update new plan because new profile quantity is minor that current profiles used.");
     }
 }
