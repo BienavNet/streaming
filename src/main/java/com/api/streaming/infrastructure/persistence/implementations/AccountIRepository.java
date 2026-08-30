@@ -100,7 +100,7 @@ public class AccountIRepository implements AccountInterface, AccountQueriesInter
 
     @Override
     public List<Account> getAccountsByPaymentId(PaymentId id) {
-        List<AccountEntity> results = this.jpa.findByPaymentId(id.value());
+        List<AccountEntity> results = this.jpa.findByPayment(id.value());
 
         return this.mapper.fromEntityListToDomainList(results);
     }

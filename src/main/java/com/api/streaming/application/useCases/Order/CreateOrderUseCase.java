@@ -36,9 +36,17 @@ public class CreateOrderUseCase {
 
         OrderId id = this.generateIdInterface.generateOrderId();
 
+
+
         Order newOrder = new Order(id, command.account(), command.profileAmount(), command.buyDate(),
                 command.finishDate(), command.paymentAmount(), command.orderType());
-
+        
+        if (newOrder.getOrderType().equals(OrderType.FULL)) {
+            Membership membership = this.membershipInterface.getMembershipByAccount(newOrder.getAccount()).get();
+            MembershipConfig config = this.membershipConfigInterface.getMembershipConfig(membership.getMembershipConfig()).get();
+            newOrder.setProfileAmount(config.getProfiles());
+        }
+            
         this.orderInterface.saveOrder(newOrder);
 
         return id;
@@ -57,6 +65,10 @@ public class CreateOrderUseCase {
     private void checkSlotProfilesAvailable(AccountId accountId, int profilesRequired, OrderType orderType) {
 
         if (orderType.equals(OrderType.PROFILE)) {
+
+            if (profilesRequired <=0 )
+                throw new IllegalArgumentException("You cannot add a profile order less or equals than 0.");
+
             List<Order> accountWithOrdersFull = this.orderInterface.getOrdersByAccountIdAndOrderType(accountId,
                     OrderType.FULL);
 

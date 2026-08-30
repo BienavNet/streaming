@@ -157,5 +157,5 @@ public interface AccountJpaRepository extends JpaRepository<AccountEntity, Strin
     )
     List<AccountDetailsProjection> findByPlatformNameContainingIgnoreCase(@Param("criteria") String criteria);
 
-    List<AccountEntity> findByPaymentId(String paymentId);
+    List<AccountEntity> findByPayment(String paymentId);
 }
