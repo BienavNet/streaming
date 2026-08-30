@@ -4,6 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.api.streaming.application.commands.CreateOrderCommand;
+import com.api.streaming.application.interfaces.OrderDetailsSnapshotInterface;
+import com.api.streaming.application.queries.OrderDetailsSnapshotQuery;
+import com.api.streaming.application.useCases.OrderDetailsSnapshot.SaveOrderSnapshotUseCase;
 import com.api.streaming.domain.enums.OrderType;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.MembershipConfigInterface;
@@ -28,6 +31,9 @@ public class CreateOrderUseCase {
     private final MembershipConfigInterface membershipConfigInterface;
     private final MembershipInterface membershipInterface;
 
+    // External use case for snapshot
+    private final SaveOrderSnapshotUseCase saveOrderSnapshotUseCase;
+
     public OrderId execute(CreateOrderCommand command) {
         // business validations
         this.checkIfAccountExistsAndIsActive(command.account());
@@ -41,13 +47,19 @@ public class CreateOrderUseCase {
         Order newOrder = new Order(id, command.account(), command.profileAmount(), command.buyDate(),
                 command.finishDate(), command.paymentAmount(), command.orderType());
         
+        
+        
         if (newOrder.getOrderType().equals(OrderType.FULL)) {
-            Membership membership = this.membershipInterface.getMembershipByAccount(newOrder.getAccount()).get();
+            Membership membership = this.membershipInterface.getMembershipByAccount(newOrder.getAccount()).get();   
             MembershipConfig config = this.membershipConfigInterface.getMembershipConfig(membership.getMembershipConfig()).get();
             newOrder.setProfileAmount(config.getProfiles());
         }
-            
+        
+        //save order
         this.orderInterface.saveOrder(newOrder);
+
+        //transaction for saving order snapshot
+        this.saveOrderSnapshotUseCase.execute(newOrder.getId());
 
         return id;
 

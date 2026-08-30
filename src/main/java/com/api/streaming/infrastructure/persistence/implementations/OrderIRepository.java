@@ -29,6 +29,7 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
 
     private final OrderJpaRepository jpa;
     private final OrderMapper mapper;
+    // private final OrderDetailsSnapshotJpaRepository snapshotJpa;
 
     @Override
     public Optional<Order> getOrderById(OrderId orderId) {
@@ -58,6 +59,10 @@ public class OrderIRepository implements OrderInterface, OrderDetailsInterface {
     public Order saveOrder(Order newOrder) {
         OrderEntity orderToSave = this.mapper.fromDomainToEntity(newOrder);
         OrderEntity orderSaved = this.jpa.save(orderToSave);
+
+        // OrderDetailsProjection projection = this.jpa.findOrderDetailsById(orderSaved.getId()).get();
+
+        // this.snapshotJpa.save(new OrderDetailsSnapshot(projection.getId(), projection.getAccountEmail(), projection.getPlatformName(), projection.getPlan(), projection.getProfileAmount(), projection.getBuyDate(), projection.getFinishDate(), projection.getPaymentAmount(), projection.getOrderType()));
 
         return this.mapper.fromEntityToDomain(orderSaved);
     }

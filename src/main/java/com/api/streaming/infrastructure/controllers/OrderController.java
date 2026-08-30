@@ -5,11 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.streaming.application.commands.CreateOrderCommand;
 import com.api.streaming.application.queries.OrderDetailsQuery;
+import com.api.streaming.application.queries.OrderDetailsSnapshotQuery;
 import com.api.streaming.application.useCases.Order.CreateOrderUseCase;
 import com.api.streaming.application.useCases.Order.DeleteOrderByIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrderDetailsByIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrdersByAccountIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrdersUseCase;
+import com.api.streaming.application.useCases.OrderDetailsSnapshot.GetSnapshotsUseCase;
 import com.api.streaming.domain.valueObjects.AccountId;
 import com.api.streaming.domain.valueObjects.OrderId;
 import com.api.streaming.domain.valueObjects.Page;
@@ -32,10 +34,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/order")
 @RequiredArgsConstructor
@@ -45,6 +43,9 @@ public class OrderController {
     private final GetOrderDetailsByIdUseCase getOrderDetailsByIdUseCase;
     private final GetOrdersByAccountIdUseCase getOrdersByAccountIdUseCase;
     private final GetOrdersUseCase getOrdersUseCase;
+
+    //Orders Snapshot
+    private final GetSnapshotsUseCase getSnapshotsUseCase;
 
     private final OrderMapper mapper;
 
@@ -113,6 +114,23 @@ public class OrderController {
                 .status(HttpStatus.OK)
                 .body(response);
     }
+    
+    @GetMapping("/orders/records/{page}/{offset}")
+    public ResponseEntity<GenericResponse<Page<OrderDetailsSnapshotQuery>>> getRecords(@PathVariable int page, @PathVariable int offset) throws Exception {
+        Pageable pageable = new Pageable(page, offset);
+
+        Page<OrderDetailsSnapshotQuery> orders = this.getSnapshotsUseCase.execute(pageable);
+
+        GenericResponse<Page<OrderDetailsSnapshotQuery>> response = new GenericResponse<>();
+        response.setStatus(HttpStatus.OK.value());
+        response.setData(orders);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+
+    }
+    
     
 
 }
