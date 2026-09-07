@@ -10,6 +10,7 @@ import com.api.streaming.application.useCases.Order.GetOrderDetailsByIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrdersByAccountIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrdersUseCase;
 import com.api.streaming.application.useCases.Order.UpdateOrderUseCase;
+import com.api.streaming.application.useCases.OrderDetailsSnapshot.SaveOrderSnapshotUseCase;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.MembershipConfigInterface;
 import com.api.streaming.domain.interfaces.MembershipInterface;
@@ -24,9 +25,10 @@ public class OrderUseCasesConfig {
         OrderInterface orderInterface,
         GenerateIdInterface generateIdInterface,
         MembershipConfigInterface membershipConfigInterface,
-        MembershipInterface membershipInterface
+        MembershipInterface membershipInterface,
+        SaveOrderSnapshotUseCase saveOrderSnapshotUseCase
     ) {
-        return new CreateOrderUseCase(orderInterface, generateIdInterface, membershipConfigInterface, membershipInterface);
+        return new CreateOrderUseCase(orderInterface, generateIdInterface, membershipConfigInterface, membershipInterface, saveOrderSnapshotUseCase);
     }
 
     @Bean

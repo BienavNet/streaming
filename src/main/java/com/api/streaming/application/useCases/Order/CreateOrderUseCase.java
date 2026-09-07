@@ -4,8 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.api.streaming.application.commands.CreateOrderCommand;
-import com.api.streaming.application.interfaces.OrderDetailsSnapshotInterface;
-import com.api.streaming.application.queries.OrderDetailsSnapshotQuery;
 import com.api.streaming.application.useCases.OrderDetailsSnapshot.SaveOrderSnapshotUseCase;
 import com.api.streaming.domain.enums.OrderType;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;

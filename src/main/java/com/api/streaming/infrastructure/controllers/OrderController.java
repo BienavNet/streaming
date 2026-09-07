@@ -115,7 +115,7 @@ public class OrderController {
                 .body(response);
     }
     
-    @GetMapping("/orders/records/{page}/{offset}")
+    @GetMapping("/records/{page}/{offset}")
     public ResponseEntity<GenericResponse<Page<OrderDetailsSnapshotQuery>>> getRecords(@PathVariable int page, @PathVariable int offset) throws Exception {
         Pageable pageable = new Pageable(page, offset);
 
