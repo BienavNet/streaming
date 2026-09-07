@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.dao.DataIntegrityViolationException;
 
 import com.api.streaming.domain.models.Payment;
+import com.api.streaming.domain.valueObjects.Page;
+import com.api.streaming.domain.valueObjects.Pageable;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.infrastructure.mappers.PaymentMapperImpl;
 import com.api.streaming.infrastructure.persistence.entities.PaymentEntity;
@@ -64,10 +66,13 @@ public class PaymentIRepoITest {
 
         this.jpaRepository.saveAllAndFlush(List.of(entity1, entity2));
 
-
-        List<Payment> result = this.paymentIRepository.getPayments();
+        Pageable pageable = new Pageable(0, 10);
+        Page<Payment> result = this.paymentIRepository.getPayments(pageable);
 
         assertThat(result)
+        .isNotNull();
+
+        assertThat(result.content())
         .isNotNull()
         .hasSize(2);
     }

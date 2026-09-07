@@ -123,11 +123,11 @@ public class MembershipControllerTest {
         )
         .andExpect(status().isOk());
     }
-
+ 
     @Test
     void shouldUpdateMembershipAndReturnOk() throws Exception {
         String membershipIdStr = "mem-123";
-        UpdateMembershipRequest request = new UpdateMembershipRequest(false, LocalDate.now(), LocalDate.now().plusMonths(2));
+        UpdateMembershipRequest request = new UpdateMembershipRequest(false, LocalDate.now(), LocalDate.now().plusMonths(2), membershipIdStr);
 
         mockMvc.perform(
             put("/api/membership/{id}", membershipIdStr)
