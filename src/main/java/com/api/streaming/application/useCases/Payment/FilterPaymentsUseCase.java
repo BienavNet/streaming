@@ -3,7 +3,7 @@ package com.api.streaming.application.useCases.Payment;
 import java.util.List;
 import java.util.Map;
 
-import com.api.streaming.application.interfaces.PaymentFilterStrategy;
+import com.api.streaming.application.interfaces.strategies.PaymentFilterStrategy;
 import com.api.streaming.domain.models.Payment;
 
 import lombok.AllArgsConstructor;

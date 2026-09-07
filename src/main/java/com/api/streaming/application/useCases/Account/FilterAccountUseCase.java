@@ -3,7 +3,7 @@ package com.api.streaming.application.useCases.Account;
 import java.util.List;
 import java.util.Map;
 
-import com.api.streaming.application.interfaces.AccountFilterStrategy;
+import com.api.streaming.application.interfaces.strategies.AccountFilterStrategy;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 
 import lombok.AllArgsConstructor;

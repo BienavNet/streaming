@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.api.streaming.application.interfaces.AccountFilterStrategy;
 import com.api.streaming.application.interfaces.AccountQueriesInterface;
+import com.api.streaming.application.interfaces.strategies.AccountFilterStrategy;
 import com.api.streaming.application.queries.AccountDetailsQuery;
 
 import lombok.AllArgsConstructor;

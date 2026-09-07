@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.api.streaming.application.interfaces.PaymentFilterStrategy;
+import com.api.streaming.application.interfaces.strategies.PaymentFilterStrategy;
 import com.api.streaming.application.useCases.Payment.CreatePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.DeletePaymentUseCase;
 import com.api.streaming.application.useCases.Payment.FilterPaymentsUseCase;

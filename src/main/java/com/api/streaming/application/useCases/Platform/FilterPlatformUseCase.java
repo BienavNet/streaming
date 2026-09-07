@@ -3,7 +3,7 @@ package com.api.streaming.application.useCases.Platform;
 import java.util.List;
 import java.util.Map;
 
-import com.api.streaming.application.interfaces.PlatformFilterStrategy;
+import com.api.streaming.application.interfaces.strategies.PlatformFilterStrategy;
 import com.api.streaming.domain.models.Platform;
 
 import lombok.AllArgsConstructor;

@@ -1,4 +1,4 @@
-package com.api.streaming.application.interfaces;
+package com.api.streaming.application.interfaces.strategies;
 
 import java.util.List;
 

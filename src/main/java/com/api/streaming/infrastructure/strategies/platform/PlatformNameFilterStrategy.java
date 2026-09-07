@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.api.streaming.application.interfaces.PlatformFilterStrategy;
+import com.api.streaming.application.interfaces.strategies.PlatformFilterStrategy;
 import com.api.streaming.domain.interfaces.PlatformInterface;
 import com.api.streaming.domain.models.Platform;
 

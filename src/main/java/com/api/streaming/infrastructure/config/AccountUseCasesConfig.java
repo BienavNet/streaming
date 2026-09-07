@@ -5,8 +5,8 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.api.streaming.application.interfaces.AccountFilterStrategy;
 import com.api.streaming.application.interfaces.AccountQueriesInterface;
+import com.api.streaming.application.interfaces.strategies.AccountFilterStrategy;
 import com.api.streaming.application.useCases.Account.CreateAccountUseCase;
 import com.api.streaming.application.useCases.Account.DeleteAccountUseCase;
 import com.api.streaming.application.useCases.Account.FilterAccountUseCase;

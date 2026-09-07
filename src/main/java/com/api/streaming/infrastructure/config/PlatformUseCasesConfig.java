@@ -5,7 +5,7 @@ import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.api.streaming.application.interfaces.PlatformFilterStrategy;
+import com.api.streaming.application.interfaces.strategies.PlatformFilterStrategy;
 import com.api.streaming.application.useCases.Platform.CreatePlatformUseCase;
 import com.api.streaming.application.useCases.Platform.DeletePlatformUseCase;
 import com.api.streaming.application.useCases.Platform.FilterPlatformUseCase;
