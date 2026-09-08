@@ -1,13 +1,14 @@
 package com.api.streaming.application.queries.dashboard;
 
-import com.api.streaming.application.queries.MembershipDetailsQuery;
+import java.util.List;
+
 
 public record DashboardInfoQuery(
-    int totalAccounts,
-    int totalOrders,
-    int totalPlatforms,
-    int totalOrderMoney,
-    AccountsByPlatformQuery[] accountsByPlatform,
-    MembershipDetailsQuery[] membershipNearToExpire
+    Long totalAccounts,
+    Long totalOrders,
+    Long totalPlatforms,
+    Double totalOrderMoney,
+    List<AccountsByPlatformQuery> accountsByPlatform,
+    List<MembershipNearToExpireQuery> membershipNearToExpire
     // Total accounts by platform
 ) {}
