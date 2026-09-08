@@ -1,12 +1,15 @@
 package com.api.streaming.infrastructure.persistence.repositories;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.api.streaming.infrastructure.persistence.entities.OrderEntity;
 import com.api.streaming.infrastructure.persistence.projections.OrderDetailsProjection;
@@ -89,4 +92,39 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, String> {
         nativeQuery = true
     )
     Page<OrderDetailsProjection> findAllOrderDetails(Pageable pageable);
+
+
+    @Query(
+        value = """
+                SELECT
+                a.email as accountEmail,
+                p.name AS platformName,
+                p.icon AS platformIcon,
+                c.plan,
+                o.id,
+                o.account,
+                o.profile_amount as profileAmount,
+                o.buy_date as buyDate,
+                o.finish_date as finishDate,
+                o.payment_amount as paymentAmount,
+                o.order_type as orderType
+                FROM orders o
+                LEFT JOIN account AS a ON o.account = a.id
+                LEFT JOIN platform AS p ON a.platform_id = p.id
+				LEFT JOIN membership AS m ON m.account = a.id
+                LEFT JOIN membership_config AS c ON m.membership_config = c.id
+                WHERE o.finish_date < CURRENT_DATE;
+                """,
+        nativeQuery = true
+    )
+    List<OrderDetailsProjection> findAllOrderDetailsExpired();
+
+    @Modifying
+    @Query(
+        value = """
+                DELETE FROM Order o WHERE o.expirationDate < :now
+                """,
+        nativeQuery = true
+    )
+    void deleteExpiredOrders(@Param("now") LocalDate now);
 }

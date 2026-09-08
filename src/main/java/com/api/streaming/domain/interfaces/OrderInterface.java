@@ -15,4 +15,5 @@ public interface OrderInterface {
     List<Order> getOrdersByAccountIdAndOrderType(AccountId accountId, OrderType orderType);
     Order saveOrder(Order newOrder);
     void deleteOrder(OrderId id);
+    void deleteAllOrdersExpired();
 }
