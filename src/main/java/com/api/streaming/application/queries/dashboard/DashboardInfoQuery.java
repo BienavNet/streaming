@@ -2,6 +2,8 @@ package com.api.streaming.application.queries.dashboard;
 
 import java.util.List;
 
+import com.api.streaming.application.queries.OrderDetailsSnapshotQuery;
+
 
 public record DashboardInfoQuery(
     Long totalAccounts,
@@ -9,6 +11,7 @@ public record DashboardInfoQuery(
     Long totalPlatforms,
     Double totalOrderMoney,
     List<AccountsByPlatformQuery> accountsByPlatform,
-    List<MembershipNearToExpireQuery> membershipNearToExpire
+    List<MembershipNearToExpireQuery> membershipNearToExpire,
+    List<OrderDetailsSnapshotQuery> ordersNearToExpireQuery
     // Total accounts by platform
 ) {}

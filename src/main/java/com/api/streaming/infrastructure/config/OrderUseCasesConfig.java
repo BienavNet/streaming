@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.api.streaming.application.interfaces.OrderDetailsInterface;
 import com.api.streaming.application.useCases.Order.CreateOrderUseCase;
+import com.api.streaming.application.useCases.Order.DeleteExpiredOrdersUseCase;
 import com.api.streaming.application.useCases.Order.DeleteOrderByIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrderDetailsByIdUseCase;
 import com.api.streaming.application.useCases.Order.GetOrdersByAccountIdUseCase;
@@ -68,5 +69,12 @@ public class OrderUseCasesConfig {
 
     ) {
         return new UpdateOrderUseCase(orderInterface, mapper, membershipInterface, membershipConfigInterface);
+    }
+
+    @Bean 
+    DeleteExpiredOrdersUseCase deleteExpiredOrdersUseCase(
+        OrderInterface orderInterface
+    ) {
+        return new DeleteExpiredOrdersUseCase(orderInterface);
     }
 }

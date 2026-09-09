@@ -5,5 +5,6 @@ import java.time.LocalDate;
 public record MembershipNearToExpireQuery(
     String email,
     LocalDate membershipExpireDate,
-    boolean isFreeTrial
+    boolean isFreeTrial,
+    String platform
 ) {}

@@ -32,17 +32,21 @@ public class Membership {
     }
 
     public void setMembershipBuyDate(LocalDate date) {
-        if (date != null && date.isBefore(this.membershipExpireDate)){
-            this.membershipBuyDate = date;
-            return;
+        if (date != null ){
+            if (date.isBefore(this.membershipExpireDate) || this.membershipBuyDate.isBefore(LocalDate.now())){
+                this.membershipBuyDate = date;
+                return;
+            }
         }
         throw new IllegalArgumentException("The new buy date has to be before than expired date.");
     }
 
     public void setMembershipExpireDate(LocalDate date) {
-        if ( date!=null && date.isAfter(this.membershipBuyDate)) {
-            this.membershipExpireDate = date;
-            return;
+        if ( date!=null ) {
+            if(date.isAfter(this.membershipBuyDate) || this.membershipExpireDate.isBefore(LocalDate.now())) {
+                this.membershipExpireDate = date;
+                return;
+            }
         }
         throw new IllegalArgumentException("The new expire date has to be after than expired date.");
     }
