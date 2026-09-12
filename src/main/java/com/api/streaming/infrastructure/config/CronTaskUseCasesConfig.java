@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.api.streaming.application.interfaces.CronTaskInterface;
 import com.api.streaming.application.useCases.CronTask.ChangeCronTaskStatusUseCase;
+import com.api.streaming.application.useCases.CronTask.CheckIfCanExecuteCronTaskUseCase;
 import com.api.streaming.application.useCases.CronTask.GetAllCronTasksUseCase;
 
 @Configuration 
@@ -22,6 +23,13 @@ public class CronTaskUseCasesConfig {
         CronTaskInterface cronTaskInterface
     ) {
         return new GetAllCronTasksUseCase(cronTaskInterface);
+    }
+
+    @Bean 
+    CheckIfCanExecuteCronTaskUseCase checkIfCanExecuteCronTaskUseCase(
+        CronTaskInterface cronTaskInterface
+    ) {
+        return checkIfCanExecuteCronTaskUseCase(cronTaskInterface);
     }
     
 }
