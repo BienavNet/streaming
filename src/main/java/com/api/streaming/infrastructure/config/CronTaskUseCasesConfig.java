@@ -26,10 +26,8 @@ public class CronTaskUseCasesConfig {
     }
 
     @Bean 
-    CheckIfCanExecuteCronTaskUseCase checkIfCanExecuteCronTaskUseCase(
-        CronTaskInterface cronTaskInterface
-    ) {
-        return checkIfCanExecuteCronTaskUseCase(cronTaskInterface);
+    CheckIfCanExecuteCronTaskUseCase checkIfCanExecuteCronTaskUseCase(CronTaskInterface cronTaskInterface){
+        return new CheckIfCanExecuteCronTaskUseCase(cronTaskInterface);
     }
     
 }
