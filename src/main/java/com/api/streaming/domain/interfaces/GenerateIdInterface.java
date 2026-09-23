@@ -6,6 +6,7 @@ import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.domain.valueObjects.OrderId;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
+import com.api.streaming.domain.valueObjects.UserId;
 
 public interface GenerateIdInterface {
     PlatformId generatePlatformId();
@@ -14,4 +15,5 @@ public interface GenerateIdInterface {
     OrderId generateOrderId();
     MembershipConfigId generateMembershipConfigId();
     MembershipId generateMembershipId();
+    UserId generateUserId();
 }

@@ -11,6 +11,7 @@ import com.api.streaming.domain.valueObjects.MembershipId;
 import com.api.streaming.domain.valueObjects.OrderId;
 import com.api.streaming.domain.valueObjects.PaymentId;
 import com.api.streaming.domain.valueObjects.PlatformId;
+import com.api.streaming.domain.valueObjects.UserId;
 import com.fasterxml.uuid.Generators;
 
 @Component
@@ -50,6 +51,12 @@ public class GenerateIdService implements GenerateIdInterface{
     public MembershipId generateMembershipId() {
         UUID uuid = Generators.timeBasedEpochGenerator().generate();
         return new MembershipId(uuid.toString());
+    }
+
+    @Override
+    public UserId generateUserId() {
+        UUID uuid = Generators.timeBasedEpochGenerator().generate();
+        return  new UserId(uuid.toString());
     }
     
 }
