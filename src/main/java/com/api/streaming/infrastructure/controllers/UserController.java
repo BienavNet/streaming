@@ -16,8 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -51,8 +51,11 @@ public class UserController {
                 .ok(response);
     }
 
-    @GetMapping("/validate/{token}")
-    public ResponseEntity<Void> validateToken(@PathVariable String token) throws Exception {
+    @GetMapping("/validate")
+    public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader) throws Exception {
+
+        String token = authHeader.replace("Bearer ", "");
+
         boolean isValid = this.validateTokenUseCase.execute(token);
 
         HttpStatus status = isValid ? HttpStatus.OK : HttpStatus.FORBIDDEN;
