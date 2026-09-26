@@ -22,14 +22,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @RequiredArgsConstructor 
 public class UserController {
     private final LoginUseCase loginUseCase;
     private final SignupUseCase signupUseCase;
     private final ValidateTokenUseCase validateTokenUseCase;
 
-    @PostMapping("/")
+    @PostMapping("")
     public ResponseEntity<GenericResponse<String>> login(@RequestBody LoginRequest login) throws Exception {
         String token = loginUseCase.execute(login.username(), login.password());
         GenericResponse<String> response = new GenericResponse<>();
@@ -58,7 +58,7 @@ public class UserController {
 
         boolean isValid = this.validateTokenUseCase.execute(token);
 
-        HttpStatus status = isValid ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+        HttpStatus status = isValid ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         return ResponseEntity
                 .status(status.value())
