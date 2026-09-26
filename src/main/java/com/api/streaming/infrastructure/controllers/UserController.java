@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.streaming.application.useCases.User.LoginUseCase;
 import com.api.streaming.application.useCases.User.SignupUseCase;
+import com.api.streaming.application.useCases.User.ValidateTokenUseCase;
 import com.api.streaming.domain.models.User;
 import com.api.streaming.infrastructure.dtos.GenericResponse;
 import com.api.streaming.infrastructure.dtos.user.LoginRequest;
@@ -15,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @RestController
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class UserController {
     private final LoginUseCase loginUseCase;
     private final SignupUseCase signupUseCase;
+    private final ValidateTokenUseCase validateTokenUseCase;
 
     @PostMapping("/")
     public ResponseEntity<GenericResponse<String>> login(@RequestBody LoginRequest login) throws Exception {
@@ -45,5 +50,17 @@ public class UserController {
         return  ResponseEntity
                 .ok(response);
     }
+
+    @GetMapping("/validate/{token}")
+    public ResponseEntity<Void> validateToken(@PathVariable String token) throws Exception {
+        boolean isValid = this.validateTokenUseCase.execute(token);
+
+        HttpStatus status = isValid ? HttpStatus.OK : HttpStatus.FORBIDDEN;
+
+        return ResponseEntity
+                .status(status.value())
+                .build();
+    }
+    
     
 }

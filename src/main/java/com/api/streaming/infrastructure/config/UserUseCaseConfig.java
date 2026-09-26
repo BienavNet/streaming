@@ -7,6 +7,7 @@ import com.api.streaming.application.interfaces.security.PasswordHasher;
 import com.api.streaming.application.interfaces.security.TokenProvider;
 import com.api.streaming.application.useCases.User.LoginUseCase;
 import com.api.streaming.application.useCases.User.SignupUseCase;
+import com.api.streaming.application.useCases.User.ValidateTokenUseCase;
 import com.api.streaming.domain.interfaces.GenerateIdInterface;
 import com.api.streaming.domain.interfaces.UserInterface;
 
@@ -29,5 +30,13 @@ public class UserUseCaseConfig {
         GenerateIdInterface generateIdInterface
     ){
         return new SignupUseCase(userInterface, passwordHasher, generateIdInterface);
+    }
+
+    @Bean 
+    ValidateTokenUseCase validateTokenUseCase (
+        UserInterface userInterface,
+        TokenProvider tokenProvider
+    ) {
+        return new ValidateTokenUseCase(userInterface, tokenProvider);
     }
 }
