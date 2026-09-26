@@ -35,18 +35,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        String token = authHeader.substring(7);
-        String username = tokenProvider.extractSubject(token);
+        try {
+            String token = authHeader.substring(7);
+            String username = tokenProvider.extractSubject(token);
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            userRepository.findUserByUsername(username).ifPresent(user -> {
-                if (tokenProvider.isTokenValid(token, user)) {
-                    var authToken = new UsernamePasswordAuthenticationToken(
-                            user, null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
-            });
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                userRepository.findUserByUsername(username).ifPresent(user -> {
+                    if (tokenProvider.isTokenValid(token, user)) {
+                        var authToken = new UsernamePasswordAuthenticationToken(
+                                user, null, List.of(new SimpleGrantedAuthority(user.getRole().name())));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
         }
+
         filterChain.doFilter(request, response);
     }
     
