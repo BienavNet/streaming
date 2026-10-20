@@ -56,14 +56,12 @@ La aplicación se configura por variables de entorno (o `application.properties`
 
 | Variable | Descripción | Ejemplo |
 | --- | --- | --- |
-| `SPRING_DATASOURCE_URL` | URL JDBC de MySQL | `jdbc:mysql://localhost:3306/streaming` (valor por defecto) |
+| `SPRING_DATASOURCE_URL` | URL JDBC de MySQL | `jdbc:mysql://localhost:3306/streaming` |
 | `SPRING_DATASOURCE_USERNAME` | Usuario de BD | `streaming_user` |
 | `SPRING_DATASOURCE_PASSWORD` | Contraseña de BD | — |
-| `SPRING_JPA_HIBERNATE_DDL_AUTO` | Estrategia de esquema (`update` en desarrollo) | `update` |
+| `JWT_SECRET` | Clave de firma de los tokens | — |
 
-> TODO: documentar aquí la clave de firma JWT y su expiración.
-
-Cualquier propiedad de `application.yml` se puede sobreescribir con variables de entorno (por ejemplo, `spring.datasource.url` → `SPRING_DATASOURCE_URL`).
+> TODO: ajustar los nombres a los que realmente usa `application.properties`.
 
 ## Ejecución local
 
@@ -89,7 +87,7 @@ La API queda disponible en `http://localhost:8080`.
    docker compose up -d --build
    ```
 
-3. Verifica en `http://localhost:8080/docs`.
+3. Verifica en `http://localhost:8080/swagger-ui/index.html`.
 
 Para detener todo: `docker compose down` (agrega `-v` para borrar también los datos de la BD).
 
@@ -102,7 +100,7 @@ docker run -p 8080:8080 --env-file .env streaming-api
 
 ## Documentación de la API
 
-Swagger UI: `/docs`
+Swagger UI: `/swagger-ui/index.html`
 
 ## Endpoints
 
