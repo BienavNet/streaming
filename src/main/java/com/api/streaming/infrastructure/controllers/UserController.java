@@ -29,7 +29,7 @@ public class UserController {
     private final SignupUseCase signupUseCase;
     private final ValidateTokenUseCase validateTokenUseCase;
 
-    @PostMapping("")
+    @PostMapping("/login")
     public ResponseEntity<GenericResponse<String>> login(@RequestBody LoginRequest login) throws Exception {
         String token = loginUseCase.execute(login.username(), login.password());
         GenericResponse<String> response = new GenericResponse<>();
