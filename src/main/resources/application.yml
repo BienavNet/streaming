@@ -11,6 +11,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: ${DDL_AUTO:update}
+  
+  jwt:
+    secret-key: ${JWT_SECRET_KEY:a1sd5f46a5sdf132a1sd65f4as32df16a5sd4f98as7d4f231as9cv87asd1f9a8s7vxc24gv98adf7sg}
 
 springdoc:
   swagger-ui:

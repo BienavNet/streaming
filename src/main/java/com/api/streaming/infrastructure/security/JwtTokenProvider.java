@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.api.streaming.application.interfaces.security.TokenProvider;
@@ -17,7 +18,8 @@ import io.jsonwebtoken.security.Keys;
 @Component 
 public class JwtTokenProvider implements TokenProvider {
 
-    private String secretKey = "a1sd5f46a5sdf132a1sd65f4as32df16a5sd4f98as7d4f231as9cv87asd1f9a8s7vxc24gv98adf7sg";
+    @Value("${spring.jwt.secret-key}")
+    private String secretKey;
     private long expiration = 360000;
 
     @Override
